@@ -417,17 +417,17 @@ const TEAMS = [
     shirt: '#0a47c2', sleeve: '#0a47c2', shorts: '#0a47c2', socks: '#f2f5fb', sockTop: '#0a47c2', trim: '#ffffff', collar: '#ffffff', num: '#ffffff', boot: '#f4f6ff',
     gk: { shirt: '#c6f23a', shorts: '#1b2a0d', socks: '#c6f23a', num: '#13200a' },
     crowd: ['#0a47c2', '#1f63ee', '#ffffff', '#0a3aa8', '#0a47c2', '#9cc0ff'], stats: { Serangan: 86, Kecepatan: 84, Bertahan: 82 },
-    names: ['Hartley', 'Coleman', 'Ashford', 'Whitmore', 'Bancroft', 'Ellison', 'Pryce', 'Dawson', 'Kendrick', 'Marlow', 'Thornbury'] },
+    captain: 1, squad: [['Sánchez', 1, 1, 'short', 1, 1], ['James', 24, 4, 'buzz', 5, 1], ['Chalobah', 23, 4, 'fade', 5, 1], ['Fofana', 29, 5, 'buzz', 5, 0], ['Cucurella', 3, 1, 'curly', 2, 0], ['Caicedo', 25, 3, 'fade', 5, 0], ['Enzo', 8, 1, 'short', 1, 1], ['Palmer', 10, 0, 'short', 3, 0], ['Estêvão', 41, 3, 'fade', 5, 0], ['João Pedro', 20, 3, 'curly', 5, 0], ['Pedro Neto', 7, 2, 'fade', 1, 1]] },
   { id: 'mun', name: 'Manchester United', short: 'MUN', nick: 'The Red Devils', c1: '#da1f26', c2: '#ffffff',
     shirt: '#da1f26', sleeve: '#da1f26', shorts: '#f6f6f6', socks: '#151515', sockTop: '#da1f26', trim: '#151515', collar: '#ffffff', num: '#ffffff', boot: '#151515',
     gk: { shirt: '#19d3ee', shorts: '#06323a', socks: '#19d3ee', num: '#03262c' },
     crowd: ['#da1f26', '#ffffff', '#151515', '#b3121a', '#da1f26', '#f2c230'], stats: { Serangan: 87, Kecepatan: 83, Bertahan: 80 },
-    names: ['Whitaker', 'Fenwick', 'Hollins', 'Barton', 'Radcliffe', 'Ormond', 'Kearney', 'Lowther', 'Ashworth', 'Prescott', 'Wainwright'] },
+    captain: 7, squad: [['Lammens', 31, 0, 'short', 3, 0], ['Dalot', 2, 1, 'fade', 1, 1], ['De Ligt', 4, 0, 'short', 4, 0], ['Maguire', 5, 0, 'short', 2, 1], ['Shaw', 23, 0, 'short', 2, 1], ['Casemiro', 18, 2, 'buzz', 5, 1], ['Mainoo', 37, 4, 'fade', 5, 0], ['B. Fernandes', 8, 1, 'short', 1, 2], ['Mbeumo', 19, 4, 'buzz', 5, 1], ['Šeško', 30, 0, 'short', 1, 0], ['Cunha', 10, 2, 'fade', 5, 1]] },
   { id: 'bvb', name: 'Borussia Dortmund', short: 'BVB', nick: 'Die Schwarzgelben', c1: '#fde100', c2: '#111111',
     shirt: '#fde100', sleeve: '#fde100', shorts: '#111111', socks: '#fde100', sockTop: '#111111', trim: '#111111', collar: '#111111', num: '#111111', boot: '#ff3d7f',
     gk: { shirt: '#ff4fb0', shorts: '#3a0a24', socks: '#ff4fb0', num: '#2a0519' },
     crowd: ['#fde100', '#111111', '#fde100', '#ffe94d', '#111111', '#ffffff'], stats: { Serangan: 85, Kecepatan: 86, Bertahan: 79 },
-    names: ['Baumann', 'Kessler', 'Hoffmann', 'Lindner', 'Vogel', 'Reinhardt', 'Seidel', 'Krause', 'Wendt', 'Albrecht', 'Steiner'] }
+    captain: 6, squad: [['Kobel', 1, 0, 'short', 3, 1], ['Ryerson', 26, 0, 'short', 4, 0], ['Anton', 3, 0, 'short', 2, 1], ['Schlotterbeck', 4, 0, 'fade', 2, 1], ['Svensson', 24, 0, 'short', 4, 0], ['Nmecha', 8, 4, 'fade', 5, 0], ['Can', 23, 1, 'fade', 1, 2], ['Bellingham', 7, 0, 'short', 2, 0], ['Brandt', 10, 0, 'short', 2, 1], ['Guirassy', 9, 5, 'buzz', 5, 2], ['Adeyemi', 27, 3, 'fade', 5, 0]] },
 ];
 const NUMS = [1, 2, 4, 5, 3, 8, 6, 10, 7, 9, 11];
 
@@ -528,6 +528,7 @@ function sfxKick(power = 0.5) {
   ng.gain.setValueAtTime(0.18 * (0.5 + power), t); ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.04); n.connect(f); f.connect(ng); ng.connect(AU.master); n.start(t, Math.random() * 0.5, 0.05);
 }
 function sfxWhistle(kind = 'short') {
+  whistleAnim(kind);
   const c = AU.ctx; if (!c) return; const t0 = c.currentTime;
   const blasts = kind === 'final' ? [[0, 0.32], [0.45, 0.32], [0.9, 0.9]] : kind === 'long' ? [[0, 0.75]] : kind === 'double' ? [[0, 0.22], [0.3, 0.45]] : [[0, 0.28]];
   for (const [st, du] of blasts) {
@@ -1178,7 +1179,7 @@ function blobTexture() {
 }
 function buildFxMeshes() {
   const bt = blobTexture(), pg = new THREE.PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
-  W3.blobs = new THREE.InstancedMesh(pg, new THREE.MeshBasicMaterial({ map: bt, transparent: true, depthWrite: false, opacity: 0.55, color: 0x000000, polygonOffset: true, polygonOffsetFactor: -4 }), 24 * 4 + 2);
+  W3.blobs = new THREE.InstancedMesh(pg, new THREE.MeshBasicMaterial({ map: bt, transparent: true, depthWrite: false, opacity: 0.55, color: 0x000000, polygonOffset: true, polygonOffsetFactor: -4 }), 27 * 4 + 2);
   W3.blobs.instanceMatrix.setUsage(THREE.DynamicDrawUsage); W3.blobs.frustumCulled = false; W3.blobs.renderOrder = 1; SCN.add(W3.blobs);
   const ring = new THREE.Group();
   const r1 = new THREE.Mesh(new THREE.RingGeometry(0.6, 0.7, 48).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: new THREE.Color(1, 1, 1), transparent: true, opacity: 0.7, depthWrite: false }));
@@ -1187,6 +1188,8 @@ function buildFxMeshes() {
   const arrow = new THREE.Mesh(new THREE.ShapeGeometry(sh).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.5, 2.5, 2.5), depthWrite: false, transparent: true }));
   ring.add(r1, r2, arrow); ring.position.y = 0.02; ring.renderOrder = 2; SCN.add(ring); W3.ring = ring; W3.ringMat = r1.material;
   const tp = new THREE.BufferGeometry(); tp.setAttribute('position', new THREE.BufferAttribute(new Float32Array(400 * 3), 3)); tp.setDrawRange(0, 0);
+  const ol = new THREE.Mesh(new THREE.PlaneGeometry(0.2, 2 * PW).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: new THREE.Color(2.4, 2.1, 0.25), transparent: true, opacity: 0.9, depthWrite: false }));
+  ol.position.y = 0.035; ol.renderOrder = 3; ol.visible = false; SCN.add(ol); W3.offLine = ol;
   W3.turf = new THREE.Points(tp, new THREE.PointsMaterial({ color: lin('#3f8f3a'), size: 0.07, sizeAttenuation: true })); W3.turf.frustumCulled = false; SCN.add(W3.turf);
 }
 const _bm = new THREE.Matrix4(), _bq = new THREE.Quaternion(), _bs = new THREE.Vector3(), _bp = new THREE.Vector3(), _be = new THREE.Euler();
@@ -1195,7 +1198,7 @@ function setBlob(i, x, z, len, wid, ang, alpha) {
 }
 function updateFx3(t, showRing) {
   let bi = 0;
-  const all = players.concat([referee]);
+  const all = players.concat(officials);
   for (const p of all) {
     const h = (p.ract === A_DIVE || p.ract === A_SLIDE) ? 0.9 : 1.85;
     setBlob(bi++, p.rx, p.rz, 0.95, 0.95, 0, 1);
@@ -1216,6 +1219,8 @@ function updateFx3(t, showRing) {
   const P = W3.turf.geometry.attributes.position; let n = 0;
   for (const q of parts) { if (n >= 400) break; P.setXYZ(n++, q.x, q.y, -q.z); }
   P.needsUpdate = true; W3.turf.geometry.setDrawRange(0, n);
+  W3.offLine.visible = G.offShowT > 0 && G.state !== 'replay' && G.state !== 'menu';
+  if (W3.offLine.visible) { W3.offLine.position.x = G.offLineX; W3.offLine.material.opacity = Math.min(0.9, G.offShowT); }
   for (const f of W3.flags) f.rotation.y = Math.sin(t * 2.3 + f.id) * 0.25;
 }
 const LIGHTS3 = [[0, 0, 0], [-78, 46, 62], [78, 46, -62], [-78, 46, -62]];
@@ -1227,8 +1232,9 @@ function refreshWorldTeams() {
 function rebuildRigs() {
   for (const R of W3.rigs) { SCN.remove(R.root); R.tex.forEach(t => t.dispose()); R.mesh.material.dispose(); R.head.material.dispose(); if (R.hair) R.hair.material.dispose(); R.mesh.skeleton.dispose(); }
   W3.rigs = [];
-  for (const p of players.concat([referee])) {
+  for (const p of players.concat(officials)) {
     const ref = p.team === 2, R = makeRig(ref ? REF_TEAM : TEAMS_SEL[p.team], p.look, ref ? '' : p.num, ref ? '' : p.name);
+    if (p === referee) R.bones[9].add(makeWhistleProp()); else if (ref) R.bones[9].add(makeFlagProp());
     p.rig = R; SCN.add(R.root); W3.rigs.push(R);
   }
 }
@@ -1247,6 +1253,23 @@ function applyTimeOfDay(tod) {
   if (BLOOM) { BLOOM.strength = day ? 0.2 : 0.5; BLOOM.threshold = day ? 1.3 : 1.0; }
 }
 
+function makeFlagProp() {
+  const g = new THREE.Group();
+  const stick = new THREE.Mesh(new THREE.CylinderGeometry(0.009, 0.009, 0.58, 8), new THREE.MeshStandardMaterial({ color: lin('#202020'), roughness: 0.5 }));
+  stick.position.set(0, -0.36, 0); g.add(stick);
+  const c = mkCanvas(64, 64), x = c.getContext('2d'); x.fillStyle = '#ffe600'; x.fillRect(0, 0, 64, 64); x.fillStyle = '#e8132b'; x.fillRect(0, 0, 32, 32); x.fillRect(32, 32, 32, 32);
+  const cloth = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.3), new THREE.MeshStandardMaterial({ map: tex3(c), side: THREE.DoubleSide, roughness: 0.7 }));
+  cloth.rotation.y = Math.PI / 2; cloth.position.set(0, -0.5, 0.21); g.add(cloth);
+  g.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  return g;
+}
+function makeWhistleProp() {
+  const g = new THREE.Group(), m = new THREE.MeshStandardMaterial({ color: lin('#c9ced6'), metalness: 0.8, roughness: 0.3 });
+  const body = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.03, 12), m); body.rotation.z = Math.PI / 2; body.position.set(0, -0.085, 0.015); g.add(body);
+  const tip = new THREE.Mesh(new THREE.BoxGeometry(0.014, 0.01, 0.03), m); tip.position.set(0, -0.085, 0.04); g.add(tip);
+  return g;
+}
+
 /* =====================================================================
    3D HUMANS
    A procedural skinned body (one mesh, one kit texture atlas per player),
@@ -1255,6 +1278,7 @@ function applyTimeOfDay(tod) {
    Body-local axes: x = the player's left, y = up, z = forward.
    ===================================================================== */
 const A_NONE = 0, A_KICK = 1, A_SLIDE = 2, A_DIVE = 3, A_CELEB = 4, A_KNEE = 5, A_THROWH = 6, A_THROW = 7, A_HEAD = 8, A_GKHOLD = 9, A_SAD = 10, A_READY = 11;
+const A_WHISTLE = 12, A_FLAG = 13;
 const LT = 0.46, LS = 0.45, LF = 0.23, UA = 0.29, FA = 0.26;
 const JL = new Float32Array(17 * 3);
 const J_PEL = 0, J_NECK = 1, J_HEAD = 2, J_LHIP = 3, J_LKNE = 4, J_LANK = 5, J_LTOE = 6, J_RHIP = 7, J_RKNE = 8, J_RANK = 9, J_RTOE = 10, J_LSH = 11, J_LELB = 12, J_LHND = 13, J_RSH = 14, J_RELB = 15, J_RHND = 16;
@@ -1303,6 +1327,8 @@ function computePose(p) {
     case A_HEAD: lean = 0.3 * Math.sin(Math.min(1, at) * Math.PI); gL = 0.9; gR = 0.7; zL = zR = 0.5; eL = eR = 0.6; aL = 0.4; bL = 0.9; aR = 0.1; bR = 0.6; head = 0.3; break;
     case A_GKHOLD: gL = gR = 1.15; eL = eR = 0.85; zL = zR = 0.02; break;
     case A_SAD: lean = 0.32; head = 0.35; gL = gR = 0.05; eL = eR = 0.1; zL = zR = 0.06; break;
+    case A_WHISTLE: gR = 1.25; eR = 2.2; zR = 0.3; fR = -0.9; break;
+    case A_FLAG: gR = Math.PI - 0.12; eR = 0.05; zR = 0.15; fR = 0.05; break;
     case A_READY: if (sp < 0.4) { bL = bR = 0.55; aL = 0.3; aR = 0.2; lean = 0.25; gL = gR = 0.55; eL = eR = 0.7; zL = zR = 0.5; spread = 0.16; } break;
   }
   if (fL === null) fL = zL * 0.6;
@@ -1410,12 +1436,12 @@ function buildBodyGeo(keeper) {
     const L = side > 0, bUA = L ? 4 : 7, bFA = L ? 5 : 8, bHD = L ? 6 : 9, bTH = L ? 10 : 13, bSH = L ? 11 : 14, bFT = L ? 12 : 15;
     const hip = BPOS[bTH], knee = BPOS[bSH], ank = BPOS[bFT], sh = BPOS[bUA], el = BPOS[bFA], wr = BPOS[bHD];
     // thigh (skin) and shorts leg
-    const thK = [[0, 0.084, 0.085, 0.088], [0.3, 0.08, 0.086, 0.08], [0.7, 0.067, 0.068, 0.062], [1, 0.056, 0.055, 0.052]];
+    const thK = [[0, 0.088, 0.09, 0.092], [0.3, 0.086, 0.092, 0.086], [0.7, 0.071, 0.073, 0.066], [1, 0.057, 0.056, 0.053]];
     const thA = vadd(hip, [0, 0.04, 0]);
     const legW = (t, x, y) => y > 0.86 ? [bTH, 0, 0.42 * sst(0.86, 1.05, y)] : y < 0.62 ? [bTH, bSH, 0.5 * sst(0.62, 0.5, y)] : [bTH, bTH, 0];
     tube(M, thA, knee, X, Z, 16, 22, t => { const k = tabK(thK, t); return [k[0], k[1], k[2], 0, 0, 2.2]; }, (u, t) => regUV(R('skin'), u, 1 - t),
       legW, false, false);
-    tube(M, vadd(hip, [0, 0.05, 0]), vadd(hip, [0, -0.2, 0]), X, Z, 8, 26, t => [lerp(0.1, 0.091, t), lerp(0.1, 0.093, t), lerp(0.106, 0.092, t), side * 0.008, 0, 2.05],
+    tube(M, vadd(hip, [0, 0.05, 0]), vadd(hip, [0, -0.2, 0]), X, Z, 8, 26, t => [lerp(0.104, 0.096, t), lerp(0.104, 0.098, t), lerp(0.11, 0.097, t), side * 0.006, 0, 2.05],
       (u, t) => regUV(R('shorts'), u, 0.55 * (1 - t)), legW, false, false);
     // shin (skin) and sock
     const shK = [[0, 0.054, 0.054, 0.052], [0.28, 0.056, 0.046, 0.074], [0.6, 0.045, 0.042, 0.05], [1, 0.031, 0.033, 0.035]];
@@ -1431,20 +1457,44 @@ function buildBodyGeo(keeper) {
     // upper arm (skin), sleeve
     const uaK = [[0, 0.052, 0.052, 0.052], [0.3, 0.05, 0.053, 0.048], [0.7, 0.044, 0.044, 0.042], [1, 0.04, 0.039, 0.038]];
     const uaSkin = t => t < 0.3 ? [bUA, 1, 0.35 * (1 - t / 0.3)] : t > 0.8 ? [bUA, bFA, 0.5 * (t - 0.8) / 0.2] : [bUA, bUA, 0];
-    tube(M, vadd(sh, [-side * 0.012, -0.03, 0]), el, X, Z, 12, 18, t => { const k = tabK(uaK, t); return [k[0], k[1], k[2], 0, 0, 2]; }, (u, t) => regUV(R(keeper ? 'sleeve' : 'skin'), u, 1 - t), uaSkin, false, false);
+    tube(M, vadd(sh, [-side * 0.012, -0.03, 0]), el, X, Z, 12, 18, t => { const k = tabK(uaK, t); return [k[0], k[1], k[2], 0, 0, 2]; }, (u, t) => regUV(R(keeper ? 'sleeve' : 'skin'), keeper ? (L ? 0 : 0.5) + u * 0.5 : u, 1 - t), uaSkin, false, false);
     const slB = vlerp(sh, el, keeper ? 1.0 : 0.55);
     tube(M, vadd(sh, [-side * 0.02, 0.012, 0]), slB, X, Z, 10, 22, t => { const k = tabK(uaK, t * (keeper ? 1 : 0.55)); const e = t < 0.2 ? -0.012 + t / 0.2 * 0.023 : 0.011; return [k[0] + e, k[1] + e, k[2] + e, 0, 0, 2.0]; },
-      (u, t) => regUV(R('sleeve'), u, 1 - t), t => [bUA, 1, 0.45 * (1 - Math.min(1, t / 0.35))], true, false);
+      (u, t) => regUV(R('sleeve'), (L ? 0 : 0.5) + u * 0.5, 1 - t), t => [bUA, 1, 0.45 * (1 - Math.min(1, t / 0.35))], true, false);
     // forearm (+ keeper sleeve), hand
     const faK = [[0, 0.043, 0.042, 0.044], [0.25, 0.046, 0.045, 0.047], [0.7, 0.036, 0.032, 0.034], [1, 0.028, 0.025, 0.027]];
     const faSkin = t => t < 0.15 ? [bFA, bUA, 0.5 * (1 - t / 0.15)] : t > 0.88 ? [bFA, bHD, 0.5 * (t - 0.88) / 0.12] : [bFA, bFA, 0];
     tube(M, el, wr, X, Z, 12, 18, t => { const k = tabK(faK, t); const e = keeper ? 0.01 : 0; return [k[0] + e, k[1] + e, k[2] + e, 0, 0, 2]; },
-      (u, t) => regUV(R(keeper ? 'sleeve' : 'skin'), u, 1 - t), faSkin, false, false);
-    const hs = keeper ? 1.3 : 1, hK = [[0, 0.019, 0.03, 0.028], [0.35, 0.022, 0.04, 0.038], [0.75, 0.017, 0.038, 0.036], [1, 0.008, 0.018, 0.016]];
-    tube(M, wr, vadd(wr, [side * 0.004, -0.165 * hs, 0.012]), X, Z, 8, 14, t => { const k = tabK(hK, t); return [k[0] * hs, k[1] * hs, k[2] * hs, 0, 0, 2.2]; },
-      (u, t) => regUV(R(keeper ? 'glove' : 'skin'), u, 1 - t), t => t < 0.15 ? [bHD, bFA, 0.4 * (1 - t / 0.15)] : [bHD, bHD, 0], false, true);
+      (u, t) => regUV(R(keeper ? 'sleeve' : 'skin'), keeper ? (L ? 0 : 0.5) + u * 0.5 : u, 1 - t), faSkin, false, false);
+    buildHand(M, wr, side, keeper, bHD, bFA);
   }
   return M.geo();
+}
+
+
+// Hand: palm, four slightly curled fingers and a thumb. The palm faces the body (-side on x), thumb in front (+z).
+function buildHand(M, wr, side, keeper, bHD, bFA) {
+  const k = keeper ? 1.22 : 1, reg = REG[keeper ? 'glove' : 'skin'], uvf = (u, t) => regUV(reg, u, 1 - t), rigid = () => [bHD, bHD, 0];
+  const seg = (a, b, r0, r1, capA) => {
+    const A = vnorm(vsub(b, a)); let S = vsub([1, 0, 0], vmul(A, A[0])); if (Math.hypot(S[0], S[1], S[2]) < 0.2) S = vsub([0, 0, 1], vmul(A, A[2]));
+    S = vnorm(S); const F = vnorm(vcross(A, S));
+    tube(M, a, b, S, F, 3, 8, t => { const r = lerp(r0, r1, t); return [r * 0.92, r, r, 0, 0, 2]; }, uvf, rigid, capA, true);
+  };
+  const kn = vadd(wr, [-side * 0.002, -0.095 * k, 0.004]);
+  tube(M, wr, kn, [1, 0, 0], [0, 0, 1], 5, 12, t => { const q = tabK([[0, 0.019, 0.032, 0.03], [0.5, 0.022, 0.044, 0.04], [1, 0.017, 0.045, 0.041]], t); return [q[0] * k, q[1] * k, q[2] * k, 0, 0, 2.4]; },
+    uvf, t => t < 0.2 ? [bHD, bFA, 0.4 * (1 - t / 0.2)] : [bHD, bHD, 0], false, true);
+  const FING = [[0.028, [0.042, 0.026, 0.02], 0.0095, 0.08], [0.009, [0.046, 0.029, 0.021], 0.01, 0.0], [-0.01, [0.043, 0.027, 0.02], 0.0095, -0.05], [-0.027, [0.034, 0.021, 0.018], 0.0083, -0.12]];
+  const curl = [0.18, 0.5, 0.82];
+  for (const [oz, lens, r, spread] of FING) {
+    let p = vadd(kn, [0, 0.008 * k, oz * k]);
+    for (let j = 0; j < 3; j++) {
+      const th = curl[j], q = vadd(p, vmul(vnorm([-side * Math.sin(th), -Math.cos(th), spread]), lens[j] * k));
+      seg(p, q, r * k * (1 - j * 0.12), r * k * (1 - (j + 1) * 0.12), j === 0); p = q;
+    }
+  }
+  let tp = vadd(wr, [-side * 0.008, -0.03 * k, 0.026 * k]);
+  const tdirs = [[-side * 0.35, -0.55, 0.76], [-side * 0.55, -0.75, 0.37]], tl = [0.04, 0.034], tr = [0.0125, 0.0105, 0.0085];
+  for (let j = 0; j < 2; j++) { const q = vadd(tp, vmul(vnorm(tdirs[j]), tl[j] * k)); seg(tp, q, tr[j] * k, tr[j + 1] * k, j === 0); tp = q; }
 }
 
 /* ---------------- head ---------------- */
@@ -1649,8 +1699,10 @@ function lookFor(team, gk, i, rng) {
   const L = { teamId: team.id || 'ref', gk: !!gk, seed: Math.floor(rng() * 1e9),
     skin: SKINS[Math.floor(rng() * SKINS.length)], hair: HAIRS[Math.floor(rng() * HAIRS.length)], style: styles[Math.floor(rng() * styles.length)],
     eye: EYES[Math.floor(rng() * EYES.length)], beard: rng() < 0.22 ? 2 : rng() < 0.35 ? 1 : 0, thickBrow: rng() < 0.4,
-    hs: 0.95 + rng() * 0.1, bulk: 0.95 + rng() * 0.1, idle: rng() < 0.35 ? 1 : 0, armband: !gk && i === 3,
+    hs: 0.95 + rng() * 0.1, bulk: 0.95 + rng() * 0.1, idle: rng() < 0.35 ? 1 : 0, armband: team.captain === i,
     boot: gk ? '#151515' : (i % 3 === 0 ? '#f4f6ff' : i % 3 === 1 ? (team.boot || '#111111') : '#141414'), bootAccent: ['#ff3d7f', '#22d3ee', '#ffd23d', '#a3e635'][i % 4] };
+  const sq = team.squad ? team.squad[i] : null;
+  if (sq) { L.skin = SKINS[sq[2]]; L.style = sq[3]; L.hair = HAIRS[sq[4]]; L.beard = sq[5]; }
   if (L.style === 'bald' && !L.beard) L.beard = 1;
   L.brow = shade(L.hair, 0.85);
   return L;
@@ -1819,11 +1871,12 @@ function drawScreenFx() {
    Team 1 = AI on "easy": slower, rarely tackles, weak finishing.
    ===================================================================== */
 const G = { tod: 'day', state: 'menu', t: 0, clock: 0, dur: 300, half: 1, score: [0, 0], hype: 0, goalTeam: -1, timeScale: 1, kickTeam: 0,
-  stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0] }, scorers: [], stT: 0, pending: null, setT: 0, lastSwitch: 0, scorer: null };
+  stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0], offsides: [0, 0] }, scorers: [], stT: 0, pending: null, setT: 0, lastSwitch: 0, scorer: null };
 let TEAMS_SEL = [TEAMS[0], TEAMS[1]];
 const players = [];
-const REF_TEAM = { id: 'ref', shirt: '#161616', sleeve: '#161616', shorts: '#111111', socks: '#161616', sockTop: '#d8ff3a', trim: '#d8ff3a', collar: '#d8ff3a', num: '#d8ff3a', boot: '#111111', gk: {} };
+const REF_TEAM = { id: 'ref', shirt: '#111111', sleeve: '#111111', shorts: '#0e0e0e', socks: '#111111', sockTop: '#222222', trim: '#2a2a2a', collar: '#2a2a2a', num: '#cfcfcf', boot: '#0a0a0a', gk: {} };
 let user = null, referee = null;
+const ars = [], officials = [];
 const ball = { x: 0, y: BR, z: 0, vx: 0, vy: 0, vz: 0, owner: null, last: 0, lastKicker: null, rot: [1, 0, 0, 0, 1, 0, 0, 0, 1], held: false, passTo: null, shot: null, rx: 0, ry: BR, rz: 0, inGoal: false };
 const FORM = [[-50, 0, 'GK'], [-33, -23, 'DEF'], [-37, -8, 'DEF'], [-37, 8, 'DEF'], [-33, 23, 'DEF'], [-18, -12, 'MID'], [-22, 0, 'MID'], [-18, 12, 'MID'], [-6, -21, 'FWD'], [-3, 0, 'FWD'], [-6, 21, 'FWD']];
 const dirOf = team => team === 0 ? 1 : -1;
@@ -1831,7 +1884,7 @@ const EASY = { aiSpeed: 4.7, aiChase: 5.3, aiTackle: 0.16, gkSave: 0.3, userSpee
 
 function makePlayer(team, i, T, rng) {
   const gk = i === 0;
-  const p = { team, idx: i, role: FORM[i][2], num: NUMS[i], name: T.names[i], look: lookFor(T, gk, i, rng),
+  const p = { team, idx: i, role: FORM[i][2], num: T.squad ? T.squad[i][1] : NUMS[i], name: T.squad ? T.squad[i][0] : '', look: lookFor(T, gk, i, rng),
     x: 0, z: 0, vx: 0, vz: 0, f: team === 0 ? 0 : Math.PI, ph: rand(0, TAU), spd: 0, act: A_NONE, actT: 0, actDur: 0, aux: 0, jump: 0,
     cool: 0, protect: 0, stam: 1, think: rand(0, 1), tackleCD: 0, pending: null, slideV: 0, wob: rand(0, TAU), tx: 0, tz: 0,
     rx: 0, rz: 0, rf: 0, rph: 0, rsp: 0, ract: 0, ractT: 0, raux: 0, rjump: 0 };
@@ -1844,6 +1897,9 @@ function buildTeams() {
   referee = makePlayer(2, 5, TEAMS[0], rng);
   referee.look = lookFor(REF_TEAM, false, 2, rng);
   referee.name = 'Wasit'; referee.num = '';
+  ars.length = 0;
+  for (const sd of [1, -1]) { const a = makePlayer(2, 5, TEAMS[0], rng); a.look = lookFor(REF_TEAM, false, 4, rng); a.name = 'Asisten wasit'; a.num = ''; a.side = sd; ars.push(a); }
+  officials.length = 0; officials.push(referee, ...ars);
   user = players[9];
 }
 const teamOf = t => players.slice(t * 11, t * 11 + 11);
@@ -1858,6 +1914,8 @@ function resetKickoff(kickTeam) {
     p.x = x; p.z = z; p.vx = p.vz = 0; p.f = p.team === 0 ? 0 : Math.PI; p.act = A_NONE; p.cool = 0; p.pending = null; p.jump = 0; p.spd = 0;
   }
   referee.x = -6; referee.z = -12; referee.f = Math.PI / 2;
+  for (const a of ars) { a.x = a.side * 12; a.z = a.side * (PW + 1.6); a.vx = a.vz = 0; a.f = a.side > 0 ? -Math.PI / 2 : Math.PI / 2; a.act = A_NONE; }
+  G.offSnap = null; G.offShowT = 0;
   Object.assign(ball, { x: 0, y: BR, z: 0, vx: 0, vy: 0, vz: 0, owner: null, held: false, passTo: null, shot: null, inGoal: false });
   const taker = players[kickTeam * 11 + 9];
   taker.f = kickTeam === 0 ? 0 : Math.PI;
@@ -1906,6 +1964,7 @@ function separate() {
 /* ---------------- ball ---------------- */
 function giveBall(p) {
   if (ball.owner === p) return;
+  if (checkOffside(p)) return;
   const prevTeam = ball.owner ? ball.owner.team : ball.last;
   ball.owner = p; ball.last = p.team; ball.held = false; ball.passTo = null; ball.shot = null; ball.vy = 0;
   p.protect = p.team === 0 ? 1.1 : 0.45;
@@ -1931,6 +1990,7 @@ function processPending(p) {
   releaseBall(p, k.vx, k.vy, k.vz, k.power, k.kind);
   if (k.kind === 'shot' || k.kind === 'volley') { ball.shot = { team: p.team, by: p, id: Math.random() }; G.stats.shots[p.team]++; G.hype = Math.max(G.hype, 0.5); }
   if (k.kind === 'pass' || k.kind === 'throw' || k.kind === 'gkthrow') { ball.passTo = k.target; G.stats.passes[p.team]++; if (p.team === 0 && k.target) setUser(k.target); }
+  if ((k.kind === 'pass' || k.kind === 'gkthrow') && G.state === 'play') snapOffside(p); else if (k.kind === 'shot') G.offSnap = null;
 }
 function updateBall(dt) {
   const o = ball.owner;
@@ -1989,6 +2049,7 @@ function bestPassTarget(p, dx, dz) {
   let best = null, bs = -1e9; const d0 = dirOf(p.team);
   for (const q of players) {
     if (q.team !== p.team || q === p || q.role === 'GK') continue;
+    if (p.team === 1 && G.offLineN && q.x * d0 > Math.max(G.offLineN[1], ball.x * d0, 0) + 0.2) continue;
     const ox = q.x - p.x, oz = q.z - p.z, d = Math.hypot(ox, oz); if (d < 3.5 || d > 48) continue;
     let sc = Math.min(openness(q), 9) * 1.4;
     if (dx || dz) { const al = (ox * dx + oz * dz) / d; sc += al * 34 - d * 0.3; if (al < 0.35) sc -= 60; }
@@ -2026,6 +2087,7 @@ function doShot(p, power, aimHint, err, volley) {
   const v = shotVel(volley ? ball.x : p.x, fy, volley ? ball.z : p.z, p.team, power, az);
   p.f = Math.atan2(v.vz, v.vx);
   if (volley) {
+    if (checkOffside(p)) return;
     p.act = ball.y > 1.35 ? A_HEAD : A_KICK; p.actT = 0.35; p.actDur = 0.35; if (p.act === A_HEAD) { p.jv = 3.5; p.jump = 0.01; }
     ball.owner = null; ball.vx = v.vx; ball.vy = Math.min(v.vy, 4); ball.vz = v.vz; ball.last = p.team; ball.lastKicker = p; p.cool = 0.4;
     ball.shot = { team: p.team, by: p, id: Math.random() }; G.stats.shots[p.team]++; sfxKick(power); G.hype = Math.max(G.hype, 0.5);
@@ -2086,7 +2148,7 @@ function gkSaveCheck(p) {
   if (d < 1.6 && ball.y < 2.6) {
     p.willSave = false; const s = dirOf(p.team), sp = Math.hypot(ball.vx, ball.vz);
     if (sp < 17 && Math.random() < 0.6) { giveBall(p); p.act = A_DIVE; toast(p.team === 1 ? 'Ditangkap kiper!' : 'Kiper kita menangkap!'); }
-    else { ball.vx = s * rand(4, 8); ball.vz = Math.sign(ball.z || 1) * rand(4, 9); ball.vy = rand(2, 5); ball.shot = null; ball.last = p.team; toast('Penyelamatan!'); sfxOoh(); }
+    else { G.offSnap = null; ball.vx = s * rand(4, 8); ball.vz = Math.sign(ball.z || 1) * rand(4, 9); ball.vy = rand(2, 5); ball.shot = null; ball.last = p.team; toast('Penyelamatan!'); sfxOoh(); }
     sfxKick(0.4); G.hype = Math.max(G.hype, 0.4);
   }
 }
@@ -2098,6 +2160,7 @@ function shapeTarget(p, attacking) {
   const d = dirOf(p.team), bx = ball.x * d, f = FORM[p.idx];
   let tx = f[0] * 0.62 + bx * 0.55 + (attacking ? 9 : -4), tz = f[1] * 0.92 + ball.z * d * 0.2;
   if (p.role === 'FWD' && attacking) tx = Math.max(tx, Math.min(bx + 9, 44));
+  if (attacking && G.offLineN) tx = Math.min(tx, Math.max(G.offLineN[p.team] - 0.9, bx));
   if (p.role === 'DEF') tx = Math.min(tx, bx - 6);
   if (p.role === 'FWD' && !attacking) tx = Math.max(tx, -12);
   tx = clamp(tx, -47, 46); tz = clamp(tz, -31, 31);
@@ -2188,10 +2251,41 @@ function userUpdate(p, dt) {
 function slideCheck(p) {
   const fx = p.x + Math.cos(p.f) * 0.7, fz = p.z + Math.sin(p.f) * 0.7, d = Math.hypot(ball.x - fx, ball.z - fz);
   if (d < 1.4 && ball.y < 0.8) {
+    G.offSnap = null;
     if (ball.owner && ball.owner.team === 1 && !ball.held) { const o = ball.owner; o.cool = 0.9; ball.owner = null; ball.vx = Math.cos(p.f) * 6; ball.vz = Math.sin(p.f) * 6; ball.last = 0; spawnTurf(ball.x, ball.z, 10, 1.4); sfxKick(0.35); toast('Tekel bersih!'); p.cool = 0.15; }
     else if (!ball.owner) { giveBall(p); }
   }
 }
+
+/* ---------------- officials and offside ---------------- */
+const NACT = 25;
+function actorAt(i) { return i < 22 ? players[i] : officials[i - 22]; }
+// x (in the attacking team's frame) of the second-last opponent, i.e. the offside line
+function offsideLineN(team) {
+  const d = dirOf(team); let a = -1e9, b = -1e9;
+  for (let i = (1 - team) * 11; i < (1 - team) * 11 + 11; i++) { const v = players[i].x * d; if (v > a) { b = a; a = v; } else if (v > b) b = v; }
+  return b;
+}
+function snapOffside(p) {
+  const d = dirOf(p.team), lineN = Math.max(offsideLineN(p.team), ball.x * d, 0), off = [];
+  for (let i = p.team * 11 + 1; i < p.team * 11 + 11; i++) { const q = players[i]; if (q !== p && q.x * d > lineN + 0.25) off.push(q); }
+  G.offSnap = off.length ? { team: p.team, off, lineX: lineN * d } : null;
+}
+function checkOffside(p) {
+  const s = G.offSnap; if (!s) return false;
+  G.offSnap = null;
+  if (G.state === 'play' && p.team === s.team && s.off.includes(p)) { callOffside(p, s); return true; }
+  return false;
+}
+// Assistant referees run their touchline level with the offside line of the half they watch.
+function arUpdate(a, dt) {
+  if (a.act === A_FLAG) { steer(a, 0, 0, 16, dt); return; }
+  const team = a.side > 0 ? 0 : 1, d = dirOf(team);
+  const lineN = Math.max(offsideLineN(team), ball.x * d, 0);
+  seek(a, clamp(lineN * d, a.side > 0 ? 0 : -PL, a.side > 0 ? PL : 0), a.side * (PW + 1.6), 7.5, dt, 14, 1.2);
+}
+function officialsStep(dt) { integrate(referee, dt); for (const a of ars) { arUpdate(a, dt); integrate(a, dt); } }
+function whistleAnim(kind) { if (!referee) return; referee.act = A_WHISTLE; referee.actT = 0; referee.actDur = kind === 'final' ? 1.6 : kind === 'long' ? 1.1 : 0.75; }
 
 /* =====================================================================
    MATCH FLOW
@@ -2225,15 +2319,16 @@ function checkBallEvents() {
     else stoppage('goalkick', defending, { x: s * (PL - 5.5), z: 0 });
   }
 }
-const SP_NAMES = { throw: 'Lemparan ke dalam', corner: 'Tendangan sudut', goalkick: 'Tendangan gawang' };
-function stoppage(kind, team, pos) {
-  G.state = 'stoppage'; G.stT = 0; G.pending = { kind, team, pos };
-  sfxWhistle('short'); toast(SP_NAMES[kind] + ' · ' + TEAMS_SEL[team].short);
+const SP_NAMES = { throw: 'Lemparan ke dalam', corner: 'Tendangan sudut', goalkick: 'Tendangan gawang', freekick: 'Tendangan bebas' };
+function stoppage(kind, team, pos, msg) {
+  G.state = 'stoppage'; G.stT = 0; G.pending = { kind, team, pos }; G.offSnap = null;
+  sfxWhistle('short'); toast(msg || (SP_NAMES[kind] + ' · ' + TEAMS_SEL[team].short));
   if (kind === 'corner') G.hype = Math.max(G.hype, 0.4);
   if (ball.owner) { ball.owner = null; ball.held = false; }
 }
 function setupSetPiece() {
   const { kind, team, pos } = G.pending, d = dirOf(team);
+  if (G.pending.offside) { G.pending.offside = false; G.offAR = null; G.camCut = 1; }
   let taker = null;
   if (kind === 'goalkick') taker = gkOf(team);
   else { let bd = 1e9; for (let i = team * 11 + 1; i < team * 11 + 11; i++) { const p = players[i], dd = Math.hypot(p.x - pos.x, p.z - pos.z) + (kind === 'corner' && p.role === 'DEF' ? 40 : 0); if (dd < bd) { bd = dd; taker = p; } } }
@@ -2243,6 +2338,7 @@ function setupSetPiece() {
     let k = 0; for (let i = team * 11 + 5; i < team * 11 + 11; i++) { const p = players[i]; if (p === taker) continue; const sp = spots[k++ % 5]; p.x = gx + d * sp[0] + rand(-0.8, 0.8); p.z = sp[1] + rand(-0.8, 0.8); }
     let m = 0; for (let i = (1 - team) * 11 + 1; i < (1 - team) * 11 + 8; i++) { const p = players[i], sp = spots[m++ % 5]; p.x = gx + d * (sp[0] + 1.6); p.z = sp[1] + rand(-1.4, 1.4); }
   }
+  if (kind === 'freekick') for (let i = (1 - team) * 11 + 1; i < (1 - team) * 11 + 11; i++) { const q = players[i], dx = q.x - pos.x, dz = q.z - pos.z, dd = Math.hypot(dx, dz); if (dd < 9.2) { const ux = dd > 0.1 ? dx / dd : -d, uz = dd > 0.1 ? dz / dd : 0; q.x = pos.x + ux * 9.3; q.z = clamp(pos.z + uz * 9.3, -PW + 1, PW - 1); } }
   taker.x = pos.x; taker.z = pos.z;
   if (kind === 'throw') taker.f = Math.atan2(-Math.sign(pos.z), 0);
   else if (kind === 'corner') taker.f = Math.atan2(-pos.z, d * (PL - 11) - pos.x);
@@ -2251,7 +2347,7 @@ function setupSetPiece() {
   ball.x = taker.x + Math.cos(taker.f) * 0.5; ball.z = taker.z + Math.sin(taker.f) * 0.5; ball.y = kind === 'throw' ? 2.05 : BR;
   if (kind === 'throw') { taker.act = A_THROWH; taker.actT = 0; taker.actDur = 99; }
   taker.protect = 99; G.setTaker = taker; G.setT = 0; trailW.length = 0;
-  if (team === 0 && taker.role !== 'GK') { setUser(taker); showHint(kind === 'throw' ? 'Tekan OPER untuk melempar bola' : 'Tekan OPER / TENDANG untuk umpan silang'); }
+  if (team === 0 && taker.role !== 'GK') { setUser(taker); showHint(kind === 'throw' ? 'Tekan OPER untuk melempar bola' : kind === 'freekick' ? 'Tekan OPER atau TENDANG untuk tendangan bebas' : 'Tekan OPER / TENDANG untuk umpan silang'); }
   G.state = 'setpiece';
 }
 function cornerCross(tk) {
@@ -2271,16 +2367,17 @@ function setpieceStep(dt) {
       hideHint();
       if (kind === 'throw') doPass(tk, userTake ? IN.mx : 0, userTake ? IN.mz : 0, false, tk.team === 1 ? 1.2 : 0, 'throw') || doPass(tk, 0, 0, false, 0, 'throw');
       else if (kind === 'corner') cornerCross(tk);
+      else if (kind === 'freekick') { if (userTake && IN.shoot.released) doShot(tk, clamp(0.4 + IN.shoot.held * 0.75, 0.4, 1), Math.abs(IN.mz) > 0.35 ? Math.sign(IN.mz) : null, 0.4, false); else doPass(tk, userTake ? IN.mx : dirOf(tk.team), userTake ? IN.mz : 0, userTake ? IN.pass.held > 0.28 : Math.random() < 0.4, userTake ? 0 : 1.0) || doPass(tk, 0, 0, false, 0); }
       else { doPass(tk, dirOf(tk.team), 0, true, 1.5) || doPass(tk, 0, 0, true, 1.5); }
     }
   }
   for (const p of players) { integrate(p, dt); processPending(p); }
-  integrate(referee, dt); updateBall(dt);
+  officialsStep(dt); updateBall(dt);
   if (ball.owner !== tk) { G.state = 'play'; tk.protect = 0; }
 }
 function kickoffStep(dt) {
   for (const p of players) { steer(p, 0, 0, 10, dt); integrate(p, dt); processPending(p); }
-  integrate(referee, dt);
+  officialsStep(dt);
   const tk = players[G.kickTeam * 11 + 9];
   if (ball.owner !== tk) { ball.owner = tk; ball.held = false; }
   updateBall(dt);
@@ -2323,7 +2420,7 @@ function goalStep(dt) {
     }
   }
   for (const p of players) integrate(p, dt);
-  integrate(referee, dt); separate(); updateBall(dt);
+  officialsStep(dt); separate(); updateBall(dt);
 }
 function afterGoal() {
   fadeThen(() => {
@@ -2335,12 +2432,12 @@ function afterGoal() {
 }
 
 /* ---------------- replay ---------------- */
-const REC_N = 480, REC_W = 3 + 23 * 9, rec = new Float32Array(REC_N * REC_W);
+const REC_N = 480, REC_W = 3 + NACT * 9, rec = new Float32Array(REC_N * REC_W);
 let recTotal = 0;
 function recordFrame() {
   let o = (recTotal % REC_N) * REC_W;
   rec[o++] = ball.x; rec[o++] = ball.y; rec[o++] = ball.z;
-  for (let i = 0; i < 23; i++) { const p = i < 22 ? players[i] : referee; rec[o++] = p.x; rec[o++] = p.z; rec[o++] = p.f; rec[o++] = p.ph; rec[o++] = p.spd; rec[o++] = p.act; rec[o++] = p.actT; rec[o++] = p.aux || 0; rec[o++] = p.jump; }
+  for (let i = 0; i < NACT; i++) { const p = actorAt(i); rec[o++] = p.x; rec[o++] = p.z; rec[o++] = p.f; rec[o++] = p.ph; rec[o++] = p.spd; rec[o++] = p.act; rec[o++] = p.actT; rec[o++] = p.aux || 0; rec[o++] = p.jump; }
   recTotal++;
 }
 function startReplay() {
@@ -2360,8 +2457,8 @@ function applyReplay(pos) {
   ball.rx = L(0); ball.ry = L(1); ball.rz = L(2);
   const mvx = (ball.rx - px) * 60, mvz = (ball.rz - pz) * 60, sp = Math.hypot(mvx, mvz);
   if (sp > 0.05 && sp < 60) rotateBall(ball.rot, mvz / sp, 0, -mvx / sp, -sp * (1 / 120) / BR);
-  for (let i = 0; i < 23; i++) {
-    const p = i < 22 ? players[i] : referee, k = 3 + i * 9;
+  for (let i = 0; i < NACT; i++) {
+    const p = actorAt(i), k = 3 + i * 9;
     p.rx = L(k); p.rz = L(k + 1); p.rf = rec[a + k + 2] + angDiff(rec[a + k + 2], rec[b + k + 2]) * t; p.rph = L(k + 3); p.rsp = L(k + 4) / 6.4;
     p.ract = rec[a + k + 5]; p.ractT = L(k + 6); p.raux = rec[a + k + 7]; p.rjump = L(k + 8);
   }
@@ -2387,7 +2484,7 @@ function fullTime() {
 function breakStep(dt) {
   G.stT += dt;
   for (const p of players) { steer(p, 0, 0, 6, dt); integrate(p, dt); }
-  integrate(referee, dt); updateBall(dt);
+  officialsStep(dt); updateBall(dt);
   if (G.state === 'halftime' && G.stT > 3.4 && !G.fading) fadeThen(() => { G.half = 2; resetKickoff(1); G.state = 'kickoff'; G.setT = 0; hideBanner(); });
   if (G.state === 'fulltime' && G.stT > 4 && !G.fading) fadeThen(() => { hideBanner(); showResult(); });
 }
@@ -2407,15 +2504,15 @@ function refereeUpdate(dt) {
 }
 function playStep(dt) {
   G.clock += dt;
+  G.offLineN = [Math.max(offsideLineN(0), 0), Math.max(offsideLineN(1), 0)];
   autoSwitch();
   for (const p of players) {
     if (p === user) userUpdate(p, dt);
     else if (p.role === 'GK') gkUpdate(p, dt);
     else aiUpdate(p, dt);
   }
-  refereeUpdate(dt);
   for (const p of players) { integrate(p, dt); processPending(p); }
-  integrate(referee, dt); separate();
+  refereeUpdate(dt); officialsStep(dt); separate();
   updateBall(dt); tryCapture(); checkBallEvents();
   if (ball.owner) G.stats.poss[ball.owner.team] += dt;
   G.hype = Math.max(Math.abs(ball.x) > 36 ? 0.25 : 0, G.hype - dt * 0.12);
@@ -2429,18 +2526,18 @@ function warmStep(dt) {
     }
     seek(p, p.tx, p.tz, p.idx % 3 === 0 ? 2.2 : 3.6, dt, 6, 2); integrate(p, dt);
   }
-  seek(referee, 0, -6, 2, dt); integrate(referee, dt);
+  seek(referee, 0, -6, 2, dt); officialsStep(dt);
   ball.owner = null; Object.assign(ball, { x: 0, y: BR, z: 0, vx: 0, vy: 0, vz: 0 });
 }
 function simStep(dt) {
   switch (G.state) {
     case 'menu': case 'result': warmStep(dt); break;
-    case 'intro': G.stT += dt; for (const p of players) { steer(p, 0, 0, 10, dt); integrate(p, dt); } integrate(referee, dt); updateBall(dt);
+    case 'intro': G.stT += dt; for (const p of players) { steer(p, 0, 0, 10, dt); integrate(p, dt); } officialsStep(dt); updateBall(dt);
       if (G.stT > 2.6) { G.state = 'kickoff'; G.setT = 0; IN.moved = false; hideBanner(); if (G.kickTeam === 0) showHint('Tekan OPER untuk kick-off'); } break;
     case 'kickoff': kickoffStep(dt); break;
     case 'play': playStep(dt); break;
-    case 'stoppage': G.stT += dt; G.clock += dt; for (const p of players) { steer(p, 0, 0, 7, dt); integrate(p, dt); } integrate(referee, dt); updateBall(dt);
-      if (G.stT > 1.1 && !G.fading) { G.stT = -99; fadeThen(setupSetPiece); } break;
+    case 'stoppage': G.stT += dt; G.clock += dt; for (const p of players) { steer(p, 0, 0, 7, dt); integrate(p, dt); } officialsStep(dt); updateBall(dt);
+      if (G.stT > (G.pending && G.pending.offside ? 2.8 : 1.1) && !G.fading) { G.stT = -99; fadeThen(setupSetPiece); } break;
     case 'setpiece': G.setT += dt; G.clock += dt; setpieceStep(dt); break;
     case 'goal': {
       const rdt = dt / Math.max(0.05, G.timeScale); G.goalT += rdt;
@@ -2453,6 +2550,7 @@ function simStep(dt) {
     case 'halftime': case 'fulltime': breakStep(dt); break;
   }
   if ((G.state === 'play' || G.state === 'stoppage' || G.state === 'setpiece' || (G.state === 'goal' && G.goalT < 1.8))) recordFrame();
+  if (G.offShowT > 0) G.offShowT -= dt;
   IN.pass.pressed = IN.pass.released = IN.shoot.pressed = IN.shoot.released = false;
   updateParticles(dt);
 }
@@ -2462,6 +2560,7 @@ function camTargets() {
   const T = rigT, s = G.state; T.face = 0;
   if (s === 'menu' || s === 'result') { T.tx = Math.sin(G.t * 0.06) * 30; T.tz = 4; T.h = 11 + Math.sin(G.t * 0.045) * 3; T.D = 40; T.vw = 74; T.shift = 0.6; T.yaw = 0.3; return 0.6; }
   if (s === 'goal' && G.scorer) { const sc = G.scorer; T.tx = sc.x * 0.75 + ball.x * 0.25; T.tz = sc.z * 0.8 + 1.5; T.h = 6.5; T.D = 19; T.vw = 21; T.shift = 0.56; T.yaw = 0; T.face = (G.goalTeam === 0 && G.goalT > 1.4 && G.goalT < 4.3) ? 1 : 0; return 1.6; }
+  if (s === 'stoppage' && G.pending && G.pending.offside && G.offAR) { const a = G.offAR, far = a.side > 0; T.tx = (a.x + G.offLineX) / 2; T.tz = far ? a.z - 2.6 : a.z + 1.5; T.h = 2.4; T.D = far ? 12 : 12.5; T.vw = 10; T.shift = 0.6; T.yaw = 0; return 2.5; }
   if (s === 'replay') { T.tx = ball.rx; T.tz = ball.rz * 0.6 + 2; T.h = 8; T.D = 24; T.vw = 30; T.shift = 0.56; T.yaw = 0.45; return 3; }
   if (s === 'halftime' || s === 'fulltime') { T.tx = ball.x * 0.3; T.tz = 6; T.h = 16; T.D = 42; T.vw = 62; T.shift = 0.58; T.yaw = 0.3; return 0.8; }
   if (s === 'setpiece' && G.pending && G.pending.kind === 'corner') { const d = Math.sign(G.pending.pos.x); T.tx = d * 38; T.tz = G.pending.pos.z * 0.3 + 3; T.h = 22; T.D = 38; T.vw = 44; T.shift = 0.5; T.yaw = 1; return 2.5; }
@@ -2476,6 +2575,17 @@ function updateCamera(dt) {
   rig.h += (rigT.h - rig.h) * az2; rig.D += (rigT.D - rig.D) * az2; rig.vw += (rigT.vw - rig.vw) * az2; rig.shift += (rigT.shift - rig.shift) * az2;
   rig.face += (rigT.face - rig.face) * damp(3.2, dt); rig.yaw += (rigT.yaw - rig.yaw) * damp(1.6, dt);
   rig.shake *= Math.exp(-dt * 3);
+  if (G.camCut) { G.camCut = 0; for (const k of ['tx', 'tz', 'h', 'D', 'vw', 'shift', 'yaw', 'face']) rig[k] = rigT[k]; }
+}
+
+function callOffside(p, s) {
+  G.stats.offsides[s.team]++;
+  const ar = s.team === 0 ? ars[0] : ars[1];
+  ar.act = A_FLAG; ar.actT = 0; ar.actDur = 3.2;
+  G.offLineX = s.lineX; G.offShowT = 3.4;
+  stoppage('freekick', 1 - s.team, { x: clamp(p.x, -PL + 3, PL - 3), z: clamp(p.z, -PW + 2, PW - 2) }, 'Offside · ' + p.name);
+  G.pending.offside = true; G.offAR = ar; G.camCut = 1;
+  banner('OFFSIDE', p.name, true); clearTimeout(callOffside.t); callOffside.t = setTimeout(() => { if (G.state !== 'goal') hideBanner(); }, 1900);
 }
 
 /* =====================================================================
@@ -2562,7 +2672,7 @@ function hudTick(dt) {
     const opp = ball.owner && ball.owner.team === 1 ? ball.owner : closestField(1);
     if (opp) { if (opp !== G.lastOpp) { G.lastOpp = opp; $('lr-num').textContent = opp.num; $('lr-name').textContent = opp.name; } $('lr-stam').style.width = Math.round(opp.stam * 100) + '%'; }
   }
-  if (!$('hud').hidden) { drawRadar(); $('hud').classList.toggle('cine', G.state === 'goal' || G.state === 'replay'); }
+  if (!$('hud').hidden) { drawRadar(); $('hud').classList.toggle('cine', G.state === 'goal' || G.state === 'replay' || !!(G.pending && G.pending.offside && G.state === 'stoppage')); }
 }
 const RC = $('radar'), RX = RC.getContext('2d');
 function drawRadar() {
@@ -2616,7 +2726,7 @@ function startMatch() {
   TEAMS_SEL = [TEAMS[G.myIdx], TEAMS[G.oppIdx]];
   fadeThen(() => {
     buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]); refreshWorldTeams(); buildTeams(); rebuildRigs();
-    Object.assign(G, { score: [0, 0], clock: 0, half: 1, scorers: [], hype: 0.35, goalTeam: -1, timeScale: 1, fwCols: null, stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0] } });
+    Object.assign(G, { score: [0, 0], clock: 0, half: 1, scorers: [], hype: 0.35, goalTeam: -1, timeScale: 1, fwCols: null, stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0], offsides: [0, 0] } });
     recTotal = 0; trailW.length = 0; conf.length = 0; fws.length = 0;
     resetKickoff(0);
     for (const id of ['scr-select', 'scr-vs', 'scr-result', 'scr-pause']) $(id).hidden = true;
@@ -2651,7 +2761,7 @@ function showResult() {
   $('res-score').textContent = `${s[0]} – ${s[1]}`;
   $('res-scorers').innerHTML = G.scorers.length ? G.scorers.map(g => `<b>${TEAMS_SEL[g.team].short}</b> · ${g.name} ${g.min}'`).join('<br>') : 'Belum ada gol malam ini';
   const ps = G.stats.poss[0] + G.stats.poss[1] || 1, p0 = Math.round(G.stats.poss[0] / ps * 100);
-  const rows = [['Penguasaan bola (%)', p0, 100 - p0], ['Tembakan', G.stats.shots[0], G.stats.shots[1]], ['Tepat sasaran', G.stats.onT[0], G.stats.onT[1]], ['Operan', G.stats.passes[0], G.stats.passes[1]]];
+  const rows = [['Penguasaan bola (%)', p0, 100 - p0], ['Tembakan', G.stats.shots[0], G.stats.shots[1]], ['Tepat sasaran', G.stats.onT[0], G.stats.onT[1]], ['Operan', G.stats.passes[0], G.stats.passes[1]], ['Offside', G.stats.offsides[0], G.stats.offsides[1]]];
   $('res-stats').innerHTML = rows.map(([l, x, y]) => `<div class="srow"><span>${x}</span><div><em>${l}</em><div class="duel">${x + y ? `<i style="flex:${x || 0.0001};background:${a.c1}"></i><i style="flex:${y || 0.0001};background:${b.c1}"></i>` : '<i style="flex:1;background:rgba(255,255,255,.12)"></i>'}</div></div><span>${y}</span></div>`).join('');
   $('scr-result').hidden = false; crowdLevel(0.35);
 }
@@ -2683,7 +2793,7 @@ function initPreview() {
     const rim = new THREE.DirectionalLight(lin('#8fb3ff'), 1.3); rim.position.set(-3, 3, -4); PV.scn.add(rim);
     const floor = new THREE.Mesh(new THREE.CircleGeometry(1.5, 48).rotateX(-Math.PI / 2), new THREE.ShadowMaterial({ opacity: 0.5 })); floor.receiveShadow = true; PV.scn.add(floor);
     PV.cam = new THREE.PerspectiveCamera(24, 480 / 300, 0.1, 50); PV.cam.position.set(0, 1.42, 3.3); PV.cam.lookAt(0, 1.27, 0);
-    PV.items = TEAMS.map((team, i) => { const L = lookFor(team, false, 9, mulberry32(41 + i * 13)); L.idle = i === 1 ? 1 : 0; const R = makeRig(team, L, 9, team.names[9]); R.root.visible = false; PV.scn.add(R.root); return { R, p: { look: L, rx: 0, rz: 0, rf: -Math.PI / 2, rph: 0, rsp: 0, ract: A_NONE, ractT: 0, raux: 0, rjump: 0 } }; });
+    PV.items = TEAMS.map((team, i) => { const L = lookFor(team, false, 9, mulberry32(41 + i * 13)); L.idle = i === 1 ? 1 : 0; const R = makeRig(team, L, team.squad[9][1], team.squad[9][0]); R.root.visible = false; PV.scn.add(R.root); return { R, p: { look: L, rx: 0, rz: 0, rf: -Math.PI / 2, rph: 0, rsp: 0, ract: A_NONE, ractT: 0, raux: 0, rjump: 0 } }; });
   } catch (e) { PV.r = null; PV.fail = true; }
 }
 function renderKits(t) {
@@ -2703,7 +2813,7 @@ function renderKits(t) {
    RENDER + LOOP
    ===================================================================== */
 function syncRender() {
-  for (let i = 0; i < 23; i++) { const p = i < 22 ? players[i] : referee; p.rx = p.x; p.rz = p.z; p.rf = p.f; p.rph = p.ph; p.rsp = p.spd / 6.4; p.ract = p.act; p.ractT = p.actT; p.raux = p.aux || 0; p.rjump = p.jump; }
+  for (let i = 0; i < NACT; i++) { const p = actorAt(i); p.rx = p.x; p.rz = p.z; p.rf = p.f; p.rph = p.ph; p.rsp = p.spd / 6.4; p.ract = p.act; p.ractT = p.actT; p.raux = p.aux || 0; p.rjump = p.jump; }
   ball.rx = ball.x; ball.ry = ball.y; ball.rz = ball.z; ball.rspd = ball.owner ? 0 : Math.hypot(ball.vx, ball.vz, ball.vy * 0.5);
 }
 function drawLabels(t) {
@@ -2728,7 +2838,7 @@ function render(dt) {
   camApply(rig);
   const t = G.t, live = !['menu', 'result', 'replay'].includes(G.state) && !(G.state === 'paused' && G.prev === 'replay');
   for (const p of players) if (p.rig) poseRig(p.rig, p);
-  if (referee.rig) poseRig(referee.rig, referee);
+  for (const o of officials) if (o.rig) poseRig(o.rig, o);
   updateFx3(t, live && G.state !== 'goal');
   updateNets(t);
   updateBoards(t, (G.state === 'goal' || G.state === 'replay' || (G.state === 'paused' && G.goalTeam >= 0)) ? G.goalTeam : -1);
@@ -2780,7 +2890,7 @@ function boot() {
   requestAnimationFrame(t => { lastT = t; frame(t); });
   const fl = document.fonts && document.fonts.load ? Promise.race([Promise.all([document.fonts.load('italic 800 30px "Barlow Condensed"'), document.fonts.load('700 30px "Barlow Condensed"'), document.fonts.load('800 30px "Barlow Condensed"')]), new Promise(r => setTimeout(r, 2500))]) : Promise.resolve();
   fl.then(() => { G.fontsOk = true; if (G.state === 'menu') { buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]); refreshWorldTeams(); rebuildRigs(); } }).catch(() => { });
-  window.__golazo = { G, ball, players, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
+  window.__golazo = { G, ball, players, officials, ars, snapOffside, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
 }
 boot();
 })();
