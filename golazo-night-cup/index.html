@@ -1702,7 +1702,8 @@ function applyTimeOfDay(tod) {
   if (BLOOM) { BLOOM.strength = day ? 0.2 : 0.5; BLOOM.threshold = day ? 1.3 : 1.0; }
   if (W3.sunScene) bakeSunShadow(); else SUN.on.value = 0;
   if (W3.tifoMat) W3.tifoMat.emissiveIntensity = day ? 0.16 : 0.28;
-  for (const m of W3.screenMats || []) m.color.setScalar(day ? (wet ? 1.0 : 1.15) : 1.7);
+  for (const m of W3.screenMats || []) m.color.setScalar(day ? (wet ? 1.15 : 1.3) : 2.1);
+  if (W3.haloMat) W3.haloMat.color.setRGB(0.2, 0.34, 0.85).multiplyScalar(day ? (wet ? 0.5 : 0.35) : 1.15);
 }
 
 function makeFlagProp() {
@@ -1846,22 +1847,33 @@ function buildBigScreens() {
   const c = mkCanvas(1024, 512); W3.bigCanvas = c; W3.bigSig = '';
   const tex = tex3(c, true, 8); W3.bigTex = tex;
   const face = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.15, 1.15, 1.15) }); W3.bigMat = face;
-  const frameM = new THREE.MeshStandardMaterial({ color: lin('#15181f'), roughness: 0.6, metalness: 0.4 });
-  W3.bigScreens = []; W3.screenMats = [face];
+  const frameM = new THREE.MeshStandardMaterial({ color: lin('#0a0c10'), roughness: 0.55, metalness: 0.4 });
+  W3.bigScreens = []; W3.screenMats = [face]; W3.screenFlarePts = [];
+  // soft light spill around each screen (additive, hidden where it overlaps the casing)
+  const hc = mkCanvas(256, 256), hg = hc.getContext('2d'), rg = hg.createRadialGradient(128, 128, 8, 128, 128, 128);
+  rg.addColorStop(0, 'rgba(255,255,255,1)'); rg.addColorStop(0.42, 'rgba(255,255,255,0.4)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); hg.fillStyle = rg; hg.fillRect(0, 0, 256, 256);
+  W3.haloMat = new THREE.MeshBasicMaterial({ map: tex3(hc, true, 2), color: new THREE.Color(0.2, 0.34, 0.85), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, side: THREE.DoubleSide });
   // the model's corner screen (its picture panel was dropped in conversion): a lit face inside its housing
-  { const Ac = [38.96, 35.9, -54.32], Dc = [52.98, 35.56, -45.59], Cc = [38.84, 27.58, -54.45], Bc = [52.85, 27.24, -45.72], n = [-0.53, 0, 0.85], k = 0.035;
-    const ins = (p, q, r) => p.map((v, i) => v + (q[i] - v) * k + (r[i] - v) * k + n[i] * 0.12);
+  { const Ac = [38.96, 35.9, -54.32], Dc = [52.98, 35.56, -45.59], Cc = [38.84, 27.58, -54.45], Bc = [52.85, 27.24, -45.72], n = [-0.53, 0, 0.85], kx = -0.024, ky = -0.045;
+    const ins = (p, q, r, f = 0.2) => p.map((v, i) => v + (q[i] - v) * kx + (r[i] - v) * ky + n[i] * f);
     const pts = [ins(Cc, Bc, Ac), ins(Bc, Cc, Dc), ins(Dc, Ac, Bc), ins(Ac, Dc, Cc)];
+    const ctr = [0, 1, 2].map(i => (pts[0][i] + pts[1][i] + pts[2][i] + pts[3][i]) / 4), hp = pts.map(p => p.map((v, i) => ctr[i] + (v - ctr[i]) * 1.9 - n[i] * 0.35));
+    const hgeo = new THREE.BufferGeometry(); hgeo.setAttribute('position', new THREE.Float32BufferAttribute(hp.flat(), 3)); hgeo.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2)); hgeo.setIndex([0, 1, 2, 0, 2, 3]);
+    const halo = new THREE.Mesh(hgeo, W3.haloMat); halo.renderOrder = 3; SCN.add(halo);
+    W3.screenFlarePts.push({ p: new THREE.Vector3(...ctr), n: new THREE.Vector3(...n).normalize(), w: 17 });
     const cg = new THREE.BufferGeometry(); cg.setAttribute('position', new THREE.Float32BufferAttribute(pts.flat(), 3)); cg.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2)); cg.setIndex([0, 1, 2, 0, 2, 3]);
     const cm = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.15, 1.15, 1.15), side: THREE.DoubleSide }); W3.screenMats.push(cm);
     const corner = new THREE.Mesh(cg, cm); SCN.add(corner); W3.cornerScreen = corner; }
   const pc = mkCanvas(1024, 512); W3.promoCanvas = pc; W3.promoTex = tex3(pc, true, 8); drawUclPromo();
   for (const s of [1, -1]) {
     const grp = new THREE.Group();
-    const frame = new THREE.Mesh(new THREE.BoxGeometry(25.6, 13.4, 1.1), frameM); frame.position.z = -0.6; grp.add(frame);
-    const scr = new THREE.Mesh(new THREE.PlaneGeometry(24.6, 12.3), face); scr.position.z = 0.01; grp.add(scr);
+    // edge-to-edge LED face: the picture covers the whole front, the casing only shows from the side and back
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(25.2, 13.0, 0.9), frameM); frame.position.z = -0.48; grp.add(frame);
+    const scr = new THREE.Mesh(new THREE.PlaneGeometry(25.5, 13.3), face); scr.position.z = 0.0; grp.add(scr);
+    const halo = new THREE.Mesh(new THREE.PlaneGeometry(25.5 * 1.9, 13.3 * 2.2), W3.haloMat); halo.position.z = -0.5; halo.renderOrder = 3; grp.add(halo);
     for (const hx of [-8, 8]) { const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.6, 6), frameM); cable.position.set(hx, 7.9, -0.6); grp.add(cable); }
     grp.position.set(s * 60.8, 29.6, 0); grp.rotation.set(0.2, -s * Math.PI / 2, 0, 'YXZ'); SCN.add(grp); W3.bigScreens.push(grp);
+    grp.updateMatrixWorld(true); W3.screenFlarePts.push({ p: grp.position.clone(), n: new THREE.Vector3(0, 0, 1).transformDirection(grp.matrixWorld), w: 25.5 });
   }
   drawBigScreen(true);
 }
@@ -1925,9 +1937,10 @@ function drawBigScreen(force) {
   const [A, B] = TEAMS_SEL, inM = G.state !== 'menu', gm = inM ? G.clock / G.dur * 90 : 0, mm = Math.floor(gm), ss = Math.floor((gm - mm) * 60);
   const clock = String(Math.min(mm, 999)).padStart(2, '0') + ':' + String(ss).padStart(2, '0'), st = G.stats || { passes: [0, 0], shots: [0, 0], poss: [0, 0] };
   const cyc = Math.floor((G.t || 0) / 6) % 3, sc = inM ? G.score : [0, 0];
-  const sig = [A.id, B.id, clock, sc[0], sc[1], (G.scorers || []).length, cyc, G.addMin || 0, st.passes[0], st.passes[1], st.shots[0], st.shots[1]].join('|');
+  const phase = G.state === 'halftime' ? 'HT' : (G.state === 'fulltime' || G.state === 'result') ? 'FT' : G.addMin ? '+' + G.addMin : G.half === 2 ? '2ND' : '1ST';
+  const sig = [A.id, B.id, clock, sc[0], sc[1], (G.scorers || []).length, cyc, phase, st.passes[0], st.passes[1], st.shots[0], st.shots[1]].join('|');
   if (!W3.promoDrawn) drawUclPromo();
-  const promo = G.state === 'menu' || G.state === 'intro' || G.state === 'halftime' || (!['result', 'fulltime', 'goal', 'replay'].includes(G.state) && ((G.t || 0) % 24) > 15);
+  const promo = G.state === 'menu';
   const want = promo ? W3.promoTex : W3.bigTex; for (const m of W3.screenMats || []) if (m.map !== want) m.map = want;
   if (!force && sig === W3.bigSig) return; W3.bigSig = sig;
   const c = W3.bigCanvas, g = c.getContext('2d'), Wd = c.width, Hd = c.height;
@@ -1937,7 +1950,7 @@ function drawBigScreen(force) {
   // clock boxes
   g.fillStyle = 'rgba(4,10,40,0.75)'; g.fillRect(Wd / 2 - 150, 34, 158, 52); g.fillRect(Wd / 2 + 16, 34, 134, 52);
   g.fillStyle = '#ffffff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = F(700, 40); g.fillText(clock, Wd / 2 - 71, 61);
-  g.fillStyle = '#9fd8ff'; g.fillText(G.addMin ? '+' + G.addMin : (inM ? (G.half === 2 ? '2ND' : '1ST') : 'KO'), Wd / 2 + 83, 61);
+  g.fillStyle = '#9fd8ff'; g.fillText(inM ? phase : 'KO', Wd / 2 + 83, 61);
   // crests and score
   const la = logoImg(A.id), lb = logoImg(B.id), cs = 148;
   if (la) g.drawImage(la, 70, 120, cs, cs); if (lb) g.drawImage(lb, Wd - 70 - cs, 120, cs, cs);
@@ -3120,7 +3133,21 @@ function edgeLeak(nx, ny, I, warm) {
   for (const [t, r, c] of G0) { const gx = ex + (cx - ex) * t, gy = ey + (cy - ey) * t, rr = H * r, g2 = X.createRadialGradient(gx, gy, rr * 0.55, gx, gy, rr);
     g2.addColorStop(0, `rgba(${c},${0.025 * I})`); g2.addColorStop(0.85, `rgba(${c},${0.07 * I})`); g2.addColorStop(1, `rgba(${c},0)`); X.fillStyle = g2; X.beginPath(); X.arc(gx, gy, rr, 0, TAU); X.fill(); }
 }
-const _sunV = new THREE.Vector3(), _fwd = new THREE.Vector3();
+const _sunV = new THREE.Vector3(), _fwd = new THREE.Vector3(), _scr = new THREE.Vector3();
+// a big LED screen facing the lens: a soft blue spill around it, an anamorphic streak and faint ghosts
+function screenFlare(sx, sy, I, rs) {
+  const R = rs * 2.4, gl = X.createRadialGradient(sx, sy, rs * 0.55, sx, sy, R);
+  gl.addColorStop(0, `rgba(110,160,255,${0.1 * I})`); gl.addColorStop(0.45, `rgba(80,120,255,${0.05 * I})`); gl.addColorStop(1, 'rgba(0,0,0,0)');
+  X.fillStyle = gl; X.fillRect(sx - R, sy - R, R * 2, R * 2);
+  const sw = Math.max(W * 0.3, rs * 5), st = X.createLinearGradient(sx - sw, 0, sx + sw, 0);
+  st.addColorStop(0, 'rgba(90,140,255,0)'); st.addColorStop(0.5, `rgba(160,200,255,${0.3 * I})`); st.addColorStop(1, 'rgba(90,140,255,0)');
+  X.fillStyle = st; X.fillRect(sx - sw, sy - 1.6 * RS, sw * 2, 3.2 * RS);
+  const cx = W / 2, cy = H / 2;
+  for (const [t, r, c] of [[0.7, 0.35, '120,170,255'], [1.25, 0.6, '170,120,255'], [1.6, 0.22, '120,255,230']]) {
+    const gx = sx + (cx - sx) * t, gy = sy + (cy - sy) * t, rr = Math.max(8 * RS, rs * r), g2 = X.createRadialGradient(gx, gy, rr * 0.5, gx, gy, rr);
+    g2.addColorStop(0, `rgba(${c},${0.025 * I})`); g2.addColorStop(0.85, `rgba(${c},${0.07 * I})`); g2.addColorStop(1, `rgba(${c},0)`); X.fillStyle = g2; X.beginPath(); X.arc(gx, gy, rr, 0, TAU); X.fill();
+  }
+}
 function drawFlares() {
   if (!R3 || !W3.flarePts) return;
   const night = G.tod === 'night', wet = G.wx === 'rain', list = [];
@@ -3147,6 +3174,15 @@ function drawFlares() {
     leaks.sort((a, b) => a[3] - b[3]); const used = [];
     for (const [nx, ny, I0, out] of leaks) { if (used.length >= (night ? 3 : 1) || used.some(u => Math.abs(u - nx) < 0.6)) continue; used.push(nx);
       edgeLeak(nx, ny, I0 * (1 - out / 2.4) * (night ? 1.1 : 1.5) / (used.length === 1 ? 1 : 1.8), !night); }
+  }
+  if (W3.screenFlarePts) {
+    const focal = H / (2 * Math.tan(CAM3.fov * Math.PI / 360));
+    for (const sp of W3.screenFlarePts) {
+      _pv.copy(sp.p).project(CAM3); if (_pv.z > 1 || Math.abs(_pv.x) > 1.1 || Math.abs(_pv.y) > 1.1) continue;
+      _scr.copy(CAM3.position).sub(sp.p); const dist = _scr.length(), face = sp.n.dot(_scr.multiplyScalar(1 / dist)); if (face < 0.12) continue;
+      const rs = sp.w * 0.5 / dist * focal, I = Math.min(1, face * 1.3) * (night ? 1 : 0.55) * (wet ? 1.15 : 1);
+      screenFlare((_pv.x * 0.5 + 0.5) * W, (0.5 - _pv.y * 0.5) * H, I, rs);
+    }
   }
   X.restore();
 }
