@@ -71,10 +71,10 @@ button{font:inherit;color:inherit;}
 .card-body{transform:skewX(6deg);display:flex;flex-direction:column;gap:8px;padding:16px 18px 18px;position:relative;}
 .card-top{display:flex;align-items:center;gap:12px;}
 .badge{width:52px;height:52px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5));}
-.badge svg{width:100%;height:100%;display:block;}
-.tname{font-family:var(--font-display);font-weight:800;font-style:italic;font-size:clamp(22px,2.6vw,32px);line-height:.95;text-transform:uppercase;letter-spacing:.01em;}
+.badge svg,.badge img{width:100%;height:100%;display:block;object-fit:contain;}
+.tname{font-family:var(--font-display);font-weight:800;font-style:italic;font-size:clamp(20px,2.3vw,30px);line-height:.95;text-transform:uppercase;letter-spacing:.01em;}
 .tnick{font-size:var(--t-xs);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;}
-.kit{width:100%;height:min(25vh,230px);max-width:100%;display:block;object-fit:contain;}
+.kit{width:100%;height:min(22vh,210px);max-width:100%;display:block;object-fit:contain;}
 .stats{display:grid;gap:5px;}
 .stat{display:grid;grid-template-columns:76px 1fr 26px;align-items:center;gap:8px;font-size:var(--t-xs);color:var(--muted);
   letter-spacing:.08em;text-transform:uppercase;font-weight:600;}
@@ -135,7 +135,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 @keyframes blink{50%{opacity:.25}}
 .sb-team{background:rgba(5,9,18,.86);padding:0 10px;gap:8px;font-weight:800;font-size:20px;letter-spacing:.06em;min-width:76px;}
 .sb-team .sw{width:6px;align-self:stretch;margin:7px 0;}
-.sb-team svg{width:24px;height:24px;}
+.sb-team svg,.sb-team img{width:24px;height:24px;object-fit:contain;}
 .sb-score{background:linear-gradient(180deg,#fff,#dfe6f5);color:#0a1020;font-weight:800;font-size:24px;padding:0 12px;
   font-variant-numeric:tabular-nums;gap:8px;letter-spacing:.02em;}
 .sb-score em{font-style:normal;opacity:.4;font-size:18px;}
@@ -226,7 +226,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   .sb{height:32px;}
   .sb-live{display:none;}
   .sb-team{font-size:16px;min-width:0;padding:0 7px;gap:5px;}
-  .sb-team svg{width:18px;height:18px;}
+  .sb-team svg,.sb-team img{width:18px;height:18px;}
   .sb-score{font-size:19px;padding:0 8px;gap:5px;}
   .sb-clock{font-size:16px;min-width:52px;padding:0 8px;}
   .iconbtn{width:36px;height:36px;}
@@ -382,41 +382,38 @@ const BR = 0.17;                          // ball radius (slightly enlarged for 
 const GRAV = 11;
 
 /* ---------------- Teams ---------------- */
+// Official club crests can be embedded here as data: URIs (PNG or SVG).
+// Empty entries fall back to a neutral placeholder shield.
+const LOGO = { che: '', mun: '', bvb: '' };
+const LOGO_IMG = {};
+for (const k in LOGO) if (LOGO[k]) { const im = new Image(); im.src = LOGO[k]; LOGO_IMG[k] = im; }
 const TEAMS = [
-  { id: 'che', name: 'Chelsea', short: 'CHE', nick: 'The Blues', c1: '#0b4bd2', c2: '#ffffff',
-    shirt: '#0b4bd2', sleeve: '#0b4bd2', shorts: '#0a42bd', socks: '#f2f5fb', trim: '#ffffff', num: '#ffffff', boot: '#f4f6ff',
-    gk: { shirt: '#bdf23d', shorts: '#1b2a0d', socks: '#bdf23d', num: '#13200a' },
-    crowd: ['#0b4bd2', '#1f63ee', '#ffffff', '#0a3aa8', '#0b4bd2', '#9cc0ff'], stats: { Serangan: 86, Kecepatan: 83, Bertahan: 81 },
-    names: ['Hartley', 'Coleman', 'Ashford', 'Whitmore', 'Bancroft', 'Ellison', 'Pryce', 'Dawson', 'Kendrick', 'Marlow', 'Sterling'] },
-  { id: 'phx', name: 'Phoenix FC', short: 'PHX', nick: 'Sang Api', c1: '#e3243b', c2: '#ffb21e',
-    shirt: '#e3243b', sleeve: '#ff8a1e', shorts: '#fbfbfb', socks: '#e3243b', trim: '#ffb21e', num: '#fff4d8', boot: '#111111',
+  { id: 'che', name: 'Chelsea', short: 'CHE', nick: 'The Blues', c1: '#0a47c2', c2: '#ffffff',
+    shirt: '#0a47c2', sleeve: '#0a47c2', shorts: '#0a47c2', socks: '#f2f5fb', sockTop: '#0a47c2', trim: '#ffffff', collar: '#ffffff', num: '#ffffff', boot: '#f4f6ff',
+    gk: { shirt: '#c6f23a', shorts: '#1b2a0d', socks: '#c6f23a', num: '#13200a' },
+    crowd: ['#0a47c2', '#1f63ee', '#ffffff', '#0a3aa8', '#0a47c2', '#9cc0ff'], stats: { Serangan: 86, Kecepatan: 84, Bertahan: 82 },
+    names: ['Hartley', 'Coleman', 'Ashford', 'Whitmore', 'Bancroft', 'Ellison', 'Pryce', 'Dawson', 'Kendrick', 'Marlow', 'Thornbury'] },
+  { id: 'mun', name: 'Manchester United', short: 'MUN', nick: 'The Red Devils', c1: '#da1f26', c2: '#ffffff',
+    shirt: '#da1f26', sleeve: '#da1f26', shorts: '#f6f6f6', socks: '#151515', sockTop: '#da1f26', trim: '#151515', collar: '#ffffff', num: '#ffffff', boot: '#151515',
     gk: { shirt: '#19d3ee', shorts: '#06323a', socks: '#19d3ee', num: '#03262c' },
-    crowd: ['#e3243b', '#ff6a2a', '#ffb21e', '#ffffff', '#b8122a', '#e3243b'], stats: { Serangan: 85, Kecepatan: 86, Bertahan: 76 },
-    names: ['Navarro', 'Ferreira', 'Ortega', 'Belmonte', 'Castillo', 'Duarte', 'Rocha', 'Salas', 'Vidal', 'Moreno', 'Ibarra'] },
-  { id: 'tig', name: 'Golden Tigers', short: 'TIG', nick: 'Harimau Emas', c1: '#ffc21a', c2: '#141414',
-    shirt: '#ffc21a', sleeve: '#141414', shorts: '#141414', socks: '#ffc21a', trim: '#141414', num: '#141414', boot: '#ff3d7f',
+    crowd: ['#da1f26', '#ffffff', '#151515', '#b3121a', '#da1f26', '#f2c230'], stats: { Serangan: 87, Kecepatan: 83, Bertahan: 80 },
+    names: ['Whitaker', 'Fenwick', 'Hollins', 'Barton', 'Radcliffe', 'Ormond', 'Kearney', 'Lowther', 'Ashworth', 'Prescott', 'Wainwright'] },
+  { id: 'bvb', name: 'Borussia Dortmund', short: 'BVB', nick: 'Die Schwarzgelben', c1: '#fde100', c2: '#111111',
+    shirt: '#fde100', sleeve: '#fde100', shorts: '#111111', socks: '#fde100', sockTop: '#111111', trim: '#111111', collar: '#111111', num: '#111111', boot: '#ff3d7f',
     gk: { shirt: '#ff4fb0', shorts: '#3a0a24', socks: '#ff4fb0', num: '#2a0519' },
-    crowd: ['#ffc21a', '#141414', '#ffd95e', '#ffffff', '#ffc21a', '#2a2a2a'], stats: { Serangan: 82, Kecepatan: 80, Bertahan: 85 },
-    names: ['Pratama', 'Saputra', 'Wibowo', 'Nugroho', 'Siregar', 'Halim', 'Kurniawan', 'Santoso', 'Hidayat', 'Lubis', 'Firmansyah'] }
+    crowd: ['#fde100', '#111111', '#fde100', '#ffe94d', '#111111', '#ffffff'], stats: { Serangan: 85, Kecepatan: 86, Bertahan: 79 },
+    names: ['Baumann', 'Kessler', 'Hoffmann', 'Lindner', 'Vogel', 'Reinhardt', 'Seidel', 'Krause', 'Wendt', 'Albrecht', 'Steiner'] }
 ];
 const NUMS = [1, 2, 4, 5, 3, 8, 6, 10, 7, 9, 11];
 
 let badgeUid = 0;
 function badgeSVG(t) {
+  if (LOGO[t.id]) return `<img src="${LOGO[t.id]}" alt="Logo ${t.name}">`;
   const u = 'g' + (badgeUid++);
-  if (t.id === 'che') return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="${u}" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#2f74ff"/><stop offset="1" stop-color="#062a86"/></radialGradient></defs>
-    <circle cx="50" cy="50" r="46" fill="url(#${u})" stroke="#fff" stroke-width="5"/><circle cx="50" cy="50" r="35" fill="none" stroke="#ffd23d" stroke-width="2"/>
-    <path d="M50 22l3.2 7 7.6.6-5.8 5 1.8 7.4L50 38l-6.6 4 1.8-7.4-5.8-5 7.6-.6z" fill="#ffd23d"/>
-    <text x="50" y="70" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="800" font-size="26" fill="#fff" letter-spacing="1">CFC</text></svg>`;
-  if (t.id === 'phx') return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff5a3c"/><stop offset="1" stop-color="#b80f2b"/></linearGradient></defs>
-    <path d="M50 4l40 12v30c0 25-17 41-40 50C27 87 10 71 10 46V16z" fill="url(#${u})" stroke="#ffb21e" stroke-width="4"/>
-    <path d="M50 22c6 10 16 12 16 26 0 10-7 17-16 19-9-2-16-9-16-19 0-7 4-10 6-15 1 6 4 8 6 9-1-9 1-14 4-20z" fill="#ffb21e"/>
-    <path d="M50 40c3 5 8 7 8 13a8 8 0 0 1-16 0c0-4 3-6 4-9 1 3 2 4 3 4 0-3 0-5 1-8z" fill="#fff4d8"/>
-    <text x="50" y="86" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="800" font-size="14" fill="#fff" letter-spacing="2">PHX</text></svg>`;
-  return `<svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${u}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe066"/><stop offset="1" stop-color="#f0a400"/></linearGradient></defs>
-    <path d="M50 4l42 22v48L50 96 8 74V26z" fill="url(#${u})" stroke="#141414" stroke-width="5"/>
-    <path d="M20 34l18 6-16 4zM80 34l-18 6 16 4zM18 56l20 2-18 6zM82 56l-20 2 18 6zM44 18l6 14 6-14z" fill="#141414"/>
-    <text x="50" y="66" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="900" font-size="30" fill="#141414">GT</text></svg>`;
+  return `<svg viewBox="0 0 100 100" role="img" aria-label="${t.name}"><defs><linearGradient id="${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(t.c1, 1.18)}"/><stop offset="1" stop-color="${shade(t.c1, 0.68)}"/></linearGradient></defs>
+    <path d="M50 5l38 11v29c0 26-16 41-38 50C28 86 12 71 12 45V16z" fill="url(#${u})" stroke="${t.c2}" stroke-width="4"/>
+    <path d="M50 14l29 8.5v22C79 64 67 76 50 84 33 76 21 64 21 44.5v-22z" fill="none" stroke="${t.c2}" stroke-opacity=".35" stroke-width="1.5"/>
+    <text x="50" y="59" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="800" font-size="26" fill="${t.c2}" letter-spacing="1">${t.short}</text></svg>`;
 }
 
 /* ---------------- Canvas ---------------- */
@@ -572,9 +569,9 @@ function buildPitchTexture() {
   const c = mkCanvas(w, h), g = c.getContext('2d');
   const U = x => (x - x0) * ppm, V = z => (zTop - z) * ppm;
   const rng = mulberry32(77);
-  g.fillStyle = '#1c5a2a'; g.fillRect(0, 0, w, h);
+  g.fillStyle = '#245f2a'; g.fillRect(0, 0, w, h);
   const mx0 = -57.75, mx1 = 57.75, mz0 = -38.6, mz1 = 38.6;
-  for (let i = 0; i < 22; i++) { g.fillStyle = (i % 2) ? '#2b9444' : '#36ad52'; g.fillRect(U(mx0 + i * 5.25), V(mz1), 5.25 * ppm + 1, (mz1 - mz0) * ppm); }
+  for (let i = 0; i < 22; i++) { g.fillStyle = (i % 2) ? '#34883a' : '#40a043'; g.fillRect(U(mx0 + i * 5.25), V(mz1), 5.25 * ppm + 1, (mz1 - mz0) * ppm); }
   for (let j = 0; j < 12; j++) { g.fillStyle = j % 2 ? 'rgba(255,255,255,0.035)' : 'rgba(0,25,0,0.045)'; g.fillRect(U(mx0), V(mz0 + (j + 1) * 6.43), (mx1 - mx0) * ppm, 6.43 * ppm + 1); }
   // soft colour variation
   for (let k = 0; k < 700; k++) {
@@ -639,7 +636,7 @@ function buildCrowd(home, away) {
         g.fillStyle = p.skin; g.beginPath(); g.arc(p.x, top - 2.2, 2.0, 0, TAU); g.fill();
         g.fillStyle = p.hair; g.beginPath(); g.arc(p.x, top - 2.9, 1.9, Math.PI, TAU); g.fill();
         if (p.scarf && (cheer || p.stand)) { g.fillStyle = p.scarf; g.fillRect(p.x - 5, top - (cheer ? 8.5 : 0.5), 10, 1.8); }
-        if (p.flag) { const wv = cheer ? 3 : 0; g.fillStyle = '#ddd'; g.fillRect(p.x + 2, top - 16, 0.8, 16); g.fillStyle = p.scarf || home.c1; g.beginPath(); g.moveTo(p.x + 2.8, top - 16); g.lineTo(p.x + 16, top - 15 + wv); g.lineTo(p.x + 16, top - 8 + wv); g.lineTo(p.x + 2.8, top - 9); g.fill(); g.fillStyle = home.c2 === '#141414' ? '#141414' : '#fff'; g.fillRect(p.x + 3, top - 13 + wv * 0.5, 13, 1.5); }
+        if (p.flag) { const wv = cheer ? 3 : 0; g.fillStyle = '#ddd'; g.fillRect(p.x + 2, top - 16, 0.8, 16); g.fillStyle = p.scarf || home.c1; g.beginPath(); g.moveTo(p.x + 2.8, top - 16); g.lineTo(p.x + 16, top - 15 + wv); g.lineTo(p.x + 16, top - 8 + wv); g.lineTo(p.x + 2.8, top - 9); g.fill(); g.fillStyle = home.c2; g.fillRect(p.x + 3, top - 13 + wv * 0.5, 13, 1.5); }
       }
     }
     // baked lighting: brighter in the middle, darker toward the far ends and upper rows
@@ -669,7 +666,7 @@ function buildStandFaces(home, away) {
   while (x < w - 200) {
     const bw = (7 + rng() * 9) * ppm, isAway = (x / ppm - ST.len) > 62, t = isAway ? away : home;
     g.fillStyle = t.c1; g.fillRect(x, 4, bw, wallH - 10);
-    g.fillStyle = t.c2 === '#141414' ? '#141414' : '#ffffff'; g.fillRect(x, 4, bw, 3); g.fillRect(x, wallH - 9, bw, 3);
+    g.fillStyle = t.c2; g.fillRect(x, 4, bw, 3); g.fillRect(x, wallH - 9, bw, 3);
     g.font = `italic 800 ${wallH - 16}px "Barlow Condensed", "Arial Narrow", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.fillText(isAway ? 'AYO ' + away.short + '!' : texts[Math.floor(rng() * texts.length)], x + bw / 2, wallH / 2 + 1, bw - 10);
     x += bw + (4 + rng() * 14) * ppm;
@@ -717,8 +714,8 @@ function buildLED(home, away) {
     { bg: ['#ff2d6f', '#ff5c3a'], fg: '#ffffff', t: 'AEROSTRIDE' },
     { bg: ['#5a22ff', '#9a3cff'], fg: '#ffffff', t: '#AYOGOL' },
     { bg: ['#f4f6fb', '#ffffff'], fg: '#0b1530', t: 'SATU HATI' },
-    { bg: [home.c1, shade(home.c1, 0.7)], fg: home.c2 === '#141414' ? '#141414' : '#ffffff', t: home.name.toUpperCase() },
-    { bg: [away.c1, shade(away.c1, 0.7)], fg: away.c2 === '#141414' ? '#141414' : '#ffffff', t: away.name.toUpperCase() }
+    { bg: [home.c1, shade(home.c1, 0.7)], fg: home.c2, t: home.name.toUpperCase() },
+    { bg: [away.c1, shade(away.c1, 0.7)], fg: away.c2, t: away.name.toUpperCase() }
   ];
   const drawPanel = (g, x, b, flash) => {
     const gr = g.createLinearGradient(x, 0, x + panel, h); gr.addColorStop(0, b.bg[0]); gr.addColorStop(1, b.bg[1]);
@@ -734,11 +731,33 @@ function buildLED(home, away) {
   for (const ord of orders) { const c = mkCanvas(w, h), g = c.getContext('2d'); ord.forEach((bi, i) => drawPanel(g, i * panel, brands[bi])); pages.push(c); }
   const goalPages = [home, away].map(t => {
     const c = mkCanvas(w, h), g = c.getContext('2d');
-    for (let i = 0; i < 10; i++) drawPanel(g, i * panel, i % 2 ? { bg: ['#ffffff', '#e8eefc'], fg: t.c1 === '#ffc21a' ? '#141414' : t.c1, t: 'GOL!' } : { bg: [t.c1, shade(t.c1, 0.65)], fg: t.c2 === '#141414' ? '#141414' : '#fff', t: 'GOOOL ' + t.short }, true);
+    for (let i = 0; i < 10; i++) drawPanel(g, i * panel, i % 2 ? { bg: ['#ffffff', '#e8eefc'], fg: t.id === 'bvb' ? '#111111' : t.c1, t: 'GOL!' } : { bg: [t.c1, shade(t.c1, 0.65)], fg: t.c2, t: 'GOOOL ' + t.short }, true);
     return c;
   });
   TEX.led = { pages, goalPages, w, h, ppm };
   TEX.ledColors = brands.map(b => b.bg[0]);
+}
+
+/* Repeating close-up grass layer (blades and clumps), mapped over the pitch near the camera */
+function buildGrassTile() {
+  const N = 512, k = 64, c = mkCanvas(N, N), g = c.getContext('2d'), rng = mulberry32(2024);
+  g.lineCap = 'round';
+  const groups = [['rgba(8,44,14,0.55)', 2.4, 2600], ['rgba(16,62,20,0.5)', 1.8, 3000], ['rgba(52,112,40,0.45)', 1.6, 2600],
+    ['rgba(150,210,105,0.30)', 1.3, 2600], ['rgba(196,236,150,0.22)', 1.0, 1800], ['rgba(205,200,120,0.16)', 1.2, 500]];
+  for (const [col, lw, n] of groups) {
+    g.strokeStyle = col; g.lineWidth = lw; g.beginPath();
+    for (let i = 0; i < n; i++) {
+      const x = rng() * N, y = rng() * N, len = 6 + rng() * 12, ang = -Math.PI / 2 + (rng() - 0.5) * 0.7, bend = (rng() - 0.5) * 4;
+      const ex = Math.cos(ang) * len, ey = Math.sin(ang) * len;
+      for (let ox = -N; ox <= N; ox += N) for (let oy = -N; oy <= N; oy += N) {
+        const bx = x + ox, by = y + oy;
+        if (bx < -24 || bx > N + 24 || by < -24 || by > N + 24) continue;
+        g.moveTo(bx, by); g.quadraticCurveTo(bx + bend, by + ey * 0.5, bx + ex, by + ey);
+      }
+    }
+    g.stroke();
+  }
+  TEX.grass = c; TEX.grassPat = X.createPattern(c, 'repeat'); TEX.grassK = k;
 }
 
 /* =====================================================================
@@ -878,7 +897,7 @@ function drawEndStands(t, hype) {
     for (let i = 0; i < 6; i++) {
       const za = z0 + 6 + i * 13.5, zb = za + 9 + (i % 3), tm = TEAMS_SEL[(i + (s > 0 ? 1 : 0)) % 3 === 0 ? 1 : 0];
       X.fillStyle = tm.c1; polyW([s * (ST.endX0 - 0.02), 0.35, za, s * (ST.endX0 - 0.02), 0.35, zb, s * (ST.endX0 - 0.02), 2.1, zb, s * (ST.endX0 - 0.02), 2.1, za]); X.fill();
-      X.fillStyle = tm.c2 === '#141414' ? '#141414' : '#ffffff'; polyW([s * (ST.endX0 - 0.03), 1.05, za, s * (ST.endX0 - 0.03), 1.05, zb, s * (ST.endX0 - 0.03), 1.4, zb, s * (ST.endX0 - 0.03), 1.4, za]); X.fill();
+      X.fillStyle = tm.c2; polyW([s * (ST.endX0 - 0.03), 1.05, za, s * (ST.endX0 - 0.03), 1.05, zb, s * (ST.endX0 - 0.03), 1.4, zb, s * (ST.endX0 - 0.03), 1.4, za]); X.fill();
     }
     X.strokeStyle = 'rgba(120,210,255,0.8)'; X.lineWidth = Math.max(1, RS); X.beginPath(); proj(s * ST.endX0, 2.4, z0, P0); X.moveTo(P0.x, P0.y); proj(s * ST.endX0, 2.4, z1, P0); X.lineTo(P0.x, P0.y); X.stroke();
   }
@@ -939,7 +958,24 @@ function drawPitch() {
     if (u1 <= u0 || v1 - v0 < 0.01) continue;
     X.drawImage(T.c, u0, v0, u1 - u0, v1 - v0, dx0, sy, dx1 - dx0, step + 0.75);
   }
+  // close-up grass blades: a repeating tile mapped strip by strip, faded out with distance
+  const pat = TEX.grassPat; if (!pat || !GM) return;
+  const k = TEX.grassK, ds = Math.max(3, Math.round(3 * RS));
+  for (let y = Math.max(0, Math.floor(horizonY) + 1); y < H; y += ds) {
+    const a0 = (cam.cy - y) / cam.F, a1 = (cam.cy - y - ds) / cam.F, am = (a0 + a1) * 0.5;
+    const d0 = -cam.sin + a0 * cam.cos, d1 = -cam.sin + a1 * cam.cos, dm = -cam.sin + am * cam.cos;
+    if (d0 >= -1e-5) continue;
+    const sm = cam.F / (-cam.y / dm), alpha = clamp((sm / RS - 16) / 30, 0, 1) * 0.85;
+    if (alpha < 0.03) continue;
+    const t0 = -cam.y / d0, t1 = -cam.y / d1, z0 = cam.z + t0 * (cam.cos + a0 * cam.sin), z1 = cam.z + t1 * (cam.cos + a1 * cam.sin);
+    if (z0 > 39 || z1 < -46 || z0 - z1 < 1e-4) continue;
+    GM.a = sm / k; GM.b = 0; GM.c = 0; GM.d = ds / ((z0 - z1) * k); GM.e = cam.cx - cam.x * sm; GM.f = y + z0 * ds / (z0 - z1);
+    pat.setTransform(GM);
+    X.globalAlpha = alpha; X.fillStyle = pat; X.fillRect(0, y, W, ds + 0.5);
+  }
+  X.globalAlpha = 1;
 }
+const GM = typeof DOMMatrix !== 'undefined' ? new DOMMatrix() : null;
 
 /* Vector pitch markings (perspective-correct width) */
 const LINES = [];
@@ -1054,31 +1090,38 @@ function drawAtmosphere(t, wide) {
 }
 
 /* =====================================================================
-   RENDER: players (procedural 3D skeleton, projected), ball, particles
+   RENDER: players
+   A projected 3D skeleton dressed with tapered, shaded body parts:
+   muscle profiles on the limbs, a shaped torso, kit pieces, head,
+   hair and face. Detail scales with on-screen size (LOD).
    ===================================================================== */
 const A_NONE = 0, A_KICK = 1, A_SLIDE = 2, A_DIVE = 3, A_CELEB = 4, A_KNEE = 5, A_THROWH = 6, A_THROW = 7, A_HEAD = 8, A_GKHOLD = 9, A_SAD = 10, A_READY = 11;
-const LT = 0.46, LS = 0.45, LF = 0.2, UA = 0.29, FA = 0.27;
-const JL = new Float32Array(17 * 3);              // local joints (f, u, r)
+const LT = 0.46, LS = 0.45, LF = 0.23, UA = 0.29, FA = 0.26;
+const JL = new Float32Array(17 * 3);
 const SX = new Float32Array(17), SY = new Float32Array(17), SD = new Float32Array(17);
-// joint ids
 const J_PEL = 0, J_NECK = 1, J_HEAD = 2, J_LHIP = 3, J_LKNE = 4, J_LANK = 5, J_LTOE = 6, J_RHIP = 7, J_RKNE = 8, J_RANK = 9, J_RTOE = 10, J_LSH = 11, J_LELB = 12, J_LHND = 13, J_RSH = 14, J_RELB = 15, J_RHND = 16;
 function setJ(i, f, u, r) { JL[i * 3] = f; JL[i * 3 + 1] = u; JL[i * 3 + 2] = r; }
 
 function computePose(p) {
-  const ph = p.rph, sp = clamp(p.rsp, 0, 1.6), act = p.ract, at = p.ractT;
+  const ph = p.rph, sp = clamp(p.rsp, 0, 1.6), act = p.ract, at = p.ractT, Lk = p.look;
   const spc = Math.min(sp, 1.3);
-  let A = 0.1 + 0.42 * spc, K = 0.25 + 1.05 * spc, lean = 0.05 + 0.14 * sp;
+  let A = 0.1 + 0.44 * spc, K = 0.25 + 1.1 * spc, lean = 0.05 + 0.15 * sp;
   let aL = A * Math.sin(ph), aR = -aL;
   let bL = 0.12 + K * Math.max(0, Math.cos(ph)), bR = 0.12 + K * Math.max(0, -Math.cos(ph));
-  const armA = 0.15 + 0.6 * Math.min(sp, 1.2);
-  let gL = -armA * Math.sin(ph), gR = armA * Math.sin(ph), eL = 0.3 + 1.05 * Math.min(sp, 1), eR = eL, zL = 0.1, zR = 0.1, spread = 0.04;
+  const armA = 0.15 + 0.62 * Math.min(sp, 1.2);
+  let gL = -armA * Math.sin(ph), gR = armA * Math.sin(ph), eL = 0.35 + 1.0 * Math.min(sp, 1), eR = eL, zL = 0.12, zR = 0.12, fL = null, fR = null, spread = 0.04;
   let pel = null, roll = 0, head = 0;
+  let twH = 0.16 * spc * Math.sin(ph), twS = -0.24 * spc * Math.sin(ph);   // hips turn with the stride, shoulders counter-rotate
   if (sp < 0.08 && act === A_NONE) {
-    const b = Math.sin(ph * 0.5) * 0.025; aL = 0.07; aR = -0.05; bL = bR = 0.15 + b; gL = 0.06; gR = 0.03; eL = eR = 0.25; zL = zR = 0.13; spread = 0.09; lean = 0.03;
+    const br = Math.sin(ph * 0.5) * 0.025; twH = twS = 0;
+    aL = 0.07; aR = -0.05; bL = bR = 0.15 + br; spread = 0.09; lean = 0.03;
+    if (Lk && Lk.idle === 1) { gL = gR = -0.2; eL = eR = 0.3; zL = zR = 0.95; fL = fR = -0.95; }   // hands on hips
+    else { gL = 0.06; gR = 0.03; eL = eR = 0.25; zL = zR = 0.14; }
   }
+  if (act !== A_NONE && act !== A_CELEB && act !== A_SAD && act !== A_KICK) { twH = 0; twS = 0; }
   switch (act) {
     case A_KICK: {
-      const t = at;
+      const t = at; twH = 0.3 * Math.sin(Math.min(1, t * 1.6) * Math.PI); twS = -twH * 0.8;
       aR = t < 0.35 ? lerp(0.1, -0.85, t / 0.35) : t < 0.6 ? lerp(-0.85, 1.3, (t - 0.35) / 0.25) : lerp(1.3, 0.2, (t - 0.6) / 0.4);
       bR = t < 0.35 ? lerp(0.3, 1.55, t / 0.35) : t < 0.6 ? lerp(1.55, 0.05, (t - 0.35) / 0.25) : lerp(0.05, 0.25, (t - 0.6) / 0.4);
       aL = -0.12; bL = 0.28; gL = 0.7; gR = -0.5; zL = 0.55; zR = 0.45; eL = eR = 0.4; lean = t > 0.4 && t < 0.75 ? -0.12 : 0.1; break;
@@ -1098,32 +1141,38 @@ function computePose(p) {
     case A_CELEB: gL = Math.PI - 0.35 + Math.sin(ph * 2) * 0.15; gR = Math.PI - 0.35 - Math.sin(ph * 2) * 0.15; eL = eR = 0.15; zL = zR = 0.45; lean = 0.02; head = -0.25; break;
     case A_KNEE: pel = 0.62; aL = aR = 0.12; bL = bR = 1.65; spread = 0.12; lean = -0.5; gL = gR = 2.4; eL = eR = 0.1; zL = zR = 0.7; head = -0.35; break;
     case A_THROWH: gL = gR = Math.PI - 0.1; eL = eR = 0.75; zL = zR = 0.05; lean = -0.12; aL = 0.15; aR = -0.25; bL = bR = 0.18; break;
-    case A_THROW: { const t = at; gL = gR = lerp(Math.PI - 0.1, 1.2, smooth(Math.min(1, t * 2))); eL = eR = lerp(0.75, 0.1, Math.min(1, t * 2)); lean = lerp(-0.15, 0.3, Math.min(1, t * 2)); aL = 0.2; aR = -0.3; bL = bR = 0.2; zL = zR = 0.05; break; }
-    case A_HEAD: { lean = 0.3 * Math.sin(Math.min(1, at) * Math.PI); gL = 0.9; gR = 0.7; zL = zR = 0.5; eL = eR = 0.6; aL = 0.4; bL = 0.9; aR = 0.1; bR = 0.6; head = 0.3; break; }
+    case A_THROW: { const t = Math.min(1, at * 2); gL = gR = lerp(Math.PI - 0.1, 1.2, smooth(t)); eL = eR = lerp(0.75, 0.1, t); lean = lerp(-0.15, 0.3, t); aL = 0.2; aR = -0.3; bL = bR = 0.2; zL = zR = 0.05; break; }
+    case A_HEAD: lean = 0.3 * Math.sin(Math.min(1, at) * Math.PI); gL = 0.9; gR = 0.7; zL = zR = 0.5; eL = eR = 0.6; aL = 0.4; bL = 0.9; aR = 0.1; bR = 0.6; head = 0.3; break;
     case A_GKHOLD: gL = gR = 1.15; eL = eR = 0.85; zL = zR = 0.02; break;
     case A_SAD: lean = 0.32; head = 0.35; gL = gR = 0.05; eL = eR = 0.1; zL = zR = 0.06; break;
     case A_READY: if (sp < 0.4) { bL = bR = 0.55; aL = 0.3; aR = 0.2; lean = 0.25; gL = gR = 0.55; eL = eR = 0.7; zL = zR = 0.5; spread = 0.16; } break;
   }
+  if (fL === null) fL = zL * 0.6;
+  if (fR === null) fR = zR * 0.6;
   const dropL = LT * Math.cos(aL) + LS * Math.cos(aL - bL), dropR = LT * Math.cos(aR) + LS * Math.cos(aR - bR);
   const Hp = pel !== null ? pel : Math.max(dropL, dropR) + 0.075;
   setJ(J_PEL, 0, Hp, 0);
   const sl = Math.sin(lean), cl = Math.cos(lean);
   setJ(J_NECK, 0.5 * sl, Hp + 0.5 * cl, 0);
-  setJ(J_HEAD, 0.64 * Math.sin(lean + head * 0.4), Hp + 0.64 * Math.cos(lean + head * 0.4), 0);
+  setJ(J_HEAD, 0.645 * Math.sin(lean + head * 0.4), Hp + 0.645 * Math.cos(lean + head * 0.4), 0);
+  const sH = Math.sin(twH), cH = Math.cos(twH), sS = Math.sin(twS), cS = Math.cos(twS);
   for (let side = -1; side <= 1; side += 2) {
     const a = side < 0 ? aL : aR, b = side < 0 ? bL : bR, base = side < 0 ? J_LHIP : J_RHIP;
-    const hr = side * 0.1, kf = LT * Math.sin(a), ku = Hp - LT * Math.cos(a), kr = hr + side * spread;
+    const hf = -side * 0.1 * sH, hr = side * 0.1 * cH;
+    const kf = hf + LT * Math.sin(a), ku = Hp - LT * Math.cos(a), kr = hr + side * spread;
     const af = kf + LS * Math.sin(a - b), au = ku - LS * Math.cos(a - b), ar = kr + side * spread * 0.4;
     const fp = (a - b) * 0.7;
-    setJ(base, 0, Hp, hr); setJ(base + 1, kf, ku, kr); setJ(base + 2, af, au, ar); setJ(base + 3, af + LF * Math.cos(fp), au + LF * Math.sin(fp) - 0.02, ar);
-    const g = side < 0 ? gL : gR, e = side < 0 ? eL : eR, z = side < 0 ? zL : zR, sb = side < 0 ? J_LSH : J_RSH;
-    const sf = 0.45 * sl, su = Hp + 0.45 * cl, sr = side * 0.19;
-    const cz = Math.cos(z), szz = Math.sin(z);
+    setJ(base, hf, Hp, hr); setJ(base + 1, kf, ku, kr); setJ(base + 2, af, au, ar); setJ(base + 3, af + LF * Math.cos(fp), au + LF * Math.sin(fp) - 0.02, ar);
+    const g = side < 0 ? gL : gR, e = side < 0 ? eL : eR, z = side < 0 ? zL : zR, fz = side < 0 ? fL : fR, sb = side < 0 ? J_LSH : J_RSH;
+    const sf = 0.45 * sl - side * 0.19 * sS, su = Hp + 0.45 * cl, sr = side * 0.19 * cS;
+    const cz = Math.cos(z), szz = Math.sin(z), cf = Math.cos(fz), sfz = Math.sin(fz);
     const ef = sf + UA * Math.sin(g) * cz, eu = su - UA * Math.cos(g) * cz, er = sr + side * UA * szz;
     setJ(sb, sf, su, sr); setJ(sb + 1, ef, eu, er);
-    setJ(sb + 2, ef + FA * Math.sin(g + e) * cz, eu - FA * Math.cos(g + e) * cz, er + side * FA * szz * 0.6);
+    setJ(sb + 2, ef + FA * Math.sin(g + e) * cf, eu - FA * Math.cos(g + e) * cf, er + side * FA * sfz);
   }
   if (roll) { const cr = Math.cos(roll), sr2 = Math.sin(roll); for (let i = 0; i < 17; i++) { const u = JL[i * 3 + 1] - 0.95, r = JL[i * 3 + 2]; JL[i * 3 + 1] = 0.95 + u * cr - r * sr2; JL[i * 3 + 2] = u * sr2 + r * cr; } let mn = 9; for (let i = 0; i < 17; i++) mn = Math.min(mn, JL[i * 3 + 1]); if (mn < 0.06) for (let i = 0; i < 17; i++) JL[i * 3 + 1] += 0.06 - mn; }
+  const hs = Lk ? Lk.hs : 1;
+  if (hs !== 1) for (let i = 0; i < 51; i++) JL[i] *= hs;
 }
 function projectPose(p) {
   const cf = Math.cos(p.rf), sf = Math.sin(p.rf), lift = p.rjump || 0;
@@ -1133,39 +1182,204 @@ function projectPose(p) {
     SX[i] = P0.x; SY[i] = P0.y; SD[i] = P0.d;
   }
 }
-function limb(a, b, w, c1, c2) {
-  X.strokeStyle = c1; X.lineWidth = w; X.beginPath(); X.moveTo(SX[a], SY[a]); X.lineTo(SX[b], SY[b]); X.stroke();
-  if (c2) { const o = w * 0.2; X.strokeStyle = c2; X.lineWidth = w * 0.5; X.beginPath(); X.moveTo(SX[a] - o, SY[a] - o); X.lineTo(SX[b] - o, SY[b] - o); X.stroke(); }
-}
-function seg(ax, ay, bx, by, w, c) { X.strokeStyle = c; X.lineWidth = w; X.beginPath(); X.moveTo(ax, ay); X.lineTo(bx, by); X.stroke(); }
 
+/* ---------------- looks: kit, skin, hair, build ---------------- */
+function pal3(h, far) { return far ? [shade(h, 0.98), shade(h, 0.74), shade(h, 0.44)] : [shade(h, 1.3), shade(h, 0.98), shade(h, 0.56)]; }
 function lookFor(team, gk, i, rng) {
-  const k = gk ? team.gk : team;
+  const k = gk ? (team.gk || {}) : team;
+  const styles = ['short', 'short', 'fade', 'buzz', 'curly', 'long', 'bald', 'short', 'fade'];
   const L = {
-    shirt: gk ? k.shirt : team.shirt, sleeve: gk ? k.shirt : team.sleeve, shorts: k.shorts, socks: k.socks, num: k.num, trim: gk ? '#ffffff' : team.trim,
-    boot: gk ? '#111111' : (i % 3 === 0 ? '#ffffff' : i % 3 === 1 ? team.boot : '#121212'), skin: SKINS[Math.floor(rng() * SKINS.length)], hair: HAIRS[Math.floor(rng() * HAIRS.length)],
-    bald: rng() < 0.12, gloves: gk ? '#f6f6f6' : null, longSleeve: gk
+    teamId: team.id || 'ref', gk: !!gk,
+    shirt: k.shirt || team.shirt, sleeve: gk ? k.shirt : (team.sleeve || team.shirt), shorts: k.shorts || team.shorts, sock: k.socks || team.socks,
+    sockTop: gk ? k.shirt : (team.sockTop || team.trim), num: k.num || team.num, trim: gk ? '#ffffff' : team.trim, collar: gk ? '#ffffff' : (team.collar || team.trim),
+    boot: gk ? '#151515' : (i % 3 === 0 ? '#f4f6ff' : i % 3 === 1 ? (team.boot || '#111111') : '#141414'),
+    skin: SKINS[Math.floor(rng() * SKINS.length)], hair: HAIRS[Math.floor(rng() * HAIRS.length)], style: styles[Math.floor(rng() * styles.length)],
+    beard: rng() < 0.3, hs: 0.95 + rng() * 0.1, bulk: 0.94 + rng() * 0.12, idle: rng() < 0.35 ? 1 : 0, armband: !gk && i === 3,
+    glove: gk ? '#eef2f6' : null, longSleeve: !!gk
   };
-  const pre = (h, n) => { L[n] = h; L[n + 'D'] = shade(h, 0.62); L[n + 'L'] = shade(h, 1.25); L[n + 'F'] = shade(h, 0.48); L[n + 'FL'] = shade(h, 0.8); };
-  pre(L.shirt, 'sh'); pre(L.sleeve, 'sl'); pre(L.shorts, 'so'); pre(L.socks, 'sk'); pre(L.skin, 'ski'); pre(L.boot, 'bo');
+  if (L.style === 'bald') L.beard = rng() < 0.6;
+  L.N = {}; L.F = {};
+  for (const key of ['skin', 'shirt', 'sleeve', 'shorts', 'sock', 'sockTop', 'boot', 'trim', 'glove', 'hair']) { const h = L[key] || L.skin; L.N[key] = pal3(h, false); L.F[key] = pal3(h, true); }
   return L;
 }
 
+/* ---------------- shaded primitives ---------------- */
+const LIT = { x: -0.42, y: -0.91 };          // screen direction toward the key floodlight
+let LOD = 2;
+function grad(mx, my, nx, ny, r, c, force) {
+  if (LOD < 2 && !force) return c[1];
+  const g = X.createLinearGradient(mx + nx * r, my + ny * r, mx - nx * r, my - ny * r);
+  if (nx * LIT.x + ny * LIT.y > 0) { g.addColorStop(0, c[0]); g.addColorStop(0.42, c[1]); g.addColorStop(0.86, c[2]); g.addColorStop(1, c[1]); }
+  else { g.addColorStop(0, c[1]); g.addColorStop(0.14, c[2]); g.addColorStop(0.58, c[1]); g.addColorStop(1, c[0]); }
+  return g;
+}
+// tapered capsule from A (radius ra) to B (radius rb), sides bulging to rm at the middle
+function taper(ax, ay, bx, by, ra, rb, rm, c, flatA, flatB) {
+  const dx = bx - ax, dy = by - ay, L = Math.hypot(dx, dy);
+  if (L < 0.4) { X.fillStyle = c[1]; X.beginPath(); X.arc(ax, ay, Math.max(ra, rb, 0.3), 0, TAU); X.fill(); return; }
+  const ux = dx / L, uy = dy / L, nx = -uy, ny = ux, mx = (ax + bx) * 0.5, my = (ay + by) * 0.5, th = Math.atan2(ny, nx);
+  X.beginPath();
+  X.moveTo(ax + nx * ra, ay + ny * ra);
+  X.quadraticCurveTo(2 * (mx + nx * rm) - (ax + bx + nx * (ra + rb)) * 0.5, 2 * (my + ny * rm) - (ay + by + ny * (ra + rb)) * 0.5, bx + nx * rb, by + ny * rb);
+  if (flatB) X.lineTo(bx - nx * rb, by - ny * rb); else X.arc(bx, by, rb, th, th - Math.PI, true);
+  X.quadraticCurveTo(2 * (mx - nx * rm) - (ax + bx - nx * (ra + rb)) * 0.5, 2 * (my - ny * rm) - (ay + by - ny * (ra + rb)) * 0.5, ax - nx * ra, ay - ny * ra);
+  if (!flatA) X.arc(ax, ay, ra, th + Math.PI, th, true);
+  X.closePath();
+  X.fillStyle = grad(mx, my, nx, ny, Math.max(ra, rb, rm), c); X.fill();
+}
+function bone(i, j, t0, t1, ra, rb, rm, c, flatA, flatB) {
+  const dx = SX[j] - SX[i], dy = SY[j] - SY[i];
+  taper(SX[i] + dx * t0, SY[i] + dy * t0, SX[i] + dx * t1, SY[i] + dy * t1, ra, rb, rm, c, flatA, flatB);
+}
+const ARMBAND = ['#fff3a0', '#ffd23d', '#a8840c'];
+
+function drawPlayer(p) {
+  computePose(p); projectPose(p);
+  const L = p.look; proj(p.rx, 1, p.rz, P0); if (P0.d < 2) return;
+  const s = P0.s, css = s / RS; LOD = css > 34 ? 2 : css > 14 ? 1 : 0;
+  const hs = s * L.hs, b = hs * L.bulk, cf = Math.cos(p.rf), sf = Math.sin(p.rf), toward = -sf;
+  X.lineCap = 'round'; X.lineJoin = 'round';
+  // how much of the body's width faces the camera
+  proj(p.rx + sf * 0.25, 1.15, p.rz - cf * 0.25, P1); proj(p.rx - sf * 0.25, 1.15, p.rz + cf * 0.25, P2);
+  const rdx = P1.x - P2.x, rdy = P1.y - P2.y, rlen = Math.hypot(rdx, rdy);
+  const wr = clamp(rlen / (0.5 * s), 0, 1), dr = Math.sqrt(1 - wr * wr), rux = rlen > 0.01 ? rdx / rlen : 1, ruy = rlen > 0.01 ? rdy / rlen : 0;
+  const leftFar = SD[J_LHIP] > SD[J_RHIP];
+  const legs = leftFar ? [J_LHIP, J_RHIP] : [J_RHIP, J_LHIP];
+  const arms = SD[J_LSH] > SD[J_RSH] ? [J_LSH, J_RSH] : [J_RSH, J_LSH];
+  const farArmBehind = SD[arms[0]] > SD[J_NECK] + 0.04;
+
+  const drawLeg = (h, far) => {
+    const C = far ? L.F : L.N;
+    bone(h, h + 1, 0.12, 1, 0.08 * b, 0.055 * b, 0.083 * b, C.skin);                 // thigh
+    bone(h + 1, h + 2, 0, 0.22, 0.054 * b, 0.058 * b, 0.058 * b, C.skin);           // knee
+    bone(h + 1, h + 2, 0.15, 1, 0.061 * b, 0.04 * b, 0.07 * b, C.sock, true, false); // calf inside the sock
+    if (LOD) bone(h + 1, h + 2, 0.15, 0.21, 0.062 * b, 0.063 * b, 0.063 * b, C.sockTop, true, true);
+    bone(h + 2, h + 3, -0.12, 0.95, 0.044 * b, 0.032 * b, 0.047 * b, C.boot);        // boot
+    if (LOD === 2) { X.strokeStyle = far ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.5)'; X.lineWidth = Math.max(0.7, 0.012 * b); X.beginPath(); X.moveTo(SX[h + 2] + (SX[h + 2] - SX[h + 3]) * 0.15, SY[h + 2] + 0.035 * b); X.lineTo(SX[h + 3], SY[h + 3] + 0.025 * b); X.stroke(); }
+    bone(h, h + 1, -0.06, 0.42, 0.1 * b, 0.088 * b, 0.1 * b, C.shorts, false, true);   // shorts leg, hemmed
+  };
+  const drawArm = (sh, far) => {
+    const C = far ? L.F : L.N;
+    if (L.longSleeve) {
+      bone(sh, sh + 1, -0.05, 1, 0.058 * b, 0.046 * b, 0.058 * b, C.sleeve);
+      bone(sh + 1, sh + 2, 0, 1, 0.047 * b, 0.036 * b, 0.049 * b, C.sleeve);
+    } else {
+      bone(sh, sh + 1, 0.3, 1, 0.047 * b, 0.039 * b, 0.05 * b, C.skin);              // biceps
+      bone(sh + 1, sh + 2, 0, 1, 0.041 * b, 0.028 * b, 0.044 * b, C.skin);           // forearm
+      bone(sh, sh + 1, -0.1, 0.56, 0.069 * b, 0.058 * b, 0.066 * b, C.sleeve, false, true); // sleeve, hemmed
+      if (LOD === 2) bone(sh, sh + 1, 0.51, 0.56, 0.059 * b, 0.058 * b, 0.059 * b, C.trim, true, true);
+      if (L.armband && sh === J_LSH && LOD) bone(sh, sh + 1, 0.62, 0.74, 0.051 * b, 0.049 * b, 0.051 * b, ARMBAND, true, true);
+    }
+    const wx = SX[sh + 2], wy = SY[sh + 2], ex = SX[sh + 1], ey = SY[sh + 1], fl = Math.hypot(wx - ex, wy - ey) || 1;
+    const hx = wx + (wx - ex) / fl * 0.04 * b, hy = wy + (wy - ey) / fl * 0.04 * b, hrr = (L.glove ? 0.062 : 0.044) * b;
+    const hc = L.glove ? C.glove : C.skin;
+    X.fillStyle = LOD === 2 ? grad(hx, hy, LIT.y, -LIT.x, hrr, hc) : hc[1]; X.beginPath(); X.arc(hx, hy, hrr, 0, TAU); X.fill();
+  };
+
+  if (farArmBehind) drawArm(arms[0], true);
+  drawLeg(legs[0], true);
+  // torso frame along the projected spine
+  const pX = SX[J_PEL], pY = SY[J_PEL], ax = SX[J_NECK] - pX, ay = SY[J_NECK] - pY, al = Math.hypot(ax, ay) || 1, ux = ax / al, uy = ay / al, nx = -uy, ny = ux;
+  const Wd = (w, d) => Math.sqrt(w * wr * w * wr + d * dr * d * dr) * b;
+  const hwS = Wd(0.215, 0.13), hwC = Wd(0.19, 0.135), hwW = Wd(0.15, 0.112), hwH = Wd(0.165, 0.118);
+  const tX = t => pX + ax * t, tY = t => pY + ay * t;
+  taper(tX(0.1), tY(0.1), tX(-0.17), tY(-0.17), hwH * 1.02, hwH * 0.84, hwH, L.N.shorts);   // shorts
+  const h0x = tX(-0.05), h0y = tY(-0.05), wx = tX(0.38), wy = tY(0.38), cx = tX(0.72), cy = tY(0.72), sx = tX(0.94), sy = tY(0.94), kx = tX(1.0), ky = tY(1.0);
+  X.beginPath();
+  X.moveTo(h0x + nx * hwH, h0y + ny * hwH);
+  X.quadraticCurveTo(wx + nx * hwW, wy + ny * hwW, cx + nx * hwC, cy + ny * hwC);
+  X.quadraticCurveTo(sx + nx * hwS * 1.07, sy + ny * hwS * 1.07, kx + nx * hwS * 0.52, ky + ny * hwS * 0.52);
+  X.lineTo(kx - nx * hwS * 0.52, ky - ny * hwS * 0.52);
+  X.quadraticCurveTo(sx - nx * hwS * 1.07, sy - ny * hwS * 1.07, cx - nx * hwC, cy - ny * hwC);
+  X.quadraticCurveTo(wx - nx * hwW, wy - ny * hwW, h0x - nx * hwH, h0y - ny * hwH);
+  X.quadraticCurveTo(tX(-0.1), tY(-0.1), h0x + nx * hwH, h0y + ny * hwH);
+  X.closePath();
+  X.fillStyle = LOD ? grad(cx, cy, nx, ny, hwC, L.N.shirt, true) : L.N.shirt[1]; X.fill();
+  if (LOD) {
+    // collar
+    X.strokeStyle = L.collar; X.lineWidth = Math.max(1, 0.024 * b); X.beginPath();
+    if (toward > 0.15) { X.moveTo(kx + nx * hwS * 0.34, ky + ny * hwS * 0.34); X.lineTo(tX(0.9), tY(0.9)); X.lineTo(kx - nx * hwS * 0.34, ky - ny * hwS * 0.34); }
+    else { X.moveTo(kx + nx * hwS * 0.36, ky + ny * hwS * 0.36); X.quadraticCurveTo(tX(1.03), tY(1.03), kx - nx * hwS * 0.36, ky - ny * hwS * 0.36); }
+    X.stroke();
+    if (LOD === 2) { X.strokeStyle = 'rgba(0,0,0,0.22)'; X.lineWidth = Math.max(1, 0.02 * b); X.beginPath(); X.moveTo(h0x + nx * hwH * 0.95, h0y + ny * hwH * 0.95); X.quadraticCurveTo(tX(-0.085), tY(-0.085), h0x - nx * hwH * 0.95, h0y - ny * hwH * 0.95); X.stroke(); }
+  }
+  // number (and name when close) on the back
+  if (toward < -0.25 && css > 8) {
+    X.save(); X.translate(tX(0.6), tY(0.6)); X.rotate(Math.atan2(ux, -uy)); X.scale(Math.max(0.3, wr), 1);
+    X.globalAlpha = clamp((-toward - 0.25) * 3, 0, 1); X.fillStyle = L.num; X.textAlign = 'center'; X.textBaseline = 'middle';
+    X.font = `800 ${Math.max(5, Math.round(0.26 * b))}px "Barlow Condensed", "Arial Narrow", sans-serif`; X.fillText(p.num, 0, 0.02 * b);
+    if (css > 38 && p.name) { X.font = `700 ${Math.round(0.062 * b)}px "Barlow Condensed", "Arial Narrow", sans-serif`; X.fillText(p.name.toUpperCase(), 0, -0.165 * b); }
+    X.restore();
+  } else if (toward > 0.3 && LOD === 2) {
+    // club badge on the left chest
+    const bx = cx - rux * hwC * 0.45 + ux * 0.03 * b, by = cy - ruy * hwC * 0.45 + uy * 0.03 * b, br = 0.032 * b;
+    const img = LOGO_IMG[L.teamId];
+    if (img && img.complete && img.naturalWidth) X.drawImage(img, bx - br, by - br, br * 2, br * 2);
+    else { X.fillStyle = L.trim; X.beginPath(); X.arc(bx, by, br, 0, TAU); X.fill(); X.fillStyle = L.N.shirt[2]; X.beginPath(); X.arc(bx, by, br * 0.62, 0, TAU); X.fill(); }
+  }
+  drawLeg(legs[1], false);
+  if (!farArmBehind) drawArm(arms[0], false);
+  drawHead(p, L, hs, b, wr, dr, ux, uy, toward, cf, css);
+  drawArm(arms[1], false);
+}
+
+function drawHead(p, L, hs, b, wr, dr, ux, uy, toward, cf, css) {
+  const hx = SX[J_HEAD], hy = SY[J_HEAD], hry = 0.118 * hs, hrx = Math.sqrt((0.08 * wr) ** 2 + (0.097 * dr) ** 2) * hs, rot = Math.atan2(ux, -uy) * 0.5;
+  taper(SX[J_NECK], SY[J_NECK], hx + ux * hry * 0.1, hy + uy * hry * 0.1, 0.05 * b, 0.045 * b, 0.048 * b, L.N.skin);   // neck
+  const sk = L.N.skin, aF = clamp(cf, -1, 1);
+  if (LOD === 2 && toward > 0.2 && wr > 0.55) {   // ears seen from the front sit behind the skull outline
+    X.fillStyle = sk[2]; X.beginPath(); X.ellipse(hx - hrx * 0.98, hy + hry * 0.05, hrx * 0.16, hry * 0.24, rot, 0, TAU); X.ellipse(hx + hrx * 0.98, hy + hry * 0.05, hrx * 0.16, hry * 0.24, rot, 0, TAU); X.fill();
+  }
+  if (LOD === 2) { const g = X.createRadialGradient(hx - hrx * 0.4, hy - hry * 0.45, hry * 0.1, hx, hy, hry * 1.15); g.addColorStop(0, sk[0]); g.addColorStop(0.55, sk[1]); g.addColorStop(1, sk[2]); X.fillStyle = g; }
+  else X.fillStyle = sk[1];
+  X.beginPath(); X.ellipse(hx, hy, hrx, hry, rot, 0, TAU); X.fill();
+  if (LOD === 2 && Math.abs(aF) > 0.55) { X.fillStyle = sk[2]; X.beginPath(); X.ellipse(hx - aF * hrx * 0.2, hy + hry * 0.05, hrx * 0.17, hry * 0.24, rot, 0, TAU); X.fill(); X.fillStyle = sk[1]; X.beginPath(); X.ellipse(hx - aF * hrx * 0.2, hy + hry * 0.05, hrx * 0.09, hry * 0.15, rot, 0, TAU); X.fill(); }
+  // face
+  if (LOD === 2 && toward > -0.05 && css > 24) {
+    const t = Math.max(0, toward), fx = hx + aF * hrx * 0.5 * (1 - t * 0.7), sep = 0.034 * hs * Math.max(0.2, t), ey = hy - hry * 0.06;
+    X.fillStyle = 'rgba(28,16,12,0.5)'; X.beginPath();
+    X.ellipse(fx - sep, ey, 0.012 * hs, 0.0075 * hs, rot, 0, TAU); if (t > 0.35) X.ellipse(fx + sep, ey, 0.012 * hs, 0.0075 * hs, rot, 0, TAU); X.fill();
+    X.globalAlpha = 0.55; X.strokeStyle = L.N.hair[2]; X.lineWidth = Math.max(0.5, 0.008 * hs); X.beginPath();
+    X.moveTo(fx - sep - 0.016 * hs, ey - 0.021 * hs); X.lineTo(fx - sep + 0.014 * hs, ey - 0.024 * hs);
+    if (t > 0.35) { X.moveTo(fx + sep - 0.014 * hs, ey - 0.024 * hs); X.lineTo(fx + sep + 0.016 * hs, ey - 0.021 * hs); }
+    X.stroke(); X.globalAlpha = 1;
+    X.fillStyle = 'rgba(70,35,22,0.22)'; X.beginPath(); X.ellipse(fx + aF * 0.012 * hs, hy + hry * 0.18, 0.014 * hs, 0.022 * hs, rot, 0, TAU); X.fill();
+    X.fillStyle = 'rgba(120,50,40,0.22)'; X.beginPath(); X.ellipse(fx, hy + hry * 0.47, 0.02 * hs * Math.max(0.3, t), 0.006 * hs, rot, 0, TAU); X.fill();
+    if (Math.abs(aF) > 0.75 && t < 0.4) { X.fillStyle = sk[1]; X.beginPath(); X.moveTo(hx + aF * hrx * 0.92, hy - hry * 0.05); X.lineTo(hx + aF * hrx * 1.12, hy + hry * 0.16); X.lineTo(hx + aF * hrx * 0.9, hy + hry * 0.24); X.fill(); }
+  }
+  if (L.beard && toward > -0.2 && LOD === 2) {
+    X.globalAlpha = 0.5; X.fillStyle = L.N.hair[1]; X.beginPath(); X.ellipse(hx + aF * hrx * 0.18, hy + hry * 0.36, hrx * 0.8, hry * 0.55, rot, 0.1, Math.PI - 0.1); X.closePath(); X.fill(); X.globalAlpha = 1;
+  }
+  // hair: a cap over the skull whose hairline follows the facing direction
+  if (L.style !== 'bald') {
+    const wA = Math.abs(aF), base = toward > 0 ? lerp(0.075, -0.38, toward) : lerp(0.075, 0.62, -toward);
+    let dL = wA * (aF > 0 ? 0.5 : -0.42) + (1 - wA) * base, dR = wA * (aF > 0 ? -0.42 : 0.5) + (1 - wA) * base;
+    if (L.style === 'fade') { dL -= 0.25; dR -= 0.25; }
+    const big = L.style === 'curly' ? 1.15 : L.style === 'buzz' ? 1.0 : 1.05, hc = L.N.hair;
+    X.fillStyle = LOD === 2 ? grad(hx, hy - hry * 0.5, LIT.y, -LIT.x, hry, hc) : hc[1];
+    if (L.style === 'buzz') X.globalAlpha = 0.62;
+    X.beginPath(); X.ellipse(hx, hy - hry * (L.style === 'curly' ? 0.07 : 0.03), hrx * big, hry * big, rot, Math.PI - dL, 2 * Math.PI + dR); X.closePath(); X.fill();
+    if (L.style === 'curly' && LOD === 2) { X.beginPath(); for (let k = 0; k < 7; k++) { const a = Math.PI + (k + 0.5) / 7 * Math.PI; X.moveTo(hx + Math.cos(a) * hrx * 1.12 + hry * 0.2, hy - hry * 0.07 + Math.sin(a) * hry * 1.1); X.arc(hx + Math.cos(a) * hrx * 1.12, hy - hry * 0.07 + Math.sin(a) * hry * 1.1, hry * 0.2, 0, TAU); } X.fill(); }
+    if (L.style === 'long') { X.beginPath(); X.arc(hx - aF * hrx * 0.55, hy - hry * 0.92, hry * 0.3, 0, TAU); X.fill(); }
+    X.globalAlpha = 1;
+  }
+}
+
+/* ---------------- shadows and the control ring ---------------- */
+const LIGHTS = [[-78, 46, 62], [78, 46, 62], [-78, 46, -62], [78, 46, -62]];
 function drawPlayerShadow(p) {
   proj(p.rx, 0, p.rz, P0); if (P0.d < 2) return;
-  const s = P0.s, h = (p.ract === A_DIVE || p.ract === A_SLIDE) ? 0.9 : 1.85;
+  const s = P0.s, h = (p.ract === A_DIVE || p.ract === A_SLIDE) ? 0.9 : 1.85 * (p.look ? p.look.hs : 1);
   X.fillStyle = 'rgba(0,15,0,0.13)';
   for (const L of LIGHTS) {
     let dx = p.rx - L[0], dz = p.rz - L[2]; const d = Math.hypot(dx, dz) || 1; dx /= d; dz /= d;
-    const len = Math.min(5.5, h * d / (L[1] - h)), wx = -dz * 0.2, wz = dx * 0.2;
+    const len = Math.min(5.5, h * d / (L[1] - h)), wx = -dz * 0.22, wz = dx * 0.22;
     X.beginPath(); proj(p.rx + wx, 0, p.rz + wz, P1); X.moveTo(P1.x, P1.y); proj(p.rx - wx, 0, p.rz - wz, P1); X.lineTo(P1.x, P1.y);
-    proj(p.rx + dx * len - wx * 0.6, 0, p.rz + dz * len - wz * 0.6, P1); X.lineTo(P1.x, P1.y); proj(p.rx + dx * len + wx * 0.6, 0, p.rz + dz * len + wz * 0.6, P1); X.lineTo(P1.x, P1.y); X.fill();
+    proj(p.rx + dx * len - wx * 0.55, 0, p.rz + dz * len - wz * 0.55, P1); X.lineTo(P1.x, P1.y); proj(p.rx + dx * len + wx * 0.55, 0, p.rz + dz * len + wz * 0.55, P1); X.lineTo(P1.x, P1.y); X.fill();
   }
   proj(p.rx, 0, p.rz + 0.4, P1); const ry = Math.max(1, Math.abs(P0.y - P1.y));
-  X.fillStyle = 'rgba(0,12,0,0.38)'; X.beginPath(); X.ellipse(P0.x, P0.y, 0.42 * s, ry, 0, 0, TAU); X.fill();
+  X.fillStyle = 'rgba(0,12,0,0.4)'; X.beginPath(); X.ellipse(P0.x, P0.y, 0.4 * s, ry, 0, 0, TAU); X.fill();
 }
-const LIGHTS = [[-78, 46, 62], [78, 46, 62], [-78, 46, -62], [78, 46, -62]];
-
 function drawRing(p, col, t) {
   proj(p.rx, 0, p.rz, P0); const s = P0.s;
   X.save(); X.translate(P0.x, P0.y); proj(p.rx, 0, p.rz + 1, P1); const sq = Math.max(0.15, Math.abs(P1.y - P0.y) / s);
@@ -1173,68 +1387,8 @@ function drawRing(p, col, t) {
   const r = 0.72 * s, pulse = 1 + Math.sin(t * 6) * 0.06;
   X.strokeStyle = col; X.globalAlpha = 0.45; X.lineWidth = 0.22 * s; X.beginPath(); X.arc(0, 0, r * pulse, 0, TAU); X.stroke();
   X.globalAlpha = 1; X.strokeStyle = '#ffffff'; X.lineWidth = 0.07 * s; X.beginPath(); X.arc(0, 0, r * pulse, 0, TAU); X.stroke();
-  // direction notch
   X.rotate(-p.rf); X.fillStyle = '#ffffff'; X.beginPath(); X.moveTo(r * 1.45, 0); X.lineTo(r * 1.08, -0.2 * s); X.lineTo(r * 1.08, 0.2 * s); X.fill();
   X.restore();
-}
-
-function drawPlayer(p) {
-  computePose(p); projectPose(p);
-  const L = p.look; proj(p.rx, 1, p.rz, P0); const s = P0.s; if (P0.d < 2) return;
-  X.lineCap = 'round'; X.lineJoin = 'round';
-  const leftFar = SD[J_LHIP] > SD[J_RHIP];
-  const legs = leftFar ? [J_LHIP, J_RHIP] : [J_RHIP, J_LHIP];
-  const arms = (SD[J_LSH] > SD[J_RSH]) ? [J_LSH, J_RSH] : [J_RSH, J_LSH];
-  const drawLeg = (h, far) => {
-    const mx = SX[h] + (SX[h + 1] - SX[h]) * 0.5, my = SY[h] + (SY[h + 1] - SY[h]) * 0.5;
-    X.strokeStyle = far ? L.skiF : L.skiD; X.lineWidth = 0.13 * s; X.beginPath(); X.moveTo(mx, my); X.lineTo(SX[h + 1], SY[h + 1]); X.stroke();
-    limb(h + 1, h + 2, 0.12 * s, far ? L.skF : L.skD, far ? null : L.skL);
-    limb(h + 2, h + 3, 0.105 * s, far ? L.boF : L.boD, far ? null : L.boL);
-    seg(SX[h], SY[h], mx, my, 0.19 * s, far ? L.soF : L.soD);
-    if (!far) seg(SX[h] - 0.03 * s, SY[h] - 0.03 * s, mx - 0.03 * s, my - 0.03 * s, 0.1 * s, L.soL);
-  };
-  const drawArm = (sh, far) => {
-    const sleeveEnd = L.longSleeve ? sh + 2 : sh + 1;
-    limb(sh, sh + 1, 0.11 * s, far ? L.slF : L.slD, far ? null : L.slL);
-    if (L.longSleeve) limb(sh + 1, sh + 2, 0.09 * s, far ? L.slF : L.slD, null); else limb(sh + 1, sh + 2, 0.085 * s, far ? L.skiF : L.skiD, far ? null : L.ski);
-    X.fillStyle = L.gloves || (far ? L.skiFL : L.ski); X.beginPath(); X.arc(SX[sh + 2], SY[sh + 2], (L.gloves ? 0.065 : 0.048) * s, 0, TAU); X.fill();
-  };
-  drawLeg(legs[0], true);
-  if (SD[arms[0]] > SD[J_NECK] + 0.05) drawArm(arms[0], true);
-  // shorts block
-  seg(SX[J_LHIP], SY[J_LHIP], SX[J_RHIP], SY[J_RHIP], 0.24 * s, L.soD);
-  // torso
-  const ax = SX[J_NECK] - SX[J_PEL], ay = SY[J_NECK] - SY[J_PEL], al = Math.hypot(ax, ay) || 1, nx = -ay / al, ny = ax / al;
-  const spanS = Math.abs((SX[J_LSH] - SX[J_RSH]) * nx + (SY[J_LSH] - SY[J_RSH]) * ny) * 0.5, spanH = Math.abs((SX[J_LHIP] - SX[J_RHIP]) * nx + (SY[J_LHIP] - SY[J_RHIP]) * ny) * 0.5;
-  const hwS = Math.max(spanS + 0.05 * s, 0.15 * s), hwH = Math.max(spanH + 0.04 * s, 0.13 * s);
-  const tx = SX[J_NECK] - ax * 0.04, ty = SY[J_NECK] - ay * 0.04, bx = SX[J_PEL] + ax * 0.02, by = SY[J_PEL] + ay * 0.02;
-  const gr = X.createLinearGradient(tx - nx * hwS, ty - ny * hwS, tx + nx * hwS, ty + ny * hwS);
-  gr.addColorStop(0, L.shL); gr.addColorStop(0.45, L.sh); gr.addColorStop(1, L.shD);
-  X.fillStyle = gr; X.beginPath();
-  X.moveTo(tx + nx * hwS, ty + ny * hwS); X.quadraticCurveTo(tx + ax * 0.08, ty + ay * 0.08, tx - nx * hwS, ty - ny * hwS);
-  X.lineTo(bx - nx * hwH, by - ny * hwH); X.lineTo(bx + nx * hwH, by + ny * hwH); X.closePath(); X.fill();
-  // collar / trim
-  X.strokeStyle = L.trim; X.lineWidth = Math.max(1, 0.035 * s); X.beginPath(); X.moveTo(tx + nx * hwS * 0.35, ty + ny * hwS * 0.35); X.lineTo(tx - nx * hwS * 0.35, ty - ny * hwS * 0.35); X.stroke();
-  // number on the back when facing away
-  const away = Math.sin(p.rf);
-  if (away > 0.3 && s > 9) {
-    X.fillStyle = L.num; X.globalAlpha = clamp((away - 0.3) * 3, 0, 1);
-    X.font = `800 ${Math.round(0.26 * s)}px "Barlow Condensed", "Arial Narrow", sans-serif`; X.textAlign = 'center'; X.textBaseline = 'middle';
-    X.fillText(p.num, tx - ax * 0.42, ty - ay * 0.42); X.globalAlpha = 1;
-  } else if (away < -0.3 && s > 12) { X.fillStyle = L.trim; X.globalAlpha = 0.85; X.beginPath(); X.arc(tx - ax * 0.25 + nx * hwS * 0.45, ty - ay * 0.25 + ny * hwS * 0.45, 0.035 * s, 0, TAU); X.fill(); X.globalAlpha = 1; }
-  drawLeg(legs[1], false);
-  if (!(SD[arms[0]] > SD[J_NECK] + 0.05)) drawArm(arms[0], false);
-  // head
-  const hx = SX[J_HEAD], hy = SY[J_HEAD], hr = 0.118 * s;
-  seg(SX[J_NECK], SY[J_NECK], hx, hy, 0.085 * s, L.skiD);
-  const hg = X.createRadialGradient(hx - hr * 0.35, hy - hr * 0.35, hr * 0.1, hx, hy, hr);
-  hg.addColorStop(0, L.skiL); hg.addColorStop(1, L.skiD); X.fillStyle = hg; X.beginPath(); X.arc(hx, hy, hr, 0, TAU); X.fill();
-  if (!L.bald) {
-    const fx = Math.cos(p.rf), span = away > 0.3 ? 2.55 : away < -0.3 ? 1.3 : 1.85;
-    const c = -Math.PI / 2 + (away > 0.3 ? 0 : Math.sign(-fx || 1) * (away < -0.3 ? 0.08 : 0.5));
-    X.fillStyle = L.hair; X.beginPath(); X.arc(hx, hy, hr * 1.06, c - span, c + span); X.closePath(); X.fill();
-  }
-  drawArm(arms[1], false);
 }
 
 /* ---------------- Ball ---------------- */
@@ -1339,7 +1493,7 @@ function buildTeams() {
   players.length = 0; const rng = mulberry32(31);
   for (let t = 0; t < 2; t++) for (let i = 0; i < 11; i++) players.push(makePlayer(t, i, TEAMS_SEL[t], rng));
   referee = makePlayer(2, 5, TEAMS[0], rng);
-  referee.look = lookFor({ shirt: '#161616', sleeve: '#161616', shorts: '#111111', socks: '#161616', trim: '#d8ff3a', num: '#d8ff3a', boot: '#111', gk: {} }, false, 2, rng);
+  referee.look = lookFor({ id: 'ref', shirt: '#161616', sleeve: '#161616', shorts: '#111111', socks: '#161616', sockTop: '#d8ff3a', trim: '#d8ff3a', collar: '#d8ff3a', num: '#d8ff3a', boot: '#111111' }, false, 2, rng);
   referee.name = 'Wasit'; referee.num = '';
   user = players[9];
 }
@@ -1798,7 +1952,7 @@ function onGoal(team) {
   G.hype = 1; crowdLevel(1, 0.3); sfxCheer(team === 0);
   const T = TEAMS_SEL[team];
   banner(team === 0 ? 'GOOOL!' : 'GOL', `${sc.name} · ${minute}'`, team !== 0);
-  G.fwCols = [T.c1, T.c2 === '#141414' ? '#ffd23d' : '#ffffff', '#ffd23d', '#ffffff'];
+  G.fwCols = [T.c1, T.c2, '#ffd23d', '#ffffff'];
   if (team === 0) spawnConfetti(G.fwCols, 220);
   G.timeScale = 0.3; updateScore(); rig.shake = 0.35;
   sc.act = A_CELEB; sc.actT = 0; sc.actDur = 99;
@@ -1954,10 +2108,10 @@ function camTargets() {
   if (s === 'goal' && G.scorer) { const sc = G.scorer; T.tx = sc.x * 0.75 + ball.x * 0.25; T.tz = sc.z * 0.8 + 1.5; T.h = 6.5; T.D = 19; T.vw = 21; T.shift = 0.56; return 1.6; }
   if (s === 'replay') { T.tx = ball.rx; T.tz = ball.rz * 0.6 + 2; T.h = 8; T.D = 24; T.vw = 30; T.shift = 0.56; return 3; }
   if (s === 'halftime' || s === 'fulltime') { T.tx = ball.x * 0.3; T.tz = 6; T.h = 16; T.D = 42; T.vw = 62; T.shift = 0.58; return 0.8; }
-  if (s === 'setpiece' && G.pending && G.pending.kind === 'corner') { const d = Math.sign(G.pending.pos.x); T.tx = d * 37; T.tz = G.pending.pos.z * 0.3 + 3; T.h = 19; T.D = 46; T.vw = 44; T.shift = 0.53; return 2.5; }
+  if (s === 'setpiece' && G.pending && G.pending.kind === 'corner') { const d = Math.sign(G.pending.pos.x); T.tx = d * 37; T.tz = G.pending.pos.z * 0.3 + 3; T.h = 16; T.D = 40; T.vw = 40; T.shift = 0.53; return 2.5; }
   const lead = ball.owner ? ball.owner.vx * 0.5 : ball.vx * 0.3;
   T.tx = clamp(ball.x + lead, -39, 39); T.tz = clamp(ball.z * 0.55 + 3, -14, 18);
-  T.h = 19; T.D = 46; T.vw = Math.abs(ball.x) > 34 ? 37 : 41; T.shift = 0.53;
+  T.h = 16; T.D = 40; T.vw = Math.abs(ball.x) > 34 ? 32 : 35; T.shift = 0.53;
   return s === 'intro' ? 1.1 : 3.2;
 }
 function updateCamera(dt) {
@@ -2267,7 +2421,7 @@ function frame(now) {
 /* ---------------- boot ---------------- */
 function boot() {
   resize();
-  buildPitchTexture();
+  buildPitchTexture(); buildGrassTile();
   TEAMS_SEL = [TEAMS[0], TEAMS[1]];
   buildCrowd(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]);
   buildTeams(); resetKickoff(0);
