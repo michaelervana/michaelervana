@@ -3337,7 +3337,7 @@ function aiUpdate(p, dt) {
       const reach = p.team === 1 ? 1.0 : 1.15;
       if (d < reach && p.tackleCD <= 0 && own.protect <= 0 && !ball.held) {
         p.tackleCD = p.team === 1 ? 0.55 : 0.5;
-        if (p.team === 1 && own.team === 0 && own.role !== 'GK' && Math.random() < (inBoxOf(own, 0) ? 0.1 : 0.07)) { p.act = A_TACKLE; p.actT = 0; p.actDur = 0.45; knockDown(own, Math.atan2(own.z - p.z, own.x - p.x), 3.4); foul(1, own); return; }
+        if (p.team === 1 && own.team === 0 && own.role !== 'GK' && Math.random() < (inBoxOf(own, 0) ? 0.035 : 0.045)) { p.act = A_TACKLE; p.actT = 0; p.actDur = 0.45; knockDown(own, Math.atan2(own.z - p.z, own.x - p.x), 3.4); foul(1, own); return; }
         if (Math.random() < (p.team === 1 ? EASY.aiTackle : 0.32)) steal(p, own);
       }
       return;
