@@ -1234,55 +1234,147 @@ function buildLines3() {
   const m = W3.lines = new THREE.Mesh(g, mat); m.receiveShadow = true; SCN.add(m);
 }
 
-/* ---------------- goals with rippling nets ---------------- */
-const NET = [{ hitT: -9, hz: 0, hy: 1, amp: 0 }, { hitT: -9, hz: 0, hy: 1, amp: 0 }];
-function netOffset(side, z, y, t) {
-  const n = NET[side > 0 ? 1 : 0], age = t - n.hitT; if (age > 2.5 || age < 0) return 0;
-  const d2 = (z - n.hz) * (z - n.hz) + (y - n.hy) * (y - n.hy);
-  return n.amp * Math.exp(-d2 / 1.6) * Math.exp(-age * 2.4) * Math.cos(age * 16 - Math.sqrt(d2) * 3);
-}
+/* ---------------- goals: posts, stanchions and cloth nets ---------------- */
 function netTexture() {
   const c = mkCanvas(64, 64), g = c.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, 64, 64);
   g.strokeStyle = '#fff'; g.lineWidth = 5; g.strokeRect(0, 0, 64, 64);
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4; return t;
 }
-function gridGeo(nu, nv, fn) {
-  const pos = new Float32Array((nu + 1) * (nv + 1) * 3), uv = new Float32Array((nu + 1) * (nv + 1) * 2), idx = [];
-  for (let j = 0; j <= nv; j++) for (let i = 0; i <= nu; i++) { const k = j * (nu + 1) + i, p = fn(i / nu, j / nv); pos.set(p.slice(0, 3), k * 3); uv[k * 2] = p[3]; uv[k * 2 + 1] = p[4]; }
-  for (let j = 0; j < nv; j++) for (let i = 0; i < nu; i++) { const a = j * (nu + 1) + i, b = a + 1, c = a + nu + 1, d = c + 1; idx.push(a, b, d, a, d, c); }
-  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals(); return g;
+/* The strings are drawn analytically per pixel: a thread is antialiased against its true width, so the mesh stays a
+   crisp lattice up close and turns into the faint white haze a broadcast camera sees from far away. */
+function netMaterial(alphaTex) {
+  const m = new THREE.MeshStandardMaterial({ color: lin('#f4f6f8'), emissive: lin('#f4f6f8', 0.1), alphaMap: alphaTex, transparent: true, alphaTest: 0.004, side: THREE.DoubleSide, roughness: 0.75 });
+  m.onBeforeCompile = sh => {
+    sh.fragmentShader = sh.fragmentShader.replace('#include <alphamap_fragment>', `
+      { vec2 fw = max(fwidth(vUv), vec2(1e-4)), d = abs(fract(vUv + 0.5) - 0.5), wpx = vec2(0.055) / fw, hw = max(wpx, vec2(1.0)) * 0.5;
+        vec2 c = clamp(wpx, 0.0, 1.0) * (1.0 - smoothstep(hw - 0.5, hw + 0.5, d / fw));
+        float a = 1.0 - (1.0 - c.x) * (1.0 - c.y), far = 1.0 - clamp(min(wpx.x, wpx.y), 0.0, 1.0);
+        diffuseColor.a *= clamp(a * (1.0 + 1.3 * far), 0.0, 1.0); }`);
+  };
+  return m;
 }
 function buildGoals3() {
   const post = new THREE.MeshStandardMaterial({ color: lin('#f6f7fa'), roughness: 0.32, metalness: 0.05 }), frame = new THREE.MeshStandardMaterial({ color: lin('#9aa1ad'), roughness: 0.6 });
-  const nt = netTexture(), netMat = new THREE.MeshStandardMaterial({ color: lin('#f2f4f7'), alphaMap: nt, alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.8 });
+  const nt = netTexture(), netMat = netMaterial(nt);
   const cyl = (a, b, r, m) => { const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), L = A.distanceTo(B), g = new THREE.CylinderGeometry(r, r, L, 16); const mesh = new THREE.Mesh(g, m); mesh.position.copy(A).add(B).multiplyScalar(0.5); mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize()); mesh.castShadow = true; mesh.receiveShadow = true; SCN.add(mesh); return mesh; };
-  const TD = 1.0, cell = 0.12;
+  const TD = 1.0, cell = 0.12, BN = [0.9119, 0.4111];
   for (const s of [-1, 1]) {
     const x0 = s * PL, xb = s * (PL + GD), xt = s * (PL + TD);
     cyl([x0, 0, GW], [x0, GH + 0.06, GW], 0.06, post); cyl([x0, 0, -GW], [x0, GH + 0.06, -GW], 0.06, post); cyl([x0, GH, GW + 0.06], [x0, GH, -GW - 0.06], 0.06, post);
     cyl([xb, 0.03, GW], [xb, 0.03, -GW], 0.03, frame);
     for (const z of [GW, -GW]) { cyl([x0, GH, z], [xt, GH, z], 0.025, frame); cyl([xt, GH, z], [xb, 0.03, z], 0.025, frame); }
-    // back net (rippling): u across z, v up the slope
-    const slope = Math.hypot(GD - TD, GH);
-    const back = gridGeo(30, 12, (u, v) => { const z = -GW + u * 2 * GW, y = v * GH, x = s * (PL + GD + (TD - GD) * v); return [x, y, -z, u * 2 * GW / cell, v * slope / cell]; });
-    const bm = new THREE.Mesh(back, netMat); bm.castShadow = true; SCN.add(bm);
-    W3.nets.push({ side: s, mesh: bm, slope });
-    const top = gridGeo(30, 4, (u, v) => [s * (PL + v * TD), GH, -(-GW + u * 2 * GW), u * 2 * GW / cell, v * TD / cell]); const tm = new THREE.Mesh(top, netMat); tm.castShadow = true; SCN.add(tm);
-    for (const z of [GW, -GW]) {
-      const side = gridGeo(8, 10, (u, v) => { const y = v * GH, xe = PL + GD + (TD - GD) * v; return [s * (PL + u * (xe - PL)), y, -z, u * GD / cell, y / cell]; });
-      const sm = new THREE.Mesh(side, netMat); sm.castShadow = true; SCN.add(sm);
-    }
+    // roof + back are one cloth that folds over the top-back edge; the side panels are separate. Edges are laced to the
+    // frame. The rest shape is the hung net: the free top-back edge droops a little and the panels belly out slightly.
+    const L1 = TD, L2 = Math.hypot(GD - TD, GH), NR = 7, NB = 22, NU = 48, N = { s, patches: [], wake: 0, acc: 0 };
+    N.patches.push(netPatch(s, NU, NR + NB, (i, j) => {
+      const u = i / NU, z = -GW + u * 2 * GW, su = Math.pow(Math.sin(Math.PI * u), 0.7); let xd, y, arc;
+      if (j <= NR) { const v = j / NR; arc = v * L1; xd = arc; y = GH - su * (0.11 * v + 0.035 * Math.sin(Math.PI * v)); }
+      else { const f = (j - NR) / NB, b = 0.07 * su * Math.sin(Math.PI * f); arc = L1 + f * L2; xd = TD + (GD - TD) * f + BN[0] * b; y = (GH - 0.11 * su) * (1 - f) + BN[1] * b; }
+      return [xd, Math.max(0.015, y), z, (i / NU) * 2 * GW / cell, arc / cell];
+    }, netMat, nt, (i, j) => j < NR ? [0, 1, 0] : j === NR ? [0.62, 0.78, 0] : [BN[0], BN[1], 0],
+      (i, j) => j === NR ? 0.16 : Math.abs(j - NR) === 1 ? 0.04 : 0.011,           // the top-back edge runs along a tensioned cord
+      (d, y, z) => Math.abs(z) < GW + 0.1 && d > -0.2, (i, j) => j < NR ? 0 : j === NR ? 3 : 1));
+    for (const zs of [GW, -GW]) N.patches.push(netPatch(s, 12, 16, (i, j) => {
+      const y = (j / 16) * GH, xe = GD + (TD - GD) * (y / GH), xd = (i / 12) * xe, b = 0.045 * Math.sin(Math.PI * i / 12) * Math.sin(Math.PI * j / 16);
+      return [xd, y, zs + Math.sign(zs) * b, xd / cell, y / cell];
+    }, netMat, nt, () => [0, 0, Math.sign(zs)], null, (d, y) => d > -0.2 && y < GH + 0.1 && d < GD + (TD - GD) * clamp(y / GH, 0, 1) + 0.1, () => 2));
+    NETS.push(N);
   }
 }
-function updateNets(t) {
-  for (const n of W3.nets) {
-    const age = t - NET[n.side > 0 ? 1 : 0].hitT; if (age > 3 && !n.dirty) continue;
-    const P = n.mesh.geometry.attributes.position;
-    for (let j = 0; j <= 12; j++) for (let i = 0; i <= 30; i++) {
-      const k = j * 31 + i, u = i / 30, v = j / 12, z = -GW + u * 2 * GW, y = v * GH;
-      P.setX(k, n.side * (PL + GD + (1.0 - GD) * v + netOffset(n.side, z, y, t)));
+/* Goal nets: Verlet cloth laced to the posts, crossbar and stanchions. The threads resist only stretching (there is a
+   little slack, so a pocket can form), a soft memory pulls the mesh back to its hung shape, and the ball drives a
+   pocket into it: the mesh wraps the ball and is dragged back in a cone towards the frame, then springs back and wobbles. */
+const NETS = [];
+function netPatch(s, nu, nv, at, mat, alphaTex, normalAt, memAt, over, pidAt) {
+  const n = (nu + 1) * (nv + 1), P = new Float32Array(n * 3), uv = new Float32Array(n * 2), W = new Float32Array(n), NRM = new Float32Array(n * 3), KM = new Float32Array(n), PID = new Uint8Array(n);
+  for (let j = 0; j <= nv; j++) for (let i = 0; i <= nu; i++) {
+    const k = j * (nu + 1) + i, q = at(i, j);
+    P[k * 3] = s * (PL + q[0]); P[k * 3 + 1] = q[1]; P[k * 3 + 2] = -q[2]; uv[k * 2] = q[3]; uv[k * 2 + 1] = q[4];
+    W[k] = (i === 0 || i === nu || j === 0 || j === nv) ? 0 : 1; KM[k] = memAt ? memAt(i, j) : 0.011; PID[k] = pidAt(i, j);
+    const nn = normalAt(i, j); NRM[k * 3] = nn[0] * s; NRM[k * 3 + 1] = nn[1]; NRM[k * 3 + 2] = -nn[2];
+  }
+  const A = [], B = [], R = [], link = (a, b, sl) => { A.push(a); B.push(b); R.push(Math.hypot(P[a * 3] - P[b * 3], P[a * 3 + 1] - P[b * 3 + 1], P[a * 3 + 2] - P[b * 3 + 2]) * sl); };
+  for (let j = 0; j <= nv; j++) for (let i = 0; i <= nu; i++) {
+    const k = j * (nu + 1) + i;
+    if (i < nu) link(k, k + 1, 1.02); if (j < nv) link(k, k + nu + 1, 1.02);
+    if (i < nu && j < nv) { link(k, k + nu + 2, 1.03); link(k + 1, k + nu + 1, 1.03); }
+  }
+  const idx = []; for (let j = 0; j < nv; j++) for (let i = 0; i < nu; i++) { const a = j * (nu + 1) + i, b = a + 1, c = a + nu + 1, d = c + 1; idx.push(a, b, d, a, d, c); }
+  const g = new THREE.BufferGeometry(), pa = new THREE.BufferAttribute(P, 3); pa.setUsage(THREE.DynamicDrawUsage);
+  g.setAttribute('position', pa); g.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals();
+  const mesh = new THREE.Mesh(g, mat); mesh.castShadow = true; mesh.receiveShadow = true; mesh.frustumCulled = false; mesh.renderOrder = 2;
+  mesh.customDepthMaterial = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, alphaMap: alphaTex, alphaTest: 0.5 });   // lattice shadow
+  SCN.add(mesh);
+  return { over, PID, P, O: P.slice(), S: P.slice(), W, NRM, KM, A: Int32Array.from(A), B: Int32Array.from(B), R: Float32Array.from(R), g, n };
+}
+// sg: +1 when the ball is inside the goal (it pushes the mesh outwards), -1 when it hits the net from outside, and then
+// only: the panel it is up against (0 roof, 1 back, 2 sides)
+function netStep(N, h, bx, by, bz, sg, bvx, bvy, bvz, only) {
+  const grav = -2.2 * h * h, damp = 0.986, rr = BR + 0.025, rr2 = rr * rr, CONE = 0.48, reach = 2.4;
+  for (const p of N.patches) {
+    const { P, O, S, W, KM } = p;
+    for (let k = 0; k < p.n; k++) {
+      if (!W[k]) continue; const i = k * 3, km = KM[k];
+      for (let c = 0; c < 3; c++) { const v = (P[i + c] - O[i + c]) * damp; O[i + c] = P[i + c]; P[i + c] += v + (S[i + c] - P[i + c]) * km; }
+      P[i + 1] += grav;
     }
-    P.needsUpdate = true; n.dirty = age <= 3;
+  }
+  // threads are elastic (a soft correction per pass, so a disturbance travels across the mesh at a finite speed and
+  // the pocket stays local while the ball is in it), with a hard limit at 25 % stretch
+  const bd = (bx - N.s * PL) * N.s, bzg = -bz;
+  for (let it = 0; it < 3; it++) for (const p of N.patches) {
+    const { P, W, A, B, R } = p;
+    for (let c = 0; c < A.length; c++) {
+      const ka = A[c], kb = B[c], wa = W[ka], wb = W[kb], ws = wa + wb; if (!ws) continue;
+      const a = ka * 3, b = kb * 3, dx = P[b] - P[a], dy = P[b + 1] - P[a + 1], dz = P[b + 2] - P[a + 2], d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+      if (d <= R[c] || d < 1e-6) continue;
+      const ov = d - R[c], lim = R[c] * 0.25, f = (ov > lim ? ov - lim + lim * 0.3 : ov * 0.3) / (d * ws);
+      P[a] += dx * f * wa; P[a + 1] += dy * f * wa; P[a + 2] += dz * f * wa; P[b] -= dx * f * wb; P[b + 1] -= dy * f * wb; P[b + 2] -= dz * f * wb;
+    }
+    if (!sg || !p.over(bd, by, bzg)) continue;                 // only the panel the ball is actually up against
+    const NN = p.NRM, O = p.O, PID = p.PID;
+    for (let k = 0; k < p.n; k++) {
+      if (!W[k] || (only >= 0 && PID[k] !== only && !(PID[k] === 3 && only < 2))) continue;
+      const i = k * 3, dx = P[i] - bx, dy = P[i + 1] - by, dz = P[i + 2] - bz;
+      if (dx > reach || dx < -reach || dy > reach || dy < -reach || dz > reach || dz < -reach) continue;
+      const nx = NN[i] * sg, ny = NN[i + 1] * sg, nz = NN[i + 2] * sg, dn = dx * nx + dy * ny + dz * nz;
+      if (dn >= rr || dn < -1.4) continue;
+      const lx = dx - nx * dn, ly = dy - ny * dn, lz = dz - nz * dn, lat2 = lx * lx + ly * ly + lz * lz;
+      // the ball's front half, then a cone that trails back from its equator: the pocket the ball drags into the mesh
+      const surf = lat2 < rr2 ? Math.sqrt(rr2 - lat2) : -(Math.sqrt(lat2) - rr) * CONE;
+      if (dn < surf) {
+        // pushed along with the ball: the mesh in contact moves at the ball's speed, so when the net stops the ball the
+        // mesh stops with it instead of flying on
+        const e = surf - dn; P[i] += nx * e; P[i + 1] += ny * e; P[i + 2] += nz * e;
+        const vx = P[i] - O[i], vy = P[i + 1] - O[i + 1], vz = P[i + 2] - O[i + 2], dv = Math.max(0, bvx * nx + bvy * ny + bvz * nz) * h - (vx * nx + vy * ny + vz * nz);
+        if (dv < 0) { O[i] -= nx * dv; O[i + 1] -= ny * dv; O[i + 2] -= nz * dv; }
+      }
+    }
+    for (let k = 0; k < p.n; k++) if (W[k] && P[k * 3 + 1] < 0.015) P[k * 3 + 1] = 0.015;
+  }
+}
+function updateNets(t, simDt) {
+  let dt, k;
+  if (simDt) { dt = simDt; k = 1; } else { dt = Math.min(0.05, Math.max(0, t - (W3.netT === undefined ? t : W3.netT))); W3.netT = t; k = G.state === 'replay' ? 0.5 : (G.timeScale || 1); }
+  const bx = ball.rx, by = ball.ry, bz = -ball.rz;
+  for (const N of NETS) {
+    const d = (ball.rx - N.s * PL) * N.s;
+    if (d > -3.5 && Math.abs(ball.rz) < GW + 4 && ball.ry < GH + 3) N.wake = 3;
+    if (N.wake <= 0) continue;
+    // inside: in through the mouth (the same test the ball physics uses); otherwise the mesh is hit from outside
+    const near = d > -0.6 && d < GD + 1.4 && Math.abs(ball.rz) < GW + 1.4 && ball.ry < GH + 1.4;
+    const sg = !near || d <= 0 ? 0 : (ball.inGoal || NETIN[N.s > 0 ? 1 : 0]) ? 1 : -1;
+    let only = -1;
+    if (sg < 0) {        // from outside, as in goalFrameCollide: the panel the ball is furthest outside of
+      const az = Math.abs(ball.rz), y = ball.ry, sideX = GD + (NET_TD - GD) * clamp(y / GH, 0, 1), back = (d + 0.4508 * y - GD) / 1.0966; let far = -9;
+      if (d < sideX + 0.05 && y < GH + 0.05 && az - GW > far) { far = az - GW; only = 2; }
+      if (az < GW + 0.05 && y < GH + 0.05 && back > far) { far = back; only = 1; }
+      if (az < GW + 0.05 && d < NET_TD + 0.05 && y - GH > far) { far = y - GH; only = 0; }
+    }
+    N.wake -= dt; N.acc += dt * k; let steps = 0;
+    while (N.acc >= 1 / 120 && steps < 6) { netStep(N, 1 / 120, bx, by, bz, only < 0 && sg < 0 ? 0 : sg, ball.vx * sg, ball.vy * sg, -ball.vz * sg, only); N.acc -= 1 / 120; steps++; }
+    if (steps >= 6) N.acc = 0;
+    if (steps) for (const p of N.patches) { p.g.attributes.position.needsUpdate = true; p.g.computeVertexNormals(); }
   }
 }
 function buildFlags3() {
@@ -1702,8 +1794,8 @@ function applyTimeOfDay(tod) {
   if (BLOOM) { BLOOM.strength = day ? 0.2 : 0.5; BLOOM.threshold = day ? 1.3 : 1.0; }
   if (W3.sunScene) bakeSunShadow(); else SUN.on.value = 0;
   if (W3.tifoMat) W3.tifoMat.emissiveIntensity = day ? 0.16 : 0.28;
-  for (const m of W3.screenMats || []) m.color.setScalar(day ? (wet ? 1.15 : 1.3) : 2.1);
-  if (W3.haloMat) W3.haloMat.color.setRGB(0.2, 0.34, 0.85).multiplyScalar(day ? (wet ? 0.5 : 0.35) : 1.15);
+  for (const m of W3.screenMats || []) m.color.setScalar(day ? (wet ? 1.6 : 1.85) : 2.3);
+  if (W3.haloMat) W3.haloMat.color.setRGB(0.2, 0.34, 0.85).multiplyScalar(day ? (wet ? 0.8 : 0.65) : 1.2);
 }
 
 function makeFlagProp() {
@@ -1846,7 +1938,7 @@ function buildBigScreens() {
   if (W3.bigScreens) return;
   const c = mkCanvas(1024, 512); W3.bigCanvas = c; W3.bigSig = '';
   const tex = tex3(c, true, 8); W3.bigTex = tex;
-  const face = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.15, 1.15, 1.15) }); W3.bigMat = face;
+  const face = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.75, 1.75, 1.75), fog: false }); W3.bigMat = face;
   const frameM = new THREE.MeshStandardMaterial({ color: lin('#0a0c10'), roughness: 0.55, metalness: 0.4 });
   W3.bigScreens = []; W3.screenMats = [face]; W3.screenFlarePts = [];
   // soft light spill around each screen (additive, hidden where it overlaps the casing)
@@ -1862,7 +1954,7 @@ function buildBigScreens() {
     const halo = new THREE.Mesh(hgeo, W3.haloMat); halo.renderOrder = 3; SCN.add(halo);
     W3.screenFlarePts.push({ p: new THREE.Vector3(...ctr), n: new THREE.Vector3(...n).normalize(), w: 17 });
     const cg = new THREE.BufferGeometry(); cg.setAttribute('position', new THREE.Float32BufferAttribute(pts.flat(), 3)); cg.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2)); cg.setIndex([0, 1, 2, 0, 2, 3]);
-    const cm = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.15, 1.15, 1.15), side: THREE.DoubleSide }); W3.screenMats.push(cm);
+    const cm = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.75, 1.75, 1.75), side: THREE.DoubleSide, fog: false }); W3.screenMats.push(cm);
     const corner = new THREE.Mesh(cg, cm); SCN.add(corner); W3.cornerScreen = corner; }
   const pc = mkCanvas(1024, 512); W3.promoCanvas = pc; W3.promoTex = tex3(pc, true, 8); drawUclPromo();
   for (const s of [1, -1]) {
@@ -1897,8 +1989,8 @@ function drawUclTrophy(g, cx, by, h) {
 }
 function drawUclPromo() {
   const c = W3.promoCanvas; if (!c) return; const g = c.getContext('2d'), W = c.width, H = c.height;
-  g.fillStyle = '#030a2a'; g.fillRect(0, 0, W, H);
-  let gr = g.createRadialGradient(W * 0.69, H * 0.5, 20, W * 0.69, H * 0.5, H * 0.66); gr.addColorStop(0, 'rgba(45,115,255,0.9)'); gr.addColorStop(0.5, 'rgba(30,62,215,0.45)'); gr.addColorStop(1, 'rgba(3,10,42,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  let gr = g.createLinearGradient(0, 0, W, H); gr.addColorStop(0, '#0a1f78'); gr.addColorStop(0.55, '#0c2a9a'); gr.addColorStop(1, '#1a1a8c'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
+  gr = g.createRadialGradient(W * 0.69, H * 0.5, 20, W * 0.69, H * 0.5, H * 0.72); gr.addColorStop(0, 'rgba(70,140,255,1)'); gr.addColorStop(0.5, 'rgba(40,90,240,0.6)'); gr.addColorStop(1, 'rgba(10,31,120,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
   gr = g.createRadialGradient(W * 0.88, H * 0.9, 4, W * 0.88, H * 0.9, H * 0.42); gr.addColorStop(0, 'rgba(235,70,255,0.65)'); gr.addColorStop(1, 'rgba(235,70,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, W, H);
   const cx = W * 0.69, cy = H * 0.5, r = H * 0.47;
   g.save(); g.beginPath(); g.arc(cx, cy, r, 0, TAU); g.clip();
@@ -1915,7 +2007,7 @@ function drawUclPromo() {
   g.strokeStyle = '#ffffff'; g.lineWidth = 2.5; g.beginPath(); g.ellipse(lx, H * 0.66, 70, 34, 0, Math.PI * 1.15, Math.PI * 1.85); g.stroke();
   g.font = '700 64px Georgia, "Times New Roman", serif'; g.fillText('CHAMPIONS', lx, H * 0.76);
   g.font = '700 54px Georgia, "Times New Roman", serif'; g.fillText('LEAGUE', lx, H * 0.88);
-  g.fillStyle = 'rgba(0,0,0,0.12)'; for (let y = 1; y < H; y += 3) g.fillRect(0, y, W, 1);
+  g.fillStyle = 'rgba(0,0,0,0.1)'; for (let y = 1; y < H; y += 3) g.fillRect(0, y, W, 1); for (let x = 1; x < W; x += 3) g.fillRect(x, 0, 1, H);
   W3.promoTex.needsUpdate = true; W3.promoDrawn = !!lim;
 }
 function bigCurves(g, W, H) {
@@ -1968,7 +2060,7 @@ function drawBigScreen(force) {
   g.textAlign = 'center'; g.font = F(700, 34); g.fillStyle = '#ffffff'; g.fillText(lab, Wd / 2, 462);
   g.fillStyle = '#7fe3ff'; g.font = F(800, 38); g.fillText(String(x0), 150, 462); g.fillText(String(x1), Wd - 150, 462);
   // LED pixel grid
-  g.fillStyle = 'rgba(0,0,0,0.13)'; for (let y = 1; y < Hd; y += 3) g.fillRect(0, y, Wd, 1);
+  g.fillStyle = 'rgba(0,0,0,0.1)'; for (let y = 1; y < Hd; y += 3) g.fillRect(0, y, Wd, 1); for (let x = 1; x < Wd; x += 3) g.fillRect(x, 0, 1, Hd);
   W3.bigTex.needsUpdate = true;
 }
 
@@ -3352,24 +3444,42 @@ function updateBall(dt) {
     }
     mvx = o.vx; mvz = o.vz; ball.vx = o.vx; ball.vz = o.vz; ball.vy = 0;
   } else {
-    ball.vy -= GRAV * dt;
+    ball.vy -= GRAV * dt; ball.px = ball.x;
     ball.x += ball.vx * dt; ball.y += ball.vy * dt; ball.z += ball.vz * dt;
     const wet = G.wx === 'rain';
     if (ball.y < BR) { ball.y = BR; if (ball.vy < -2) { ball.vy = -ball.vy * (wet ? 0.36 : 0.5); ball.vx *= wet ? 0.97 : 0.9; ball.vz *= wet ? 0.97 : 0.9; if (wet && Math.hypot(ball.vx, ball.vz) > 6) spawnSpray(ball.x, ball.z); } else ball.vy = 0; }
     const sp = Math.hypot(ball.vx, ball.vz);
     if (ball.y <= BR + 0.002 && sp > 0) { const ns = Math.max(0, sp - (wet ? 2.0 + sp * 0.14 : 3.0 + sp * 0.2) * dt); ball.vx *= ns / sp; ball.vz *= ns / sp; if (wet && sp > 9 && Math.random() < dt * 14) spawnSpray(ball.x, ball.z); }
     else { ball.vx *= 1 - 0.08 * dt; ball.vz *= 1 - 0.08 * dt; }
-    goalFrameCollide();
+    goalFrameCollide(dt);
     mvx = ball.vx; mvz = ball.vz;
   }
   const sp = Math.hypot(mvx, mvz);
   if (sp > 0.05 && ball.y < BR + 0.05) rotateBall(ball.rot, mvz / sp, 0, -mvx / sp, -sp * dt / BR);
   else if (sp > 0.05) rotateBall(ball.rot, mvz / sp, 0, -mvx / sp, -sp * dt / BR * 0.6);
 }
-function goalFrameCollide() {
+const NET_TD = 1.0, NETC = [0, 0, 0, 0, 0, 0], NETIN = [0, 0];   // NETIN: the ball came in through that goal's mouth
+/* The net as the ball feels it: a stiff-ish spring along the panel normal n (pointing the way the ball is pushing the
+   mesh) that gives way, swallows most of the energy and lets go gently, plus grip that damps sliding along the mesh.
+   pen is how far the ball surface has gone past the panel; e is how far the contact is from the nearest edge laced to
+   the frame. Near the frame the mesh has nowhere to go, so it is stiffer and gives less. */
+function netPull(pen, nx, ny, nz, ci, dt, e) {
+  if (pen <= 0) { NETC[ci] = 0; return; }
+  e = Math.max(0.05, e);
+  const SPR = 430 * clamp(1.2 / e, 1, 5), DOUT = 15, DIN = 70, MAXP = Math.min(1.15, 0.1 + 0.55 * e);
+  let vn = ball.vx * nx + ball.vy * ny + ball.vz * nz;
+  if (!NETC[ci]) { NETC[ci] = 1; if (vn > 2.5) sfxNet(); }
+  if (pen > MAXP) { const e = pen - MAXP; ball.x -= nx * e; ball.y -= ny * e; ball.z -= nz * e; if (vn > 0) { ball.vx -= nx * vn; ball.vy -= ny * vn; ball.vz -= nz * vn; vn = 0; } }
+  let a = (-SPR * Math.min(pen, MAXP) - (vn > 0 ? DOUT : DIN) * vn) * dt;
+  if (vn + a < -1.6) a = Math.min(0, -1.6 - vn);                                            // the net lets go of the ball gently
+  ball.vx += nx * a; ball.vy += ny * a; ball.vz += nz * a;
+  const tk = Math.exp(-5 * dt), v2 = ball.vx * nx + ball.vy * ny + ball.vz * nz;
+  ball.vx = nx * v2 + (ball.vx - nx * v2) * tk; ball.vy = ny * v2 + (ball.vy - ny * v2) * tk; ball.vz = nz * v2 + (ball.vz - nz * v2) * tk;
+}
+function goalFrameCollide(dt = STEP) {
   for (const s of [-1, 1]) {
-    const gx = s * PL;
-    if (Math.abs(ball.x - gx) > 3.5 || Math.abs(ball.z) > GW + 1.5) continue;
+    const gx = s * PL, gi = s > 0 ? 1 : 0;
+    if (Math.abs(ball.x - gx) > 3.5 || Math.abs(ball.z) > GW + 1.5) { NETIN[gi] = 0; continue; }
     for (const pz of [-GW, GW]) { // posts
       const dx = ball.x - gx, dz = ball.z - pz, d = Math.hypot(dx, dz);
       if (d < BR + 0.07 && ball.y < GH + 0.05) { const nx = dx / d, nz = dz / d, dot = ball.vx * nx + ball.vz * nz; if (dot < 0) { ball.vx -= 1.7 * dot * nx; ball.vz -= 1.7 * dot * nz; ball.x = gx + nx * (BR + 0.08); ball.z = pz + nz * (BR + 0.08); sfxKick(0.3); postHit(); } }
@@ -3378,13 +3488,29 @@ function goalFrameCollide() {
       const dx = ball.x - gx, dy = ball.y - GH, d = Math.hypot(dx, dy);
       if (d < BR + 0.07) { const nx = dx / d, ny = dy / d, dot = ball.vx * nx + ball.vy * ny; if (dot < 0) { ball.vx -= 1.7 * dot * nx; ball.vy -= 1.7 * dot * ny; ball.x = gx + nx * (BR + 0.08); ball.y = GH + ny * (BR + 0.08); sfxKick(0.3); postHit(); } }
     }
-    // net (inside the goal)
-    const inside = (ball.x - gx) * s > 0 && Math.abs(ball.z) < GW && ball.y < GH;
-    if (inside) {
-      const backX = PL + GD + (1.0 - GD) * (ball.y / GH);
-      if (Math.abs(ball.x) > backX - BR) { NET[s > 0 ? 1 : 0].hitT = G.t; NET[s > 0 ? 1 : 0].hz = ball.z; NET[s > 0 ? 1 : 0].hy = ball.y; NET[s > 0 ? 1 : 0].amp = Math.min(0.55, Math.abs(ball.vx) * 0.03); ball.x = s * (backX - BR); ball.vx *= -0.12; ball.vz *= 0.4; ball.vy *= 0.5; sfxNet(); }
-      if (Math.abs(ball.z) > GW - BR - 0.02) { ball.z = Math.sign(ball.z) * (GW - BR - 0.02); ball.vz *= -0.2; }
-      if (ball.y > GH - BR) { ball.y = GH - BR; ball.vy = -Math.abs(ball.vy) * 0.2; }
+    // net: back, side and roof panels catch the ball, give and drop it (the cloth mesh follows the ball)
+    const d = (ball.x - gx) * s, az = Math.abs(ball.z), sz = Math.sign(ball.z) || 1, back = (d + 0.4508 * ball.y - GD) / 1.0966;
+    // which side of the net the ball is on is decided where it crosses the goal line: under the bar and between the
+    // posts it is in the goal; anywhere else it stays outside, whatever it then pushes against
+    if (d <= 0) NETIN[gi] = 0;
+    else if (((ball.px === undefined ? ball.x : ball.px) - gx) * s <= 0) NETIN[gi] = az < GW && ball.y < GH ? 1 : 0;
+    if (d > 0 && (ball.inGoal || NETIN[gi])) {
+      const sideX = GD + (NET_TD - GD) * clamp(ball.y / GH, 0, 1), y = clamp(ball.y, 0, GH);
+      netPull(back + BR, s * 0.9119, 0.4111, 0, 0, dt, Math.min(y / 0.9119, GW - az, (GH - y) * 1.6));
+      netPull(az + BR - GW, 0, 0, sz, 1, dt, Math.min(d, sideX - d, y, GH - y));
+      if (d < NET_TD + 0.2) netPull(ball.y + BR - GH, 0, 1, 0, 2, dt, Math.min(d, (NET_TD - d) * 1.6, GW - az));
+    } else if (d > 0 && d < GD + 0.4) {
+      // from outside: the side netting, the back or the roof soaks the ball up and pushes it away. The panel the ball is
+      // furthest outside of is the one it is up against.
+      const sideX = GD + (NET_TD - GD) * clamp(ball.y / GH, 0, 1), y = clamp(ball.y, 0, GH);
+      const ds = az - GW, dr = ball.y - GH; let k = -1, far = -9;
+      if (d < sideX + 0.05 && ball.y < GH + 0.05 && ds > far) { far = ds; k = 3; }
+      if (az < GW + 0.05 && ball.y < GH + 0.05 && back > far) { far = back; k = 4; }
+      if (az < GW + 0.05 && d < NET_TD + 0.05 && dr > far) { far = dr; k = 5; }
+      for (let c = 3; c < 6; c++) if (c !== k) NETC[c] = 0;
+      if (k === 3) netPull(BR - ds, 0, 0, -sz, 3, dt, Math.min(d, sideX - d, y, GH - y));
+      else if (k === 4) netPull(BR - back, -s * 0.9119, -0.4111, 0, 4, dt, Math.min(y / 0.9119, GW - az, (GH - y) * 1.6));
+      else if (k === 5) netPull(BR - dr, 0, -1, 0, 5, dt, Math.min(d, (NET_TD - d) * 1.6, GW - az));
     }
   }
 }
@@ -3699,7 +3825,7 @@ function tryCapture() {
 }
 function checkBallEvents() {
   if (!ball.inGoal && !ball.owner) {
-    for (const s of [-1, 1]) if (ball.x * s > PL + BR * 0.6 && Math.abs(ball.z) < GW && ball.y < GH) { ball.inGoal = true; onGoal(s > 0 ? 0 : 1); return; }
+    for (const s of [-1, 1]) if (ball.x * s > PL + BR * 0.6 && Math.abs(ball.z) < GW && ball.y < GH && NETIN[s > 0 ? 1 : 0]) { ball.inGoal = true; onGoal(s > 0 ? 0 : 1); return; }
   }
   if (G.state !== 'play') return;
   if (Math.abs(ball.z) > PW + BR) { stoppage('throw', 1 - ball.last, { x: clamp(ball.x, -PL + 2, PL - 2), z: Math.sign(ball.z) * (PW + 0.45) }); return; }
@@ -4427,7 +4553,7 @@ function boot() {
   requestAnimationFrame(t => { lastT = t; frame(t); });
   const fl = document.fonts && document.fonts.load ? Promise.race([Promise.all([document.fonts.load('italic 800 30px "Barlow Condensed"'), document.fonts.load('700 30px "Barlow Condensed"'), document.fonts.load('800 30px "Barlow Condensed"'), LOGO_READY]), new Promise(r => setTimeout(r, 2500))]) : LOGO_READY;
   fl.then(() => { G.fontsOk = true; if (G.state === 'menu') { buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]); refreshWorldTeams(); rebuildRigs(); } }).catch(() => { });
-  window.__golazo = { get sel() { return TEAMS_SEL; }, DBG, MENU, wx: applyWeather, knockDown, foul, G, ball, players, officials, ars, snapOffside, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
+  window.__golazo = { netTick: () => { syncRender(); updateNets(0, STEP); }, get sel() { return TEAMS_SEL; }, DBG, MENU, wx: applyWeather, knockDown, foul, G, ball, players, officials, ars, snapOffside, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
 }
 boot();
 })();
