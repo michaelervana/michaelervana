@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Golazo Night Cup</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Game sepak bola malam hari dengan stadion pseudo-3D, langsung main di browser.">
+<meta name="description" content="A 3D football game with real club crests, playable right in the browser.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700;1,800;1,900&family=Barlow:wght@400;500;600;700&display=swap">
@@ -129,20 +129,41 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 /* ---------- HUD ---------- */
 #hud{position:fixed;inset:0;pointer-events:none;z-index:10;}
 #hud[hidden]{display:none!important;}
-.sb{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:calc(14px + env(safe-area-inset-left,0px));
-  display:flex;align-items:stretch;height:38px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45));font-family:var(--font-display);}
-.sb>*{display:flex;align-items:center;}
-.sb-live{background:var(--live);color:#fff;font-weight:800;font-size:13px;letter-spacing:.14em;padding:0 10px 0 12px;gap:6px;}
-.sb-live i{width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.2s infinite;}
-@keyframes blink{50%{opacity:.25}}
-.sb-team{background:rgba(5,9,18,.86);padding:0 10px;gap:8px;font-weight:800;font-size:20px;letter-spacing:.06em;min-width:76px;}
-.sb-team .sw{width:6px;align-self:stretch;margin:7px 0;}
-.sb-team svg,.sb-team img{width:24px;height:24px;object-fit:contain;}
-.sb-score{background:linear-gradient(180deg,#fff,#dfe6f5);color:#0a1020;font-weight:800;font-size:24px;padding:0 12px;
-  font-variant-numeric:tabular-nums;gap:8px;letter-spacing:.02em;}
-.sb-score em{font-style:normal;opacity:.4;font-size:18px;}
-.sb-clock{background:rgba(5,9,18,.86);color:var(--gold);font-weight:700;font-size:20px;padding:0 12px;font-variant-numeric:tabular-nums;min-width:66px;justify-content:center;border-left:1px solid rgba(255,255,255,.08);}
-.sb-half{background:rgba(5,9,18,.86);color:var(--muted);font-weight:700;font-size:12px;letter-spacing:.14em;padding:0 10px 0 0;}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+/* broadcast scoreboard: emblem + clock | crest  score  crest */
+.sb{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:calc(16px + env(safe-area-inset-left,0px));display:flex;align-items:center;gap:9px;
+  height:34px;padding:0 12px 0 0;border-radius:6px;font-family:var(--font-display);
+  background:linear-gradient(180deg,#3a4558 0%,#141b27 48%,#060a12 52%,#0d131d 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.22) inset,0 0 0 1px rgba(0,0,0,.6),0 8px 20px rgba(0,0,0,.45);}
+.sb-main{display:flex;align-items:center;gap:6px;height:100%;padding:0 7px 0 4px;border-radius:6px 0 0 6px;
+  background:linear-gradient(180deg,#8cc0ff 0%,#2a64d6 46%,#0b2a86 54%,#1a46b0 100%);box-shadow:0 0 0 1px rgba(255,255,255,.4) inset;}
+.sb-emb svg{width:26px;height:26px;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));}
+.sb-clock{display:flex;align-items:center;justify-content:center;min-width:60px;height:24px;padding:0 9px;border-radius:12px;
+  background:linear-gradient(180deg,#ffffff 0%,#eef2f8 50%,#cfd8e6 100%);color:#0b1426;font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 3px rgba(0,0,0,.45);}
+.sb-crest{display:flex;align-items:center;}
+.sb-crest img,.sb-crest svg{width:25px;height:25px;object-fit:contain;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));}
+.sb-score{display:flex;align-items:center;gap:5px;height:24px;padding:0 13px;border-radius:12px;
+  background:linear-gradient(180deg,#ffffff 0%,#eef2f8 50%,#cfd8e6 100%);color:#0b1426;font-weight:800;font-size:19px;font-variant-numeric:tabular-nums;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 1px 3px rgba(0,0,0,.45);}
+.sb-score em{font-style:normal;opacity:.55;}
+.sb-score.flash{animation:sbflash 1.2s ease-out;}
+@keyframes sbflash{0%,30%{background:linear-gradient(180deg,#fff7c2,#ffd23d);transform:scale(1.12)}100%{transform:none}}
+.sb-add{position:absolute;top:calc(53px + env(safe-area-inset-top,0px));left:calc(16px + env(safe-area-inset-left,0px));display:flex;align-items:center;gap:7px;
+  height:26px;padding:0 4px 0 6px;border-radius:5px;font-family:var(--font-display);
+  background:linear-gradient(180deg,#3a4558 0%,#141b27 48%,#060a12 52%,#0d131d 100%);box-shadow:0 0 0 1px rgba(255,255,255,.22) inset,0 6px 14px rgba(0,0,0,.4);}
+.sb-add[hidden]{display:none!important;}
+.sb-add i svg{width:17px;height:17px;display:block;}
+.sb-add span{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#d5deee;}
+.sb-add b{display:flex;align-items:center;height:19px;padding:0 7px;border-radius:4px;background:linear-gradient(180deg,#fff,#d2dbe8);color:#0b1426;font-size:15px;font-weight:800;}
+/* original channel bug */
+.bug{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:calc(120px + env(safe-area-inset-right,0px));display:flex;flex-direction:column;align-items:flex-end;
+  font-family:var(--font-display);pointer-events:none;opacity:.94;filter:drop-shadow(0 3px 8px rgba(0,0,0,.45));}
+.bug-row{display:flex;align-items:stretch;height:24px;}
+.bug-a{display:flex;align-items:center;padding:0 7px;background:#fff;color:#0a1a3a;font-weight:900;font-style:italic;font-size:17px;letter-spacing:.02em;}
+.bug-b{display:flex;align-items:center;gap:5px;padding:0 8px;background:linear-gradient(180deg,#1d3f8f,#0a1a3a);color:#fff;font-weight:800;font-size:14px;letter-spacing:.06em;}
+.bug-b b{display:grid;place-items:center;width:17px;height:17px;background:#fff;color:#0a1a3a;font-size:13px;}
+.bug-c{margin-top:3px;padding:1px 7px;background:rgba(10,26,58,.85);color:#fff;font-size:10px;font-weight:700;letter-spacing:.3em;}
 .hud-btns{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));right:calc(14px + env(safe-area-inset-right,0px));display:flex;gap:8px;pointer-events:auto;}
 .iconbtn{width:42px;height:42px;display:grid;place-items:center;cursor:pointer;background:rgba(5,9,18,.72);border:1px solid var(--edge);
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
@@ -150,16 +171,36 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 .radar{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
   width:196px;height:126px;background:rgba(5,12,10,.55);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
 .radar canvas{width:100%;height:100%;display:block;}
-.lower{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:stretch;height:40px;
-  font-family:var(--font-display);filter:drop-shadow(0 6px 14px rgba(0,0,0,.5));}
-.lower.l{left:calc(14px + env(safe-area-inset-left,0px));}
-.lower.r{right:calc(14px + env(safe-area-inset-right,0px));flex-direction:row-reverse;}
-.lower .num{background:var(--tc,#0a4fd6);color:#fff;font-weight:800;font-size:20px;min-width:40px;display:grid;place-items:center;}
-.lower .nm{background:rgba(5,9,18,.86);font-weight:700;font-size:17px;letter-spacing:.1em;text-transform:uppercase;padding:0 14px;display:flex;flex-direction:column;justify-content:center;gap:4px;min-width:150px;}
-.lower.r .nm{align-items:flex-end;}
-.stam{display:block;width:100%;height:4px;background:rgba(255,255,255,.16);}
-.stam b{display:block;height:100%;width:100%;background:linear-gradient(90deg,#3ddc74,#c6f23a);transition:width .2s;}
-.lower.r .stam b{margin-left:auto;}
+.pbox{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;height:36px;width:min(25vw,250px);padding:0 10px 0 7px;
+  border-radius:5px;font-family:var(--font-display);
+  background:linear-gradient(180deg,#7db4ff 0%,#2a64d6 44%,#0b2a86 56%,#1a46b0 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.45) inset,0 0 0 1px rgba(0,0,0,.55),0 8px 18px rgba(0,0,0,.45);}
+.pbox.l{left:calc(14px + env(safe-area-inset-left,0px));}
+.pbox.r{right:calc(14px + env(safe-area-inset-right,0px));flex-direction:row-reverse;padding:0 7px 0 10px;}
+.pbox .pn{flex:1;min-width:0;text-align:center;color:#fff;font-weight:800;font-size:19px;letter-spacing:.06em;text-transform:uppercase;text-shadow:0 1px 2px rgba(0,0,0,.65);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.pbox .pos{flex:none;min-width:32px;padding:2px 6px;border-radius:3px;text-align:center;font-weight:800;font-size:13px;letter-spacing:.04em;color:#a6f56b;
+  background:linear-gradient(180deg,#14203a,#050a16);box-shadow:0 0 0 1px rgba(255,255,255,.28);}
+.pbox.r .pos{color:#ff6e6e;}
+.pips{display:flex;flex-direction:column;gap:2px;flex:none;}
+.pips i{display:block;width:7px;height:6px;border-radius:1px;background:rgba(0,0,0,.5);box-shadow:0 0 0 1px rgba(255,255,255,.18) inset;}
+.pips i.on:nth-child(1){background:#4be36f;box-shadow:0 0 5px #4be36f;}
+.pips i.on:nth-child(2){background:#ffd23d;box-shadow:0 0 5px #ffd23d;}
+.pips i.on:nth-child(3){background:#ff4d4d;box-shadow:0 0 5px #ff4d4d;}
+/* full-width score bar (after goals, at the breaks) */
+.gbar{position:absolute;left:50%;top:60%;display:flex;align-items:center;width:min(92vw,980px);opacity:0;pointer-events:none;
+  transform:translate(-50%,-50%) scaleX(.55);transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1);}
+.gbar.on{opacity:1;transform:translate(-50%,-50%) scaleX(1);}
+.gb-crest{flex:none;width:clamp(58px,9vw,108px);height:clamp(58px,9vw,108px);position:relative;z-index:1;filter:drop-shadow(0 6px 12px rgba(0,0,0,.55));}
+.gb-crest img,.gb-crest svg{width:100%;height:100%;object-fit:contain;display:block;}
+.gb-band{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;height:clamp(40px,5.2vw,56px);margin:0 -16px;padding:0 30px;
+  background:linear-gradient(180deg,#8cc0ff 0%,#2a64d6 42%,#0b2a86 58%,#1a46b0 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.5) inset,0 12px 30px rgba(0,0,0,.5);clip-path:polygon(1.6% 0,98.4% 0,100% 50%,98.4% 100%,1.6% 100%,0 50%);}
+.gb-name{color:#fff;font-family:var(--font-display);font-weight:800;font-size:clamp(15px,2.3vw,28px);letter-spacing:.07em;text-transform:uppercase;text-align:center;
+  text-shadow:0 2px 3px rgba(0,0,0,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gb-score{display:flex;align-items:center;gap:clamp(14px,2.2vw,30px);height:calc(100% - 6px);padding:0 clamp(16px,2.6vw,32px);border-radius:999px;
+  background:linear-gradient(180deg,#ffffff 0%,#eef2f8 50%,#cfd8e6 100%);color:#0a1328;font-family:var(--font-display);font-weight:900;font-size:clamp(24px,3.6vw,44px);
+  font-variant-numeric:tabular-nums;box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(0,0,0,.45);}
 .banner{position:absolute;left:0;right:0;top:9%;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;
   transform:translateY(10px);transition:opacity .35s,transform .35s;}
 .banner.on{opacity:1;transform:none;}
@@ -181,8 +222,8 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   font-weight:900;font-style:italic;font-size:26px;letter-spacing:.2em;color:#fff;display:flex;align-items:center;gap:10px;}
 .replay-tag i{width:12px;height:12px;border-radius:50%;background:var(--live);animation:blink 1s infinite;}
 .replay-tag small{font-size:12px;letter-spacing:.2em;color:var(--muted);font-style:normal;font-weight:700;}
-#hud.cine .radar,#hud.cine .lower{opacity:0;transition:opacity .3s;}
-.radar,.lower{transition:opacity .3s;}
+#hud.cine .radar,#hud.cine .pbox{opacity:0;transition:opacity .3s;}
+.radar,.pbox{transition:opacity .3s;}
 .hint{position:absolute;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);font-size:var(--t-sm);
   color:var(--ink);background:rgba(5,9,18,.72);padding:8px 14px;border:1px solid var(--edge);white-space:nowrap;transition:opacity .4s;}
 
@@ -202,7 +243,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 .tb-pass{width:74px;height:74px;right:112px;bottom:0;font-size:14px;background:radial-gradient(circle at 35% 30%,#56b8ff,#1d5fe0);}
 .tb-sprint{width:64px;height:64px;right:96px;bottom:96px;font-size:12px;background:radial-gradient(circle at 35% 30%,#ffe066,#e8a10c);color:#1a1200;}
 .touch-on .radar{top:calc(62px + env(safe-area-inset-top,0px));bottom:auto;left:auto;right:calc(14px + env(safe-area-inset-right,0px));transform:none;width:138px;height:89px;}
-.touch-on .lower{display:none;}
+.touch-on .pbox{display:none;}
 .touch-on .hint{bottom:auto;top:calc(120px + env(safe-area-inset-top,0px));}
 
 /* ---------- Result ---------- */
@@ -222,6 +263,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   background:rgba(5,9,18,.86);border:1px solid var(--edge);padding:10px 14px;color:var(--ink);letter-spacing:.04em;}
 
 @media (max-width:760px){
+  .bug{display:none;}
   .cards{grid-template-columns:1fr;gap:10px;}
   .card-body{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"top kit" "stats kit";gap:6px 12px;padding:12px 14px;}
   .card-top{grid-area:top;}
@@ -234,12 +276,13 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 @media (max-width:560px){
   .kicker{letter-spacing:.2em;text-align:center;}
   .kicker::before,.kicker::after{display:none;}
-  .sb{height:32px;}
-  .sb-live{display:none;}
-  .sb-team{font-size:16px;min-width:0;padding:0 7px;gap:5px;}
-  .sb-team svg,.sb-team img{width:18px;height:18px;}
-  .sb-score{font-size:19px;padding:0 8px;gap:5px;}
-  .sb-clock{font-size:16px;min-width:52px;padding:0 8px;}
+  .sb{height:30px;gap:6px;padding-right:8px;}
+  .sb-emb svg{width:20px;height:20px;}
+  .sb-clock{font-size:15px;min-width:50px;height:21px;padding:0 6px;}
+  .sb-crest img,.sb-crest svg{width:20px;height:20px;}
+  .sb-score{font-size:16px;height:21px;padding:0 9px;}
+  .sb-add{top:calc(48px + env(safe-area-inset-top,0px));}
+  .gb-band{padding:0 20px;gap:8px;}
   .iconbtn{width:36px;height:36px;}
   .touch-on .radar{top:calc(56px + env(safe-area-inset-top,0px));width:112px;height:72px;}
 }
@@ -255,50 +298,50 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 }
 </style>
 
-<canvas id="game" aria-label="Lapangan pertandingan"></canvas>
+<canvas id="game" aria-label="Football pitch"></canvas>
 <canvas id="fx" aria-hidden="true"></canvas>
-<div id="loading" class="loading">Memuat stadion 3D…</div>
+<div id="loading" class="loading">Loading 3D stadium…</div>
 
 <section id="scr-select" class="screen scrim" aria-labelledby="logo">
   <div class="wrap">
-    <div class="kicker">Stadion Nusantara · Kick-off 19.45</div>
+    <div class="kicker">Nusantara Stadium · Kick-off 19:45</div>
     <h1 class="logo" id="logo"><span class="l1">GOLAZO</span><span class="l2">NIGHT CUP</span></h1>
-    <p class="tag">Pilih tim kamu. Lawan bermain santai, jadi kamu bisa langsung fokus mencetak gol.</p>
-    <div class="cards" id="cards" role="radiogroup" aria-label="Pilih tim"></div>
-    <button class="cta" id="btn-next" disabled><span id="btn-next-label">Pilih tim dulu</span></button>
+    <p class="tag">Pick your team. The opponents play it easy, so you can focus on scoring goals.</p>
+    <div class="cards" id="cards" role="radiogroup" aria-label="Choose a team"></div>
+    <button class="cta" id="btn-next" disabled><span id="btn-next-label">Choose a team first</span></button>
   </div>
 </section>
 
-<section id="scr-vs" class="screen scrim" hidden aria-label="Persiapan pertandingan">
+<section id="scr-vs" class="screen scrim" hidden aria-label="Match setup">
   <div class="wrap">
-    <div class="kicker">Laga Hari Ini</div>
+    <div class="kicker">Today's Match</div>
     <div class="vs">
-      <div class="side"><div class="badge" id="vs-b1"></div><div class="tname" id="vs-n1"></div><div class="side-role you">Tim kamu</div></div>
+      <div class="side"><div class="badge" id="vs-b1"></div><div class="tname" id="vs-n1"></div><div class="side-role you">Your team</div></div>
       <div class="vs-mid">VS</div>
-      <div class="side"><div class="badge" id="vs-b2"></div><div class="tname" id="vs-n2"></div><div class="side-role">Lawan · Mode Santai</div></div>
+      <div class="side"><div class="badge" id="vs-b2"></div><div class="tname" id="vs-n2"></div><div class="side-role">Opponent · Easy mode</div></div>
     </div>
     <div class="row">
-      <button class="ghost" id="btn-swap"><span>Ganti lawan</span></button>
-      <div class="chips" role="radiogroup" aria-label="Durasi pertandingan">
-        <span class="chips-label">Durasi</span>
-        <button class="chip dur" role="radio" aria-checked="false" data-dur="180"><span>3 mnt</span></button>
-        <button class="chip dur" role="radio" aria-checked="true" data-dur="300"><span>5 mnt</span></button>
-        <button class="chip dur" role="radio" aria-checked="false" data-dur="480"><span>8 mnt</span></button>
+      <button class="ghost" id="btn-swap"><span>Change opponent</span></button>
+      <div class="chips" role="radiogroup" aria-label="Match length">
+        <span class="chips-label">Length</span>
+        <button class="chip dur" role="radio" aria-checked="false" data-dur="180"><span>3 min</span></button>
+        <button class="chip dur" role="radio" aria-checked="true" data-dur="300"><span>5 min</span></button>
+        <button class="chip dur" role="radio" aria-checked="false" data-dur="480"><span>8 min</span></button>
       </div>
-      <div class="chips" role="radiogroup" aria-label="Waktu pertandingan">
-        <span class="chips-label">Waktu</span>
-        <button class="chip tod" role="radio" aria-checked="true" data-tod="day"><span>Sore</span></button>
-        <button class="chip tod" role="radio" aria-checked="false" data-tod="night"><span>Malam</span></button>
+      <div class="chips" role="radiogroup" aria-label="Kick-off time">
+        <span class="chips-label">Time</span>
+        <button class="chip tod" role="radio" aria-checked="true" data-tod="day"><span>Day</span></button>
+        <button class="chip tod" role="radio" aria-checked="false" data-tod="night"><span>Night</span></button>
       </div>
     </div>
     <div class="howto panel" id="howto">
-      <div><b>Gerak</b><span><kbd>W A S D</kbd> atau <kbd>Panah</kbd></span></div>
-      <div><b>Tendang</b><span><kbd>Spasi</kbd> / <kbd>K</kbd>. Tahan untuk tembakan keras</span></div>
-      <div><b>Oper</b><span><kbd>J</kbd> / <kbd>Z</kbd>. Tahan untuk umpan lambung</span></div>
-      <div><b>Lari</b><span><kbd>Shift</kbd> / <kbd>L</kbd>. Saat bertahan, <kbd>J</kbd> ganti pemain</span></div>
+      <div><b>Move</b><span><kbd>W A S D</kbd> or <kbd>Arrows</kbd></span></div>
+      <div><b>Shoot</b><span><kbd>Space</kbd> / <kbd>K</kbd>. Hold for a power shot</span></div>
+      <div><b>Pass</b><span><kbd>J</kbd> / <kbd>Z</kbd>. Hold for a lofted pass</span></div>
+      <div><b>Sprint</b><span><kbd>Shift</kbd> / <kbd>L</kbd>. When defending, <kbd>J</kbd> switches player</span></div>
     </div>
     <div class="row">
-      <button class="ghost" id="btn-back"><span>Kembali</span></button>
+      <button class="ghost" id="btn-back"><span>Back</span></button>
       <button class="cta" id="btn-kick"><span>Kick Off</span></button>
     </div>
   </div>
@@ -306,22 +349,28 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 
 <div id="hud" hidden>
   <div class="sb" aria-live="polite">
-    <div class="sb-live"><i></i>LIVE</div>
-    <div class="sb-team"><span class="sw" id="sb-sw1"></span><span id="sb-b1"></span><span id="sb-t1">CHE</span></div>
-    <div class="sb-score"><span id="sb-s1">0</span><em>–</em><span id="sb-s2">0</span></div>
-    <div class="sb-team"><span id="sb-t2">PHX</span><span id="sb-b2"></span><span class="sw" id="sb-sw2"></span></div>
-    <div class="sb-clock" id="sb-clock">00:00</div>
+    <div class="sb-main">
+      <span class="sb-emb" aria-hidden="true"><svg viewBox="0 0 40 40"><defs><radialGradient id="embg" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#cfe0ff"/><stop offset="1" stop-color="#7ea6e6"/></radialGradient></defs><circle cx="20" cy="20" r="17" fill="url(#embg)" stroke="#0b2a86" stroke-width="2"/><path d="M20 9l3 6.4 7 .8-5.2 4.8 1.4 6.9L20 24.5l-6.2 3.4 1.4-6.9L10 16.2l7-.8z" fill="#0b2a86"/></svg></span>
+      <span class="sb-clock" id="sb-clock">00:00</span>
+    </div>
+    <span class="sb-crest" id="sb-b1"></span>
+    <span class="sb-score" id="sb-score"><span id="sb-s1">0</span><em>-</em><span id="sb-s2">0</span></span>
+    <span class="sb-crest" id="sb-b2"></span>
+    <span class="vh"><span id="sb-t1">CHE</span> <span id="sb-t2">MUN</span></span>
   </div>
+  <div class="sb-add" id="sb-add" hidden><i aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#fff" stroke="#0b1426" stroke-width="1.6"/><path d="M12 7.2l3.6 2.6-1.4 4.2H9.8L8.4 9.8z" fill="#0b1426"/><path d="M12 7.2V3M15.6 9.8l4-1.3M14.2 14l2.5 3.4M9.8 14l-2.5 3.4M8.4 9.8l-4-1.3" stroke="#0b1426" stroke-width="1.3"/></svg></i><span>Added time</span><b id="sb-addn">+1</b></div>
+  <div class="bug" aria-hidden="true"><div class="bug-row"><span class="bug-a">GOLAZO</span><span class="bug-b">SPORT<b>1</b></span></div><span class="bug-c">LIVE</span></div>
   <div class="hud-btns">
-    <button class="iconbtn" id="btn-sound" aria-label="Matikan suara"><svg viewBox="0 0 24 24" id="ico-sound"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
-    <button class="iconbtn" id="btn-pause" aria-label="Jeda"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button>
+    <button class="iconbtn" id="btn-sound" aria-label="Mute sound"><svg viewBox="0 0 24 24" id="ico-sound"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+    <button class="iconbtn" id="btn-pause" aria-label="Pause"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button>
   </div>
   <div class="radar"><canvas id="radar" width="392" height="252"></canvas></div>
-  <div class="lower l" id="lower"><div class="num" id="lw-num">9</div><div class="nm"><span id="lw-name">Pemain</span><i class="stam"><b id="lw-stam"></b></i></div></div>
-  <div class="lower r" id="lower-r"><div class="num" id="lr-num">9</div><div class="nm"><span id="lr-name">Lawan</span><i class="stam"><b id="lr-stam"></b></i></div></div>
-  <div class="banner" id="banner"><div class="big" id="bn-big">GOL!</div><div class="sub"><span id="bn-sub"></span></div></div>
+  <div class="pbox l" id="lower"><span class="pips" id="lw-pips"><i></i><i></i><i></i></span><span class="pos" id="lw-pos">ST</span><span class="pn" id="lw-name">Player</span></div>
+  <div class="pbox r" id="lower-r"><span class="pips" id="lr-pips"><i></i><i></i><i></i></span><span class="pos" id="lr-pos">CB</span><span class="pn" id="lr-name">Opponent</span></div>
+  <div class="gbar" id="gbar" aria-hidden="true"><span class="gb-crest" id="gb-b1"></span><div class="gb-band"><span class="gb-name" id="gb-n1"></span><span class="gb-score"><b id="gb-s1">0</b><b id="gb-s2">0</b></span><span class="gb-name" id="gb-n2"></span></div><span class="gb-crest" id="gb-b2"></span></div>
+  <div class="banner" id="banner"><div class="big" id="bn-big">GOAL!</div><div class="sub"><span id="bn-sub"></span></div></div>
   <div class="toast" id="toast"></div>
-  <div class="replay-tag" id="replay-tag" hidden><i></i>REPLAY <small>Ketuk / tekan tombol untuk lewati</small></div>
+  <div class="replay-tag" id="replay-tag" hidden><i></i>REPLAY <small>Tap or press any button to skip</small></div>
   <div class="hint" id="hint" hidden></div>
 </div>
 
@@ -329,29 +378,29 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   <div class="joy-zone" id="joy-zone"></div>
   <div class="joy" id="joy"><i id="joy-k"></i></div>
   <div class="tbtns">
-    <div class="tb tb-sprint" id="tb-sprint">Lari</div>
-    <div class="tb tb-pass" id="tb-pass">Oper</div>
-    <div class="tb tb-shoot" id="tb-shoot">Tendang</div>
+    <div class="tb tb-sprint" id="tb-sprint">Sprint</div>
+    <div class="tb tb-pass" id="tb-pass">Pass</div>
+    <div class="tb tb-shoot" id="tb-shoot">Shoot</div>
   </div>
 </div>
 
-<section id="scr-pause" class="screen scrim" hidden aria-label="Jeda">
+<section id="scr-pause" class="screen scrim" hidden aria-label="Paused">
   <div class="wrap">
-    <div class="kicker">Pertandingan dijeda</div>
-    <h2 class="logo" style="font-size:clamp(48px,9vw,96px)"><span class="l1">JEDA</span></h2>
+    <div class="kicker">Match paused</div>
+    <h2 class="logo" style="font-size:clamp(48px,9vw,96px)"><span class="l1">PAUSED</span></h2>
     <div class="row">
-      <button class="cta" id="btn-resume"><span>Lanjut Main</span></button>
+      <button class="cta" id="btn-resume"><span>Resume</span></button>
     </div>
     <div class="row">
-      <button class="ghost" id="btn-restart"><span>Ulang Laga</span></button>
-      <button class="ghost" id="btn-menu"><span>Menu Utama</span></button>
+      <button class="ghost" id="btn-restart"><span>Restart Match</span></button>
+      <button class="ghost" id="btn-menu"><span>Main Menu</span></button>
     </div>
   </div>
 </section>
 
-<section id="scr-result" class="screen scrim" hidden aria-label="Hasil pertandingan">
+<section id="scr-result" class="screen scrim" hidden aria-label="Match result">
   <div class="result">
-    <div class="kicker" id="res-kicker">Pertandingan Selesai</div>
+    <div class="kicker" id="res-kicker">Full Time</div>
     <div class="final">
       <div class="side"><div class="badge" id="res-b1"></div><div class="tname" id="res-n1"></div></div>
       <div class="score" id="res-score">0 – 0</div>
@@ -360,13 +409,13 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
     <div class="scorers" id="res-scorers"></div>
     <div class="statgrid panel" id="res-stats"></div>
     <div class="row">
-      <button class="cta" id="btn-again"><span>Main Lagi</span></button>
-      <button class="ghost" id="btn-menu2"><span>Ganti Tim</span></button>
+      <button class="cta" id="btn-again"><span>Play Again</span></button>
+      <button class="ghost" id="btn-menu2"><span>Change Team</span></button>
     </div>
   </div>
 </section>
 
-<div class="rotate" id="rotate" hidden>Putar ponsel ke mode lanskap untuk tampilan terbaik</div>
+<div class="rotate" id="rotate" hidden>Rotate your phone to landscape for the best view</div>
 <div id="fade"></div>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/shaders/CopyShader.js"></script>
@@ -380,7 +429,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 <script>
 (() => {
 'use strict';
-if (!window.THREE || !THREE.EffectComposer) { const l = document.getElementById('loading'); if (l) l.textContent = 'Grafis 3D gagal dimuat. Periksa koneksi internet lalu muat ulang halaman.'; return; }
+if (!window.THREE || !THREE.EffectComposer) { const l = document.getElementById('loading'); if (l) l.textContent = '3D graphics failed to load. Check your internet connection and reload the page.'; return; }
 /* =====================================================================
    GOLAZO NIGHT CUP: single-file pseudo-3D football
    World units are metres. x = along the pitch (left/right on screen),
@@ -418,20 +467,20 @@ const LOGO_IMG = {};
 const LOGO_READY = Promise.all(Object.keys(LOGO).filter(k => LOGO[k]).map(k => new Promise(res => { const im = new Image(); im.onload = im.onerror = () => res(); im.src = LOGO[k]; LOGO_IMG[k] = im; })));
 const logoImg = id => { const im = LOGO_IMG[id]; return im && im.complete && im.naturalWidth ? im : null; };
 const TEAMS = [
-  { id: 'che', name: 'Chelsea', short: 'CHE', nick: 'The Blues', c1: '#0a47c2', c2: '#ffffff',
+  { id: 'che', name: 'Chelsea', full: 'Chelsea FC', short: 'CHE', nick: 'The Blues', c1: '#0a47c2', c2: '#ffffff',
     shirt: '#0a47c2', sleeve: '#0a47c2', shorts: '#0a47c2', socks: '#f2f5fb', sockTop: '#0a47c2', trim: '#ffffff', collar: '#ffffff', num: '#ffffff', boot: '#f4f6ff',
     gk: { shirt: '#c6f23a', shorts: '#1b2a0d', socks: '#c6f23a', num: '#13200a' },
-    crowd: ['#0a47c2', '#1f63ee', '#ffffff', '#0a3aa8', '#0a47c2', '#9cc0ff'], stats: { Serangan: 86, Kecepatan: 84, Bertahan: 82 },
+    crowd: ['#0a47c2', '#1f63ee', '#ffffff', '#0a3aa8', '#0a47c2', '#9cc0ff'], stats: { Attack: 86, Pace: 84, Defence: 82 },
     captain: 5, squad: [['Penders', 39, 0, 'short', 3, 0], ['Palestra', 2, 1, 'fade', 1, 0], ['Acheampong', 34, 4, 'fade', 5, 0, [0.3, 0.2, 0.1, 0.4]], ['Fofana', 3, 5, 'buzz', 5, 1, [0.4, 0.4, 0.2, 0.5]], ['Colwill', 6, 2, 'fade', 5, 0, [0.2, 0, -0.2, 0.2]], ['Caicedo', 25, 3, 'fade', 5, 0, [0.2, 0.1, 0.3, 0.3]], ['Lavia', 45, 4, 'buzz', 5, 0, [0, 0.3, 0.1, 0.4]], ['Palmer', 10, 0, 'short', 3, 0, [-0.3, 0.2, 0.1, -0.2]], ['Estêvão', 41, 3, 'curly', 5, 0, [-0.4, -0.2, 0, 0.3]], ['Rogers', 17, 4, 'buzz', 5, 1, [0.5, 0.2, 0.2, 0.4]], ['Pedro Neto', 7, 2, 'fade', 1, 2, [0, 0.1, 0.2, 0]]] },
-  { id: 'mun', name: 'Manchester United', short: 'MUN', nick: 'The Red Devils', c1: '#da1f26', c2: '#ffffff',
+  { id: 'mun', name: 'Manchester United', full: 'Manchester United', short: 'MUN', nick: 'The Red Devils', c1: '#da1f26', c2: '#ffffff',
     shirt: '#da1f26', sleeve: '#da1f26', shorts: '#f6f6f6', socks: '#151515', sockTop: '#da1f26', trim: '#151515', collar: '#ffffff', num: '#ffffff', boot: '#151515',
     gk: { shirt: '#19d3ee', shorts: '#06323a', socks: '#19d3ee', num: '#03262c' },
-    crowd: ['#da1f26', '#ffffff', '#151515', '#b3121a', '#da1f26', '#f2c230'], stats: { Serangan: 87, Kecepatan: 83, Bertahan: 80 },
+    crowd: ['#da1f26', '#ffffff', '#151515', '#b3121a', '#da1f26', '#f2c230'], stats: { Attack: 87, Pace: 83, Defence: 80 },
     captain: 7, squad: [['Lammens', 1, 0, 'short', 3, 0, [0.2, 0.3, 0, -0.2]], ['Yoro', 15, 4, 'buzz', 5, 0, [0, 0.3, 0.1, 0.4]], ['Maguire', 5, 0, 'short', 2, 2, [0.9, 0.3, 0.4, 0]], ['L. Martínez', 6, 1, 'short', 0, 1, [0.4, -0.2, 0.3, 0]], ['Dalot', 2, 1, 'fade', 1, 2, [0.2, 0.2, 0.3, 0]], ['A. Santos', 17, 3, 'fade', 5, 0, [0.2, 0, 0.1, 0.3]], ['Baleba', 20, 5, 'buzz', 5, 1, [0.4, 0.3, 0.2, 0.5]], ['B. Fernandes', 8, 1, 'short', 1, 2, [0.3, 0.4, 0.5, -0.1]], ['Mbeumo', 19, 4, 'buzz', 5, 2, [0.3, 0, 0.2, 0.4]], ['Cunha', 10, 2, 'fade', 5, 1, [0.3, 0.1, 0.2, 0.2]], ['Amad', 16, 4, 'fade', 5, 1, [-0.2, -0.1, 0.1, 0.3]]] },
-  { id: 'bvb', name: 'Borussia Dortmund', short: 'BVB', nick: 'Die Schwarzgelben', c1: '#fde100', c2: '#111111',
+  { id: 'bvb', name: 'Borussia Dortmund', full: 'Borussia Dortmund', short: 'BVB', nick: 'Die Schwarzgelben', c1: '#fde100', c2: '#111111',
     shirt: '#fde100', sleeve: '#fde100', shorts: '#111111', socks: '#fde100', sockTop: '#111111', trim: '#111111', collar: '#111111', num: '#111111', boot: '#ff3d7f',
     gk: { shirt: '#ff4fb0', shorts: '#3a0a24', socks: '#ff4fb0', num: '#2a0519' },
-    crowd: ['#fde100', '#111111', '#fde100', '#ffe94d', '#111111', '#ffffff'], stats: { Serangan: 85, Kecepatan: 86, Bertahan: 79 },
+    crowd: ['#fde100', '#111111', '#fde100', '#ffe94d', '#111111', '#ffffff'], stats: { Attack: 85, Pace: 86, Defence: 79 },
     captain: 3, squad: [['Kobel', 1, 0, 'short', 3, 1, [0.4, 0.3, 0.2, -0.2]], ['Gadou', 22, 5, 'buzz', 5, 0, [0.2, 0.3, 0.1, 0.4]], ['Anton', 3, 0, 'short', 3, 1, [0.6, 0.2, 0.2, -0.2]], ['Schlotterbeck', 4, 0, 'fade', 3, 1, [0.5, 0.3, 0.3, -0.2]], ['Svensson', 24, 0, 'short', 4, 0, [0, 0.1, 0, -0.2]], ['Nmecha', 8, 3, 'curly', 5, 0, [0.1, 0.3, 0, 0.3]], ['Veerman', 25, 0, 'short', 3, 1, [0.2, 0.4, 0.3, -0.1]], ['Bellingham', 7, 1, 'curly', 1, 0, [0, 0.2, 0, 0.1]], ['Beier', 14, 0, 'fade', 2, 0, [0, 0.2, 0.1, -0.1]], ['Guirassy', 9, 5, 'buzz', 5, 2, [0.6, 0.5, 0.3, 0.6]], ['Chukwuemeka', 17, 4, 'curly', 5, 0, [0.1, 0.2, 0.1, 0.4]]] },
 ];
 const NUMS = [1, 2, 4, 5, 3, 8, 6, 10, 7, 9, 11];
@@ -521,7 +570,7 @@ function crowdLevel(v, t = 0.8) {
 }
 function setSound(on) {
   AU.on = on; if (AU.master) AU.master.gain.setTargetAtTime(on ? 0.9 : 0, AU.ctx.currentTime, 0.05);
-  $('btn-sound').setAttribute('aria-label', on ? 'Matikan suara' : 'Nyalakan suara');
+  $('btn-sound').setAttribute('aria-label', on ? 'Mute sound' : 'Turn sound on');
   $('ico-sound').innerHTML = on ? '<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/>' : '<path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l5 6M22 9l-5 6"/>';
 }
 function sfxKick(power = 0.5) {
@@ -696,7 +745,7 @@ function buildStandFaces(home, away) {
   const wallH = Math.round(ST.wallH * ppm), wall = mkCanvas(w, wallH), g = wall.getContext('2d');
   const gr = g.createLinearGradient(0, 0, 0, wallH); gr.addColorStop(0, '#1b2440'); gr.addColorStop(1, '#0b1020');
   g.fillStyle = gr; g.fillRect(0, 0, w, wallH);
-  const texts = ['AYO ' + home.short + '!', 'SATU HATI', 'JUARA!', home.name.toUpperCase(), 'KAMI BERSAMAMU', 'MALAM INI MILIK KITA'];
+  const texts = ['COME ON ' + home.short + '!', 'ONE CLUB ONE HEART', 'CHAMPIONS!', home.name.toUpperCase(), 'WE ARE WITH YOU', 'TONIGHT IS OURS'];
   let x = 40;
   while (x < w - 200) {
     const bw = (7 + rng() * 9) * ppm, isAway = (x / ppm - ST.len) > 62, t = isAway ? away : home;
@@ -705,7 +754,7 @@ function buildStandFaces(home, away) {
     g.font = `italic 800 ${wallH - 16}px "Barlow Condensed", "Arial Narrow", sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
     const lg = logoImg(t.id), ls = wallH - 16, lo = lg ? ls + 8 : 0;
     if (lg) g.drawImage(lg, x + 7, 8, ls, ls);
-    g.fillText(isAway ? 'AYO ' + away.short + '!' : texts[Math.floor(rng() * texts.length)], x + (bw + lo) / 2, wallH / 2 + 1, bw - 10 - lo);
+    g.fillText(isAway ? 'COME ON ' + away.short + '!' : texts[Math.floor(rng() * texts.length)], x + (bw + lo) / 2, wallH / 2 + 1, bw - 10 - lo);
     x += bw + (4 + rng() * 14) * ppm;
   }
   g.fillStyle = 'rgba(120,200,255,0.9)'; g.fillRect(0, 0, w, 2);
@@ -746,11 +795,11 @@ function buildLED(home, away) {
   const brands = [
     { bg: ['#0a1640', '#16307a'], fg: '#ffd23d', t: 'GOLAZO' },
     { bg: ['#05070c', '#141a28'], fg: '#ffffff', t: 'NIGHT CUP', stripe: '#ffd23d' },
-    { bg: ['#00e1ff', '#0062ff'], fg: '#04122b', t: 'VOLTRA ENERGI' },
-    { bg: ['#3b1d0c', '#5c2f12'], fg: '#ffcf8a', t: 'KOPI SENJA' },
+    { bg: ['#00e1ff', '#0062ff'], fg: '#04122b', t: 'VOLTRA ENERGY' },
+    { bg: ['#3b1d0c', '#5c2f12'], fg: '#ffcf8a', t: 'DUSK COFFEE' },
     { bg: ['#ff2d6f', '#ff5c3a'], fg: '#ffffff', t: 'AEROSTRIDE' },
-    { bg: ['#5a22ff', '#9a3cff'], fg: '#ffffff', t: '#AYOGOL' },
-    { bg: ['#f4f6fb', '#ffffff'], fg: '#0b1530', t: 'SATU HATI' },
+    { bg: ['#5a22ff', '#9a3cff'], fg: '#ffffff', t: '#GOALTIME' },
+    { bg: ['#f4f6fb', '#ffffff'], fg: '#0b1530', t: 'ONE HEART' },
     { bg: [home.c1, shade(home.c1, 0.7)], fg: home.c2, t: home.name.toUpperCase(), logo: logoImg(home.id) },
     { bg: [away.c1, shade(away.c1, 0.7)], fg: away.c2, t: away.name.toUpperCase(), logo: logoImg(away.id) }
   ];
@@ -770,7 +819,7 @@ function buildLED(home, away) {
   for (const ord of orders) { const c = mkCanvas(w, h), g = c.getContext('2d'); ord.forEach((bi, i) => drawPanel(g, i * panel, brands[bi])); pages.push(c); }
   const goalPages = [home, away].map(t => {
     const c = mkCanvas(w, h), g = c.getContext('2d');
-    for (let i = 0; i < 10; i++) drawPanel(g, i * panel, i % 2 ? { bg: ['#ffffff', '#e8eefc'], fg: t.id === 'bvb' ? '#111111' : t.c1, t: 'GOL!' } : { bg: [t.c1, shade(t.c1, 0.65)], fg: t.c2, t: 'GOOOL ' + t.short, logo: logoImg(t.id) }, true);
+    for (let i = 0; i < 10; i++) drawPanel(g, i * panel, i % 2 ? { bg: ['#ffffff', '#e8eefc'], fg: t.id === 'bvb' ? '#111111' : t.c1, t: 'GOAL!' } : { bg: [t.c1, shade(t.c1, 0.65)], fg: t.c2, t: 'GOAL! ' + t.short, logo: logoImg(t.id) }, true);
     return c;
   });
   TEX.led = { pages, goalPages, w, h, ppm };
@@ -2232,9 +2281,9 @@ function buildTeams() {
   for (let t = 0; t < 2; t++) for (let i = 0; i < 11; i++) players.push(makePlayer(t, i, TEAMS_SEL[t], rng));
   referee = makePlayer(2, 5, TEAMS[0], rng);
   referee.look = lookFor(REF_TEAM, false, 2, rng);
-  referee.name = 'Wasit'; referee.num = '';
+  referee.name = 'Referee'; referee.num = '';
   ars.length = 0;
-  for (const sd of [1, -1]) { const a = makePlayer(2, 5, TEAMS[0], rng); a.look = lookFor(REF_TEAM, false, 4, rng); a.name = 'Asisten wasit'; a.num = ''; a.side = sd; ars.push(a); }
+  for (const sd of [1, -1]) { const a = makePlayer(2, 5, TEAMS[0], rng); a.look = lookFor(REF_TEAM, false, 4, rng); a.name = 'Assistant referee'; a.num = ''; a.side = sd; ars.push(a); }
   officials.length = 0; officials.push(referee, ...ars);
   user = players[9];
 }
@@ -2377,7 +2426,7 @@ function goalFrameCollide() {
     }
   }
 }
-function postHit() { if (G.state === 'play') { sfxOoh(); toast('Membentur tiang!'); } }
+function postHit() { if (G.state === 'play') { sfxOoh(); toast('Off the post!'); } }
 
 /* ---------------- passing & shooting ---------------- */
 function openness(q) { let m = 99; for (const o of players) if (o.team !== q.team) m = Math.min(m, Math.hypot(o.x - q.x, o.z - q.z)); return m; }
@@ -2483,8 +2532,8 @@ function gkSaveCheck(p) {
   const d = Math.hypot(ball.x - p.x, ball.z - p.z);
   if (d < 1.6 && ball.y < 2.6) {
     p.willSave = false; const s = dirOf(p.team), sp = Math.hypot(ball.vx, ball.vz);
-    if (sp < 17 && Math.random() < 0.6) { giveBall(p); p.act = A_DIVE; toast(p.team === 1 ? 'Ditangkap kiper!' : 'Kiper kita menangkap!'); }
-    else { G.offSnap = null; ball.vx = s * rand(4, 8); ball.vz = Math.sign(ball.z || 1) * rand(4, 9); ball.vy = rand(2, 5); ball.shot = null; ball.last = p.team; toast('Penyelamatan!'); sfxOoh(); }
+    if (sp < 17 && Math.random() < 0.6) { giveBall(p); p.act = A_DIVE; toast(p.team === 1 ? 'Keeper collects' : 'Our keeper holds it'); }
+    else { G.offSnap = null; ball.vx = s * rand(4, 8); ball.vz = Math.sign(ball.z || 1) * rand(4, 9); ball.vy = rand(2, 5); ball.shot = null; ball.last = p.team; toast('Great save!'); sfxOoh(); }
     sfxKick(0.4); G.hype = Math.max(G.hype, 0.4);
   }
 }
@@ -2532,7 +2581,7 @@ function aiUpdate(p, dt) {
 function steal(p, from) {
   from.cool = 0.7; from.protect = 0; from.vx *= 0.3; from.vz *= 0.3;
   giveBall(p); spawnTurf(p.x, p.z, 6, 1); sfxKick(0.25);
-  if (p.team === 0) toast('Bola direbut!');
+  if (p.team === 0) toast('Dispossessed!');
 }
 function aiCarrier1(p, dt) {
   const gx = -PL; p.think -= dt;
@@ -2588,7 +2637,7 @@ function slideCheck(p) {
   const fx = p.x + Math.cos(p.f) * 0.7, fz = p.z + Math.sin(p.f) * 0.7, d = Math.hypot(ball.x - fx, ball.z - fz);
   if (d < 1.4 && ball.y < 0.8) {
     G.offSnap = null;
-    if (ball.owner && ball.owner.team === 1 && !ball.held) { const o = ball.owner; o.cool = 0.9; ball.owner = null; ball.vx = Math.cos(p.f) * 6; ball.vz = Math.sin(p.f) * 6; ball.last = 0; spawnTurf(ball.x, ball.z, 10, 1.4); sfxKick(0.35); toast('Tekel bersih!'); p.cool = 0.15; }
+    if (ball.owner && ball.owner.team === 1 && !ball.held) { const o = ball.owner; o.cool = 0.9; ball.owner = null; ball.vx = Math.cos(p.f) * 6; ball.vz = Math.sin(p.f) * 6; ball.last = 0; spawnTurf(ball.x, ball.z, 10, 1.4); sfxKick(0.35); toast('Clean tackle!'); p.cool = 0.15; }
     else if (!ball.owner) { giveBall(p); }
   }
 }
@@ -2655,9 +2704,9 @@ function checkBallEvents() {
     else stoppage('goalkick', defending, { x: s * (PL - 5.5), z: 0 });
   }
 }
-const SP_NAMES = { throw: 'Lemparan ke dalam', corner: 'Tendangan sudut', goalkick: 'Tendangan gawang', freekick: 'Tendangan bebas' };
+const SP_NAMES = { throw: 'Throw-in', corner: 'Corner kick', goalkick: 'Goal kick', freekick: 'Free kick' };
 function stoppage(kind, team, pos, msg) {
-  G.state = 'stoppage'; G.stT = 0; G.pending = { kind, team, pos }; G.offSnap = null;
+  G.state = 'stoppage'; G.stT = 0; G.pending = { kind, team, pos }; G.offSnap = null; G.halfStops = (G.halfStops || 0) + 1;
   sfxWhistle('short'); toast(msg || (SP_NAMES[kind] + ' · ' + TEAMS_SEL[team].short));
   if (kind === 'corner') G.hype = Math.max(G.hype, 0.4);
   if (ball.owner) { ball.owner = null; ball.held = false; }
@@ -2683,7 +2732,7 @@ function setupSetPiece() {
   ball.x = taker.x + Math.cos(taker.f) * 0.5; ball.z = taker.z + Math.sin(taker.f) * 0.5; ball.y = kind === 'throw' ? 2.05 : BR;
   if (kind === 'throw') { taker.act = A_THROWH; taker.actT = 0; taker.actDur = 99; }
   taker.protect = 99; G.setTaker = taker; G.setT = 0; trailW.length = 0;
-  if (team === 0 && taker.role !== 'GK') { setUser(taker); showHint(kind === 'throw' ? 'Tekan OPER untuk melempar bola' : kind === 'freekick' ? 'Tekan OPER atau TENDANG untuk tendangan bebas' : 'Tekan OPER / TENDANG untuk umpan silang'); }
+  if (team === 0 && taker.role !== 'GK') { setUser(taker); showHint(kind === 'throw' ? 'Press PASS to take the throw-in' : kind === 'freekick' ? 'Press PASS or SHOOT to take the free kick' : 'Press PASS / SHOOT to cross'); }
   G.state = 'setpiece';
 }
 function cornerCross(tk) {
@@ -2730,14 +2779,14 @@ function onGoal(team) {
   G.state = 'goal'; G.goalT = 0; G.goalDone = false; G.goalTeam = team; G.score[team]++; hideHint();
   const sc = ball.lastKicker && ball.lastKicker.team === team ? ball.lastKicker : closestField(team);
   G.scorer = sc; G.goalFrame = recTotal;
-  const minute = Math.min(90, Math.floor(G.clock / G.dur * 90) + 1);
+  const minute = matchMinute(); G.halfGoals = (G.halfGoals || 0) + 1;
   G.scorers.push({ team, name: sc.name, min: minute });
   G.hype = 1; crowdLevel(1, 0.3); sfxCheer(team === 0);
   const T = TEAMS_SEL[team];
-  banner(team === 0 ? 'GOOOL!' : 'GOL', `${sc.name} · ${minute}'`, team !== 0);
+  banner(team === 0 ? 'GOAL!' : 'GOAL', `${sc.name} · ${minute}'`, team !== 0);
   G.fwCols = [T.c1, T.c2, '#ffd23d', '#ffffff'];
   if (team === 0) spawnConfetti(G.fwCols, 220);
-  G.timeScale = 0.3; updateScore(); rig.shake = 0.35;
+  G.timeScale = 0.3; updateScore(true); rig.shake = 0.35;
   sc.act = A_CELEB; sc.actT = 0; sc.actDur = 99;
   G.celebTarget = [dirOf(team) * (PL - 10), -(PW - 8)];
 }
@@ -2762,8 +2811,8 @@ function afterGoal() {
   fadeThen(() => {
     $('replay-tag').hidden = true; hideBanner(); conf.length = 0; fws.length = 0;
     const kt = 1 - G.goalTeam; G.goalTeam = -1; G.timeScale = 1; rig.shake = 0;
-    resetKickoff(kt); G.state = 'kickoff'; G.setT = 0; IN.moved = false; crowdLevel(0.45);
-    if (kt === 0) showHint('Tekan OPER untuk kick-off');
+    resetKickoff(kt); G.state = 'kickoff'; G.setT = 0; IN.moved = false; crowdLevel(0.45); G.gbarT = 3.2;
+    if (kt === 0) showHint('Press PASS to kick off');
   });
 }
 
@@ -2806,14 +2855,20 @@ function replayStep(dt) {
 }
 
 /* ---------------- half / full time ---------------- */
+// Match minute as shown on the scorers list: 45+2, 90+1 in added time.
+function matchMinute() {
+  const end = G.half === 1 ? G.dur / 2 : G.dur, base = G.half === 1 ? 45 : 90;
+  if (G.clock > end) return base + '+' + Math.max(1, Math.ceil((G.clock - end) / (G.dur / 90)));
+  return String(Math.min(base, Math.floor(G.clock / G.dur * 90) + 1));
+}
 function halfTime() {
   G.state = 'halftime'; G.stT = 0; sfxWhistle('double'); crowdLevel(0.5);
-  banner('TURUN MINUM', `${TEAMS_SEL[0].short} ${G.score[0]} – ${G.score[1]} ${TEAMS_SEL[1].short}`, true);
+  banner('HALF TIME', 'First half over', true);
 }
 function fullTime() {
   G.state = 'fulltime'; G.stT = 0; sfxWhistle('final'); crowdLevel(0.75);
   const w = G.score[0] > G.score[1] ? 0 : G.score[1] > G.score[0] ? 1 : -1;
-  banner('SELESAI', `${TEAMS_SEL[0].short} ${G.score[0]} – ${G.score[1]} ${TEAMS_SEL[1].short}`, true);
+  banner('FULL TIME', 'Final whistle', true);
   for (const p of players) { if (p.role === 'GK') continue; if (w === -1) continue; p.act = p.team === w ? A_CELEB : A_SAD; p.actT = 0; p.actDur = 99; }
   if (w === 0) { spawnConfetti(G.fwCols || [TEAMS_SEL[0].c1, '#fff', '#ffd23d'], 200); }
 }
@@ -2821,7 +2876,7 @@ function breakStep(dt) {
   G.stT += dt;
   for (const p of players) { steer(p, 0, 0, 6, dt); integrate(p, dt); }
   officialsStep(dt); updateBall(dt);
-  if (G.state === 'halftime' && G.stT > 3.4 && !G.fading) fadeThen(() => { G.half = 2; resetKickoff(1); G.state = 'kickoff'; G.setT = 0; hideBanner(); });
+  if (G.state === 'halftime' && G.stT > 3.4 && !G.fading) fadeThen(() => { G.half = 2; G.clock = G.dur / 2; G.addMin = 0; G.halfStops = 0; G.halfGoals = 0; resetKickoff(1); G.state = 'kickoff'; G.setT = 0; hideBanner(); });
   if (G.state === 'fulltime' && G.stT > 4 && !G.fading) fadeThen(() => { hideBanner(); showResult(); });
 }
 
@@ -2852,7 +2907,11 @@ function playStep(dt) {
   updateBall(dt); tryCapture(); checkBallEvents();
   if (ball.owner) G.stats.poss[ball.owner.team] += dt;
   G.hype = Math.max(Math.abs(ball.x) > 36 ? 0.25 : 0, G.hype - dt * 0.12);
-  if (G.state === 'play') { if (G.half === 1 && G.clock >= G.dur / 2) halfTime(); else if (G.clock >= G.dur) fullTime(); }
+  if (G.state === 'play') {
+    const end = G.half === 1 ? G.dur / 2 : G.dur;
+    if (G.clock >= end && !G.addMin) G.addMin = clamp(Math.round(1 + (G.halfStops || 0) * 0.2 + (G.halfGoals || 0) * 0.6 + Math.random() * 1.2), 1, 5);
+    if (G.addMin && G.clock >= end + G.addMin * G.dur / 90) { if (G.half === 1) halfTime(); else fullTime(); }
+  }
 }
 function warmStep(dt) {
   for (const p of players) {
@@ -2869,7 +2928,7 @@ function simStep(dt) {
   switch (G.state) {
     case 'menu': case 'result': warmStep(dt); break;
     case 'intro': G.stT += dt; for (const p of players) { steer(p, 0, 0, 10, dt); integrate(p, dt); } officialsStep(dt); updateBall(dt);
-      if (G.stT > 2.6) { G.state = 'kickoff'; G.setT = 0; IN.moved = false; hideBanner(); if (G.kickTeam === 0) showHint('Tekan OPER untuk kick-off'); } break;
+      if (G.stT > 2.6) { G.state = 'kickoff'; G.setT = 0; IN.moved = false; hideBanner(); if (G.kickTeam === 0) showHint('Press PASS to kick off'); } break;
     case 'kickoff': kickoffStep(dt); break;
     case 'play': playStep(dt); break;
     case 'stoppage': G.stT += dt; G.clock += dt; for (const p of players) { steer(p, 0, 0, 7, dt); integrate(p, dt); } officialsStep(dt); updateBall(dt);
@@ -2958,7 +3017,7 @@ function setTouchMode(on) {
   isTouch = on; document.body.classList.toggle('touch-on', on);
   $('touch').hidden = !(on && inMatchState(G.state) && G.state !== 'paused');
   $('howto').innerHTML = on
-    ? '<div><b>Gerak</b><span>Geser jempol di sisi kiri layar</span></div><div><b>Tendang</b><span>Tombol merah. Tahan untuk tembakan keras</span></div><div><b>Oper</b><span>Tombol biru. Tahan untuk umpan lambung</span></div><div><b>Lari</b><span>Tombol kuning. Saat bertahan, OPER ganti pemain</span></div>'
+    ? '<div><b>Move</b><span>Drag your thumb on the left side of the screen</span></div><div><b>Shoot</b><span>Red button. Hold for a power shot</span></div><div><b>Pass</b><span>Blue button. Hold for a lofted pass</span></div><div><b>Sprint</b><span>Yellow button. When defending, PASS switches player</span></div>'
     : $('howto').innerHTML;
 }
 addEventListener('touchstart', () => { if (!isTouch) setTouchMode(true); }, { passive: true });
@@ -2986,28 +3045,37 @@ addEventListener('touchstart', () => { if (!isTouch) setTouchMode(true); }, { pa
 function toast(msg) { const el = $('toast'); el.textContent = msg; el.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('on'), 1900); }
 function banner(big, sub, small) { $('bn-big').textContent = big; $('bn-sub').textContent = sub; const b = $('banner'); b.classList.toggle('small', !!small); b.classList.add('on'); }
 function hideBanner() { $('banner').classList.remove('on'); }
-function showHint(t) { const h = $('hint'); h.textContent = isTouch ? t : t.replace(/OPER/g, 'J').replace(/TENDANG/g, 'Spasi'); h.hidden = false; }
+function showHint(t) { const h = $('hint'); h.textContent = isTouch ? t : t.replace(/PASS/g, 'J').replace(/SHOOT/g, 'Space'); h.hidden = false; }
 function hideHint() { $('hint').hidden = true; }
-function updateScore() { $('sb-s1').textContent = G.score[0]; $('sb-s2').textContent = G.score[1]; }
-function updateLower() { if (!user) return; $('lw-num').textContent = user.num; $('lw-name').textContent = user.name; }
+function updateScore(flash) {
+  $('sb-s1').textContent = $('gb-s1').textContent = G.score[0]; $('sb-s2').textContent = $('gb-s2').textContent = G.score[1];
+  if (flash) { const el = $('sb-score'); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+}
+const POSN = ['GK', 'RB', 'CB', 'CB', 'LB', 'CM', 'CM', 'CM', 'RW', 'ST', 'LW'];
+function setPips(id, st) { const el = $(id).children; el[0].classList.toggle('on', st > 0.66); el[1].classList.toggle('on', st > 0.33); el[2].classList.toggle('on', st > 0.02); }
+function updateLower() { if (!user) return; $('lw-pos').textContent = POSN[user.idx]; $('lw-name').textContent = user.name; }
 function fadeThen(fn) { if (G.fading) return; G.fading = true; $('fade').classList.add('on'); setTimeout(() => { try { fn(); } finally { $('fade').classList.remove('on'); G.fading = false; } }, 300); }
 function setupHud() {
   const [a, b] = TEAMS_SEL;
   $('sb-t1').textContent = a.short; $('sb-t2').textContent = b.short;
   $('sb-b1').innerHTML = badgeSVG(a); $('sb-b2').innerHTML = badgeSVG(b);
-  $('sb-sw1').style.background = a.c1; $('sb-sw2').style.background = b.c1;
-  $('lower').style.setProperty('--tc', a.c1); $('lower-r').style.setProperty('--tc', b.c1);
+  $('gb-b1').innerHTML = badgeSVG(a); $('gb-b2').innerHTML = badgeSVG(b); $('gb-n1').textContent = a.full; $('gb-n2').textContent = b.full;
+  $('sb-add').hidden = true; $('gbar').classList.remove('on');
 }
 let clockAcc = 0;
 function hudTick(dt) {
   clockAcc += dt;
   if (clockAcc > 0.2 && !$('hud').hidden) {
-    clockAcc = 0; const gm = Math.min(90, G.clock / G.dur * 90), m = Math.floor(gm), s = Math.floor((gm - m) * 60);
+    clockAcc = 0; const gm = G.clock / G.dur * 90, m = Math.floor(gm), s = Math.floor((gm - m) * 60);
     $('sb-clock').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-    if (user) $('lw-stam').style.width = Math.round(user.stam * 100) + '%';
+    const add = G.addMin > 0 && ['play', 'stoppage', 'setpiece', 'goal', 'replay', 'kickoff'].includes(G.state);
+    $('sb-add').hidden = !add; if (add) $('sb-addn').textContent = '+' + G.addMin;
+    if (user) setPips('lw-pips', user.stam);
     const opp = ball.owner && ball.owner.team === 1 ? ball.owner : closestField(1);
-    if (opp) { if (opp !== G.lastOpp) { G.lastOpp = opp; $('lr-num').textContent = opp.num; $('lr-name').textContent = opp.name; } $('lr-stam').style.width = Math.round(opp.stam * 100) + '%'; }
+    if (opp) { if (opp !== G.lastOpp) { G.lastOpp = opp; $('lr-pos').textContent = POSN[opp.idx]; $('lr-name').textContent = opp.name; } setPips('lr-pips', opp.stam); }
   }
+  if (G.gbarT > 0) G.gbarT -= dt;
+  $('gbar').classList.toggle('on', !$('hud').hidden && ((G.state === 'goal' && G.goalT > 4.4) || G.state === 'intro' || ((G.state === 'halftime' || G.state === 'fulltime') && G.stT > 0.5) || (G.state === 'kickoff' && G.gbarT > 0)));
   $('banner').classList.toggle('low', rig.face > 0.35);
   if (!$('hud').hidden) { drawRadar(); $('hud').classList.toggle('cine', G.state === 'goal' || G.state === 'replay' || !!(G.pending && G.pending.offside && G.state === 'stoppage')); }
 }
@@ -3038,7 +3106,7 @@ function buildCards() {
   TEAMS.forEach((t, i) => {
     const b = document.createElement('button'); b.className = 'card'; b.id = 'team-' + t.id; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', 'false');
     b.style.setProperty('--c1', t.c1);
-    b.innerHTML = `<div class="card-in"><span class="pick">DIPILIH</span><div class="card-body"><div class="card-top"><div class="badge">${badgeSVG(t)}</div><div><div class="tname">${t.name}</div><div class="tnick">${t.nick}</div></div></div><canvas class="kit" width="480" height="300"></canvas><div class="stats">${Object.entries(t.stats).map(([k, v]) => `<div class="stat"><span>${k}</span><div class="bar"><i style="width:${v}%"></i></div><b>${v}</b></div>`).join('')}</div></div></div>`;
+    b.innerHTML = `<div class="card-in"><span class="pick">SELECTED</span><div class="card-body"><div class="card-top"><div class="badge">${badgeSVG(t)}</div><div><div class="tname">${t.name}</div><div class="tnick">${t.nick}</div></div></div><canvas class="kit" width="480" height="300"></canvas><div class="stats">${Object.entries(t.stats).map(([k, v]) => `<div class="stat"><span>${k}</span><div class="bar"><i style="width:${v}%"></i></div><b>${v}</b></div>`).join('')}</div></div></div>`;
     b.addEventListener('click', () => selectTeam(i));
     wrap.appendChild(b);
   });
@@ -3046,7 +3114,7 @@ function buildCards() {
 function selectTeam(i) {
   audioInit(); sfxUI(620 + i * 90); G.myIdx = i;
   document.querySelectorAll('.card').forEach((c, k) => { c.classList.toggle('sel', k === i); c.classList.toggle('dim', k !== i); c.setAttribute('aria-checked', k === i ? 'true' : 'false'); });
-  $('btn-next').disabled = false; $('btn-next-label').textContent = 'Lanjut dengan ' + TEAMS[i].name;
+  $('btn-next').disabled = false; $('btn-next-label').textContent = 'Continue with ' + TEAMS[i].name;
 }
 function fillVs() {
   const a = TEAMS[G.myIdx], b = TEAMS[G.oppIdx];
@@ -3063,14 +3131,14 @@ function startMatch() {
   TEAMS_SEL = [TEAMS[G.myIdx], TEAMS[G.oppIdx]];
   fadeThen(() => {
     buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]); refreshWorldTeams(); buildTeams(); rebuildRigs();
-    Object.assign(G, { score: [0, 0], clock: 0, half: 1, scorers: [], hype: 0.35, goalTeam: -1, timeScale: 1, fwCols: null, stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0], offsides: [0, 0] } });
+    Object.assign(G, { score: [0, 0], clock: 0, half: 1, scorers: [], addMin: 0, halfStops: 0, halfGoals: 0, gbarT: 0, hype: 0.35, goalTeam: -1, timeScale: 1, fwCols: null, stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0], offsides: [0, 0] } });
     recTotal = 0; trailW.length = 0; conf.length = 0; fws.length = 0;
     resetKickoff(0);
     for (const id of ['scr-select', 'scr-vs', 'scr-result', 'scr-pause']) $(id).hidden = true;
     applyTimeOfDay(G.tod); setupHud(); $('hud').hidden = false; $('touch').hidden = !isTouch; $('replay-tag').hidden = true; hideHint();
     Object.assign(rig, { tx: -24, tz: 8, h: 30, D: 58, vw: 92, shift: 0.56 });
     G.state = 'intro'; G.stT = 0; IN.moved = false;
-    banner('KICK OFF', `${TEAMS_SEL[0].name} vs ${TEAMS_SEL[1].name}`, true);
+    banner('KICK OFF', 'Nusantara Stadium', true);
     crowdLevel(0.6); sfxCheer(false); updateScore(); updateLower(); resize();
     if (isTouch && innerHeight > innerWidth * 1.15) { $('rotate').hidden = false; clearTimeout(startMatch.rt); startMatch.rt = setTimeout(() => { $('rotate').hidden = true; }, 5000); }
   });
@@ -3093,12 +3161,12 @@ function goToMenu() {
 function showResult() {
   G.state = 'result'; $('hud').hidden = true; $('touch').hidden = true;
   const [a, b] = TEAMS_SEL, s = G.score;
-  $('res-kicker').textContent = s[0] > s[1] ? 'Kamu menang!' : s[0] === s[1] ? 'Hasil imbang' : 'Kamu kalah, ayo revans!';
+  $('res-kicker').textContent = s[0] > s[1] ? 'You win!' : s[0] === s[1] ? 'Draw' : 'You lost. Time for a rematch!';
   $('res-b1').innerHTML = badgeSVG(a); $('res-b2').innerHTML = badgeSVG(b); $('res-n1').textContent = a.name; $('res-n2').textContent = b.name;
   $('res-score').textContent = `${s[0]} – ${s[1]}`;
-  $('res-scorers').innerHTML = G.scorers.length ? G.scorers.map(g => `<b>${TEAMS_SEL[g.team].short}</b> · ${g.name} ${g.min}'`).join('<br>') : 'Belum ada gol malam ini';
+  $('res-scorers').innerHTML = G.scorers.length ? G.scorers.map(g => `<b>${TEAMS_SEL[g.team].short}</b> · ${g.name} ${g.min}'`).join('<br>') : 'No goals in this match';
   const ps = G.stats.poss[0] + G.stats.poss[1] || 1, p0 = Math.round(G.stats.poss[0] / ps * 100);
-  const rows = [['Penguasaan bola (%)', p0, 100 - p0], ['Tembakan', G.stats.shots[0], G.stats.shots[1]], ['Tepat sasaran', G.stats.onT[0], G.stats.onT[1]], ['Operan', G.stats.passes[0], G.stats.passes[1]], ['Offside', G.stats.offsides[0], G.stats.offsides[1]]];
+  const rows = [['Possession (%)', p0, 100 - p0], ['Shots', G.stats.shots[0], G.stats.shots[1]], ['On target', G.stats.onT[0], G.stats.onT[1]], ['Passes', G.stats.passes[0], G.stats.passes[1]], ['Offsides', G.stats.offsides[0], G.stats.offsides[1]]];
   $('res-stats').innerHTML = rows.map(([l, x, y]) => `<div class="srow"><span>${x}</span><div><em>${l}</em><div class="duel">${x + y ? `<i style="flex:${x || 0.0001};background:${a.c1}"></i><i style="flex:${y || 0.0001};background:${b.c1}"></i>` : '<i style="flex:1;background:rgba(255,255,255,.12)"></i>'}</div></div><span>${y}</span></div>`).join('');
   $('scr-result').hidden = false; crowdLevel(0.35);
 }
