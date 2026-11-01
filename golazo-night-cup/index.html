@@ -192,9 +192,9 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 .pips i.on:nth-child(2){background:#ffd23d;box-shadow:0 0 5px #ffd23d;}
 .pips i.on:nth-child(3){background:#ff4d4d;box-shadow:0 0 5px #ff4d4d;}
 /* full-width score bar (after goals, at the breaks) */
-.gbar{position:absolute;left:50%;top:60%;display:flex;align-items:center;width:min(92vw,980px);opacity:0;pointer-events:none;
-  transform:translate(-50%,-50%) scaleX(.55);transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1);}
-.gbar.on{opacity:1;transform:translate(-50%,-50%) scaleX(1);}
+.gbar{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;width:min(86vw,900px);opacity:0;pointer-events:none;
+  transform:translateX(-50%) translateY(14px) scaleX(.6);transition:opacity .35s,transform .5s cubic-bezier(.2,.8,.2,1);}
+.gbar.on{opacity:1;transform:translateX(-50%) translateY(0) scaleX(1);}
 .gb-crest{flex:none;width:clamp(58px,9vw,108px);height:clamp(58px,9vw,108px);position:relative;z-index:1;filter:drop-shadow(0 6px 12px rgba(0,0,0,.55));}
 .gb-crest img,.gb-crest svg{width:100%;height:100%;object-fit:contain;display:block;}
 .gb-band{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px;height:clamp(40px,5.2vw,56px);margin:0 -16px;padding:0 30px;
@@ -253,7 +253,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 .touch-on .bug-tile{width:44px;height:33px;}
 .touch-on .bug-live{font-size:12px;}
 .touch-on .radar{top:calc(86px + env(safe-area-inset-top,0px));}
-.touch-on .gbar{top:40%;width:min(78vw,760px);}
+.touch-on .gbar{bottom:calc(128px + env(safe-area-inset-bottom,0px));width:min(64vw,620px);}
 .touch-on .gb-crest{width:clamp(48px,7vw,80px);height:clamp(48px,7vw,80px);}
 .touch-on .hint{bottom:auto;top:calc(120px + env(safe-area-inset-top,0px));}
 
@@ -520,7 +520,7 @@ const TEAMS = [
     shirt: '#0a47c2', sleeve: '#0a47c2', shorts: '#0a47c2', socks: '#f2f5fb', sockTop: '#0a47c2', trim: '#ffffff', collar: '#ffffff', num: '#ffffff', boot: '#f4f6ff',
     gk: { shirt: '#c6f23a', shorts: '#1b2a0d', socks: '#c6f23a', num: '#13200a' },
     crowd: ['#0a47c2', '#1f63ee', '#ffffff', '#0a3aa8', '#0a47c2', '#9cc0ff'], stats: { Attack: 86, Pace: 84, Defence: 82 },
-    captain: 5, squad: [['Penders', 39, 0, 'short', 3, 0], ['Palestra', 2, 1, 'fade', 1, 0], ['Acheampong', 34, 4, 'fade', 5, 0, [0.3, 0.2, 0.1, 0.4]], ['Fofana', 3, 5, 'buzz', 5, 1, [0.4, 0.4, 0.2, 0.5]], ['Colwill', 6, 2, 'fade', 5, 0, [0.2, 0, -0.2, 0.2]], ['Caicedo', 25, 3, 'fade', 5, 0, [0.2, 0.1, 0.3, 0.3]], ['Lavia', 45, 4, 'buzz', 5, 0, [0, 0.3, 0.1, 0.4]], ['Palmer', 10, 0, 'short', 3, 0, [-0.3, 0.2, 0.1, -0.2]], ['Estêvão', 41, 3, 'curly', 5, 0, [-0.4, -0.2, 0, 0.3]], ['Rogers', 17, 4, 'buzz', 5, 1, [0.5, 0.2, 0.2, 0.4]], ['Pedro Neto', 7, 2, 'fade', 1, 2, [0, 0.1, 0.2, 0]]] },
+    captain: 5, squad: [['Penders', 39, 0, 'short', 3, 0], ['Palestra', 2, 1, 'fade', 1, 0], ['Acheampong', 34, 4, 'fade', 5, 0, [0.3, 0.2, 0.1, 0.4]], ['Fofana', 3, 5, 'buzz', 5, 1, [0.4, 0.4, 0.2, 0.5]], ['Colwill', 6, 2, 'fade', 5, 0, [0.2, 0, -0.2, 0.2]], ['Caicedo', 25, 3, 'fade', 5, 0, [0.2, 0.1, 0.3, 0.3]], ['Lavia', 45, 4, 'buzz', 5, 0, [0, 0.3, 0.1, 0.4]], ['Palmer', 10, 0, 'short', 3, 3, [-0.3, 0.2, 0.1, -0.2]], ['Estêvão', 41, 3, 'curly', 5, 0, [-0.4, -0.2, 0, 0.3]], ['Rogers', 17, 4, 'buzz', 5, 1, [0.5, 0.2, 0.2, 0.4]], ['Pedro Neto', 7, 2, 'short', 1, 3, [0, 0.1, 0.2, 0]]] },
   { id: 'mun', name: 'Manchester United', full: 'Manchester United', short: 'MUN', nick: 'The Red Devils', c1: '#da1f26', c2: '#ffffff',
     shirt: '#da1f26', sleeve: '#da1f26', shorts: '#f6f6f6', socks: '#151515', sockTop: '#da1f26', trim: '#151515', collar: '#ffffff', num: '#ffffff', boot: '#151515',
     gk: { shirt: '#19d3ee', shorts: '#06323a', socks: '#19d3ee', num: '#03262c' },
@@ -1361,7 +1361,8 @@ function buildCrowd3() {
         vUv = vec2((col + uv.x) / 32.0, 1.0 - (row + 1.0 - uv.y) / 4.0);
         vec3 toC = cameraPosition - offset; toC.y = 0.0; toC = normalize(toC); vec3 right = vec3(toC.z, 0.0, -toC.x);
         float bob = hype * 0.2 * max(0.0, sin(time * 8.0 + seed * 31.0)) + 0.012 * sin(time * 1.7 + seed * 17.0);
-        vec3 p = offset + right * (position.x * 0.62) + vec3(0.0, position.y * hS + bob, 0.0);
+        float near = smoothstep(7.0, 11.0, distance(cameraPosition, offset));
+        vec3 p = offset + (right * (position.x * 0.62) + vec3(0.0, position.y * hS + bob, 0.0)) * near;
         vShade = data.z * mix(0.5, 1.0, sunLit4(offset + vec3(0.0, 0.9, 0.0))); vFlash = step(1.0 - flash, fract(sin(seed * 91.7 + floor(time * 14.0) * 13.1) * 43758.5));
         gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0); }`,
     fragmentShader: `uniform sampler2D atlas; uniform float lightK; varying vec2 vUv; varying float vShade, vFlash;
@@ -1576,7 +1577,7 @@ function applyWeather(wx) { G.wx = wx === 'rain' ? 'rain' : 'clear'; applyTimeOf
 function applyTimeOfDay(tod) {
   const day = tod !== 'night'; G.tod = day ? 'day' : 'night';
   const wet = G.wx === 'rain';
-  W3.hemi.color.copy(lin(day ? '#aacaf0' : '#7f95cf')); W3.hemi.groundColor.copy(lin(day ? '#46602f' : '#24331f')); W3.hemi.intensity = day ? 0.85 : 0.62;
+  W3.hemi.color.copy(lin(day ? '#aacaf0' : '#7f95cf')); W3.hemi.groundColor.copy(lin(day ? '#565a3e' : '#2a2e22')); W3.hemi.intensity = day ? 0.85 : 0.62;
   KEY.color.copy(lin(day ? '#fff2df' : '#fff1dc')); KEY.intensity = day ? 2.6 : 2.25; W3.keyOff = day ? [-38, 78, -30] : [-32, 72, -48];
   W3.fill.intensity = day ? 0.3 : 0.55; W3.rim.intensity = day ? 0.12 : 0.45;
   SCN.fog.color.copy(lin(day ? (wet ? '#8f9aa8' : '#c5d7ec') : (wet ? '#1a2130' : '#0b1226'))); SCN.fog.density = (day ? 0.0015 : 0.0022) * (wet ? 3.6 : 1);
@@ -2286,6 +2287,64 @@ function buildHairGeo(style) {
   return g;
 }
 
+// Point on the hair shell for a unit-sphere direction (same surface as buildHairGeo)
+function hairShellPoint(x, y, z, style) {
+  const b = sculpt(x, y, z, false), k = Math.abs(Math.atan2(x, z)) / Math.PI, h = hairLine(k, style), L = Math.hypot(b[0], b[1], b[2]) || 1;
+  const inner = lerp(-0.04, -0.008, sst(h - 0.3, h - 0.02, y));
+  const rough = style === 'curly' ? (noise3(x * 19, y * 19, z * 19) - 0.5) * 0.004 : (noise3(x * 7 + 1, y * 7, z * 7) - 0.5) * 0.0018;
+  const outer = 0.0006 + (hairThick(style, x, y, z) + rough) * sst(h + 0.04, h + 0.2, y);
+  const s = 1 + lerp(inner, outer, sst(h - 0.02, h + 0.06, y)) / L;
+  return [b[0] * s, b[1] * s, b[2] * s];
+}
+// Hair cards: thin alpha-tested strips that grow out of the shell along a flow field combed away from the crown,
+// giving a strand look in close-ups (only drawn when the head is large on screen).
+const HAIR_CARDS = { short: [3200, 0.014, 0.028, 0.005, 0.008, 0.0008, 0.0025, 0.09, 0.3], fade: [2000, 0.016, 0.03, 0.005, 0.008, 0.001, 0.003, 0.52, 0.35],
+  curly: [2600, 0.01, 0.017, 0.009, 0.014, 0.003, 0.01, 0.06, 0], long: [2600, 0.04, 0.075, 0.006, 0.01, 0.001, 0.0025, 0.09, 0.1] };
+function buildHairCards(style) {
+  const cfg = HAIR_CARDS[style]; if (!cfg) return null;
+  const [N, l0, l1, w0, w1, lf0, lf1, rootY, sweep] = cfg, rng = mulberry32(style.length * 977 + 13), C = vnorm([0, 0.88, -0.48]);
+  const pos = [], uv = [], idx = [];
+  const onHead = (d, lift) => {               // surface (shell or, past the hairline, skin) + lift along the radial normal
+    const sp = hairShellPoint(d[0], d[1], d[2], style), kp = sculpt(d[0], d[1], d[2], false), rs = Math.hypot(sp[0], sp[1], sp[2]), rk = Math.hypot(kp[0], kp[1], kp[2]) + 0.0025;
+    const r = Math.max(rs, rk) + lift; return vmul(d, r);
+  };
+  let made = 0, tries = 0;
+  while (made < N && tries < N * 40) {
+    tries++;
+    const yy = rng() * 2 - 1, ph = rng() * TAU, rr = Math.sqrt(1 - yy * yy), d0 = [rr * Math.cos(ph), yy, rr * Math.sin(ph)];
+    const k = Math.abs(Math.atan2(d0[0], d0[2])) / Math.PI, h = hairLine(k, style);
+    if (d0[1] < h + rootY || (style === 'fade' && d0[1] < rootY)) continue;
+    // flow: away from the crown, swept to one side at the front; curls point anywhere
+    let t = vsub(vmul(d0, vdot(d0, C)), C); if (Math.hypot(t[0], t[1], t[2]) < 0.05) t = [rng() - 0.5, 0, rng() - 0.5];
+    t = vnorm(t); if (sweep && d0[2] > 0.2) t = vnorm(vadd(t, [sweep * (0.5 + 0.5 * rng()), 0, 0]));
+    if (style === 'curly') { const a = rng() * TAU, bt = vnorm(vcross(d0, t)); t = vnorm(vadd(vmul(t, Math.cos(a)), vmul(bt, Math.sin(a)))); }
+    t = vnorm(vsub(t, vmul(d0, vdot(t, d0))));
+    let L = lerp(l0, l1, rng()); const wd = lerp(w0, w1, rng()), lift = lerp(lf0, lf1, rng()), u0 = rng() * 0.75, base = pos.length / 3;
+    { const de = vnorm(vadd(d0, vmul(t, L / 0.1))), ke = Math.abs(Math.atan2(de[0], de[2])) / Math.PI; if (de[1] < hairLine(ke, style) + 0.015 && de[2] > 0) L *= 0.45; }   // fringe stays at the hairline
+    for (let r = 0; r < 3; r++) {
+      const f = r / 2, dr = vnorm(vadd(d0, vmul(t, L * f / 0.1))), p = onHead(dr, r === 0 ? -0.0015 : lift * (0.6 + f)), side = vmul(vnorm(vcross(dr, t)), wd * (r === 2 ? 0.35 : 0.5));
+      pos.push(...vsub(p, side), ...vadd(p, side)); uv.push(u0, f, u0 + 0.25, f);
+    }
+    for (let r = 0; r < 2; r++) { const a = base + r * 2; idx.push(a, a + 1, a + 3, a, a + 3, a + 2); }
+    made++;
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals();
+  return g;
+}
+function hairCardTex(curly) {
+  const S = 256, c = mkCanvas(S, S), g = c.getContext('2d'), rng = mulberry32(curly ? 31 : 17);
+  g.clearRect(0, 0, S, S); g.lineCap = 'round';
+  for (let i = 0; i < (curly ? 90 : 120); i++) {
+    const x = 6 + rng() * (S - 12), lum = Math.round(150 + rng() * 60), a = (0.65 + rng() * 0.35) * Math.pow(Math.sin(Math.PI * x / S), 0.6), len = S * (0.6 + rng() * 0.4);
+    const gr = g.createLinearGradient(0, 0, 0, len); gr.addColorStop(0, `rgba(${lum * 0.55 | 0},${lum * 0.55 | 0},${lum * 0.55 | 0},${a})`); gr.addColorStop(0.75, `rgba(${lum},${lum},${lum},${a})`); gr.addColorStop(1, `rgba(${lum},${lum},${lum},0)`);
+    g.strokeStyle = gr; g.lineWidth = curly ? 2.2 + rng() * 1.6 : 1 + rng() * 1.6; g.beginPath(); g.moveTo(x, 0);
+    if (curly) { const r0 = 6 + rng() * 6; for (let yy = 0; yy <= len; yy += 3) g.lineTo(x + Math.sin(yy / r0 + i) * r0 * 0.8, yy); }
+    else g.bezierCurveTo(x + (rng() - 0.5) * 10, len * 0.35, x + (rng() - 0.5) * 18, len * 0.7, x + (rng() - 0.5) * 22, len);
+    g.stroke();
+  }
+  return c;
+}
+
 /* ---------------- textures ---------------- */
 function paintHairTex(curly) {
   const c = mkCanvas(256, 128), g = c.getContext('2d'), rng = mulberry32(curly ? 9 : 4);
@@ -2337,6 +2396,22 @@ function paintKit(team, L, num, name) {
   if (!gk) { const ng = g.createLinearGradient(0, 384, 0, 512); ng.addColorStop(0, mixHex(L.skin, '#fff6f2', 0.8)); ng.addColorStop(0.28, mixHex(L.skin, '#ffe6de', 0.6)); ng.addColorStop(1, mixHex(L.skin, '#e2a49b', 0.45)); g.fillStyle = ng; g.fillRect(464, 384, 48, 128); }
   return c;
 }
+// Jersey knit: fine mesh texture in the cloth regions of the kit atlas, flat elsewhere
+function kitNormalAtlas() {
+  const S = 512, c = mkCanvas(S, S), g = c.getContext('2d'), id = g.createImageData(S, S), d = id.data, Hh = new Float32Array(S * S);
+  const cloth = (x, y) => y < 256 || (y < 320) || (y < 384 && x < 256);
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    if (!cloth(x, y)) continue;
+    const kx = (x % 4) - 1.5, ky = (y % 4) - 1.5, hole = Math.hypot(kx, ky) < 0.9 ? 1 : 0, rib = y < 256 ? 0.25 * Math.sin(x * 0.55) : 0;
+    Hh[y * S + x] = 1 - hole * 0.8 + rib;
+  }
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    const k = y * S + x, i = k * 4; let nx = 0, ny = 0;
+    if (cloth(x, y)) { nx = (Hh[y * S + Math.max(0, x - 1)] - Hh[y * S + Math.min(S - 1, x + 1)]) * 0.9; ny = (Hh[Math.min(S - 1, y + 1) * S + x] - Hh[Math.max(0, y - 1) * S + x]) * 0.9; }
+    const l = Math.hypot(nx, ny, 1); d[i] = (nx / l * 0.5 + 0.5) * 255; d[i + 1] = (ny / l * 0.5 + 0.5) * 255; d[i + 2] = (1 / l * 0.5 + 0.5) * 255; d[i + 3] = 255;
+  }
+  g.putImageData(id, 0, 0); return c;
+}
 function roughAtlas() {
   const c = mkCanvas(64, 64), g = c.getContext('2d'), f = (r, v) => { g.fillStyle = `rgb(${v},${v},${v})`; g.fillRect(r[0] / 8, r[1] / 8, r[2] / 8, r[3] / 8); };
   f(REG.shirt, 205); f(REG.sleeve, 205); f(REG.shorts, 185); f(REG.sock, 220); f(REG.boot, 95); f(REG.skin, 150); f(REG.glove, 175);
@@ -2357,6 +2432,7 @@ function lookFor(team, gk, i, rng) {
   if (sq) { L.skin = SKINS[sq[2]]; L.style = sq[3]; L.hair = HAIRS[sq[4]]; L.beard = sq[5]; }
   if (SKINS.indexOf(L.skin) >= 2 && !['#4a2c17', '#2e1d10', '#5a3a1e', '#6b4a22'].includes(L.eye)) L.eye = ['#4a2c17', '#2e1d10', '#3a2414'][L.seed % 3];   // darker skin: brown eyes
   L.fm = sq && sq[6] ? sq[6] : [rng() * 1.2 - 0.6, rng() * 1.2 - 0.6, rng() * 1.2 - 0.6, rng() * 1.2 - 0.6];
+  L.frk = SKINS.indexOf(L.skin) <= 1 ? (rng() < 0.55 ? 0.3 + rng() * 0.7 : 0) : 0; L.moles = rng() < 0.6 ? 1 + Math.floor(rng() * 3) : 0;
   // movement personality: arm carriage, knee drive, lean, bounce, cadence; kick wind-up and finish; strong foot
   L.gs = { arm: 0.78 + rng() * 0.5, elb: 0.82 + rng() * 0.4, lean: (rng() - 0.5) * 0.1, knee: 0.84 + rng() * 0.32, cross: (rng() - 0.5) * 0.16, bob: 0.65 + rng() * 0.7, step: 0.92 + rng() * 0.16, twist: 0.7 + rng() * 0.6, head: (rng() - 0.5) * 0.12,
     kb: 0.8 + rng() * 0.4, kt: 0.85 + rng() * 0.3, ka: 0.7 + rng() * 0.6, kl: 0.75 + rng() * 0.5 };
@@ -2369,10 +2445,13 @@ function initHumans() {
   if (HB.body) return;
   HB.body = buildBodyGeo(false); HB.bodyGK = buildBodyGeo(true); HB.head = buildHeadGeo2(72, 52); HB.headHi = buildHeadGeo2(200, 160); HB.eyeGeo = buildEyeGeo(); faceDetailMaps();
   HB.hair = {}; for (const s of ['short', 'fade', 'curly', 'long']) HB.hair[s] = buildHairGeo(s); HB.hair.buzz = null;
+  HB.cards = {}; for (const s of ['short', 'fade', 'curly', 'long']) HB.cards[s] = buildHairCards(s);
   const tex = (cnv, srgb = true) => { const t = new THREE.CanvasTexture(cnv); if (srgb) t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; return t; };
   HB.rough = tex(roughAtlas(), false);
   HB.hairTex = tex(paintHairTex(false)); HB.curlTex = tex(paintHairTex(true));
   HB.hairTex.wrapS = HB.curlTex.wrapS = THREE.RepeatWrapping;
+  HB.cardTex = tex(hairCardTex(false)); HB.cardCurl = tex(hairCardTex(true));
+  HB.kitN = tex(kitNormalAtlas(), false);
   // bind-pose frames (so the bind pose maps to identity rotations)
   HB.bindQ = BONES.map(() => new THREE.Quaternion());
   const J = BPOS.map(p => new THREE.Vector3(p[0], p[1], p[2])), T = BTOE.map(p => new THREE.Vector3(p[0], p[1], p[2]));
@@ -2415,7 +2494,7 @@ function makeRig(team, L, num, name) {
   const root = new THREE.Group(), bones = BONES.map(n => { const b = new THREE.Bone(); b.name = n; return b; });
   bones.forEach((b, i) => { const pi = BPARENT[i], bp = bonePos(i, L.gk), pp = pi >= 0 ? bonePos(pi, L.gk) : [0, 0, 0]; b.position.set(bp[0] - pp[0], bp[1] - pp[1], bp[2] - pp[2]); if (pi >= 0) bones[pi].add(b); });
   const kit = new THREE.CanvasTexture(paintKit(team, L, num, name)); kit.encoding = THREE.sRGBEncoding; kit.anisotropy = 4;
-  const mat = new THREE.MeshPhysicalMaterial({ map: kit, roughnessMap: HB.rough, roughness: 1, metalness: 0, sheen: 0.6, sheenRoughness: 0.7, sheenColor: new THREE.Color(0.35, 0.35, 0.38) });
+  const mat = new THREE.MeshPhysicalMaterial({ map: kit, roughnessMap: HB.rough, normalMap: HB.kitN, normalScale: new THREE.Vector2(0.45, 0.45), roughness: 1, metalness: 0, sheen: 0.6, sheenRoughness: 0.7, sheenColor: new THREE.Color(0.35, 0.35, 0.38) });
   const mesh = new THREE.SkinnedMesh(L.gk ? HB.bodyGK : HB.body, mat);
   mesh.add(bones[0]); mesh.bind(new THREE.Skeleton(bones));
   mesh.castShadow = mesh.receiveShadow = true; mesh.frustumCulled = false;
@@ -2430,8 +2509,16 @@ function makeRig(team, L, num, name) {
     hair = new THREE.Mesh(HB.hair[L.style], new THREE.MeshStandardMaterial({ map: L.style === 'curly' ? HB.curlTex : HB.hairTex, color: new THREE.Color(L.hair).convertSRGBToLinear().multiplyScalar(2.2), roughness: 0.62, metalness: 0 }));
     hair.castShadow = true; bones[3].add(hair);
   }
+  let cards = null;
+  if (HB.cards[L.style] && L.style !== 'buzz') {
+    const hc = new THREE.Color(L.hair).convertSRGBToLinear();
+    cards = new THREE.Mesh(HB.cards[L.style], new THREE.MeshStandardMaterial({ map: L.style === 'curly' ? HB.cardCurl : HB.cardTex, color: hc.clone().multiplyScalar(1.45), roughness: 0.72, metalness: 0,
+      alphaTest: 0.5, alphaToCoverage: true, side: THREE.DoubleSide }));
+    cards.visible = false; bones[3].add(cards);
+    if (hair) hair.material.color.multiplyScalar(0.8);
+  }
   root.add(mesh);
-  return { root, bones, mesh, head, hair, eyes, Q: BONES.map(() => new THREE.Quaternion()), tex: [kit, face] };
+  return { root, bones, mesh, head, hair, cards, eyes, Q: BONES.map(() => new THREE.Quaternion()), tex: [kit, face] };
 }
 const _jv = Array.from({ length: 17 }, () => new THREE.Vector3()), _toe = [new THREE.Vector3(), new THREE.Vector3()], _qinv = new THREE.Quaternion(), _yAx = new THREE.Vector3(0, 1, 0);
 // Players (and officials) keep their eyes on the ball: yaw of the head relative to the body, smoothed per actor
@@ -2612,7 +2699,7 @@ function faceMasks() {
   if (HB.fm) return HB.fm;
   initEye();
   const D = faceDirs(), n = FW * FH, A = () => new Float32Array(n);
-  const M = { ap: A(), ir: A(), pu: A(), lu: A(), ll: A(), lid: A(), ue: A(), car: A(), br: A(), brw: A(), lip: A(), lipL: A(), ml: A(), nos: A(), red: A(), ao: A(), bd: A(), mo: A(), n1: A(), n2: A(), hgt: A() };
+  const M = { ap: A(), ir: A(), pu: A(), lu: A(), ll: A(), lid: A(), ue: A(), car: A(), br: A(), brw: A(), lip: A(), lipL: A(), ml: A(), nos: A(), red: A(), ao: A(), bd: A(), mo: A(), chin: A(), frk: A(), n1: A(), n2: A(), hgt: A() };
   const rng = mulberry32(77);
   for (let k = 0; k < n; k++) { M.n1[k] = rng(); }
   // low-frequency blotch noise
@@ -2662,7 +2749,9 @@ function faceMasks() {
       const cheekLine = -0.2 - 0.25 * sst(0.75, 0.3, ax), onFace = sst(cheekLine + 0.03, cheekLine - 0.05, y) * sst(-0.4, 0.05, z);
       const mo = FG(x / 0.3, (y + 0.405) / 0.035) * sst(0.6, 0.8, z);
       M.bd[k] = clamp(Math.max(onFace, mo) * (1 - M.lip[k]) * (1 - 0.5 * sst(-0.8, -0.97, y)), 0, 1); M.mo[k] = mo;
+      M.chin[k] = clamp((FG(x / 0.2, (y + 0.74) / 0.13) + 0.9 * FG(x / 0.06, (y + 0.6) / 0.045)) * sst(0.35, 0.7, z), 0, 1) * (1 - M.lip[k]);
     }
+    M.frk[k] = clamp(FG((ax - 0.34) / 0.2, (y + 0.1) / 0.14) + 0.8 * FG(x / 0.12, (y + 0.06) / 0.12), 0, 1) * sst(0.45, 0.8, z);
     // --- height for the shared normal map (pores, lines) ---
     let h = (M.n1[k] - 0.5) * 0.35 + (M.n2[k] - 0.5) * 0.5;
     if (z > 0.4) {
@@ -2729,14 +2818,33 @@ function paintFace(L) {
     // beard / stubble
     if (beard && M.bd[k] > 0) {
       const w = M.bd[k];
-      if (beard === 2) mix(col, hc, w * (0.62 + 0.38 * r1) * 0.95);
+      if (beard === 2) { const px = k % FW, py = (k / FW) | 0, hs = Math.sin(px * 12.9898 + Math.floor(py / 3) * 78.233 + px * 0.37) * 43758.5453, strand = hs - Math.floor(hs) > 0.42;
+        mix(col, strand ? hc : [hc[0] * 0.75 + sk[0] * 0.25, hc[1] * 0.75 + sk[1] * 0.25, hc[2] * 0.75 + sk[2] * 0.25], sst(0.05, 0.75, w + (r1 - 0.5) * 0.35) * (strand ? 0.9 : 0.55)); }
+      else if (beard === 3) { mix(col, stub, w * (r1 < 0.4 ? 0.42 : 0.1) * stubK); const gw = Math.max(M.mo[k] * 0.6, M.chin[k] * 0.9); if (gw > 0) mix(col, hc, sst(0.1, 0.8, gw + (r1 - 0.5) * 0.3) * (r1 > 0.3 ? 0.85 : 0.35)); }
       else mix(col, stub, w * (r1 < 0.45 ? 0.62 : 0.22) * stubK);
     }
+    // freckles
+    if (L.frk && M.frk[k] > 0.12 && r1 > 0.955 - 0.03 * L.frk) mix(col, [sk[0] * 0.66, sk[1] * 0.52, sk[2] * 0.42], M.frk[k] * L.frk * 0.55);
     // scalp hair
     if (COV && COV[k] > 0) { const a = COV[k] * (L.style === 'buzz' ? 0.5 + 0.38 * r1 : 0.9 + 0.08 * r1); mix(col, hc, a); }
     d[k * 4] = col[0]; d[k * 4 + 1] = col[1]; d[k * 4 + 2] = col[2]; d[k * 4 + 3] = 255;
   }
   g.putImageData(id, 0, 0);
+  // brow hairs: short strokes growing up at the inner end and out toward the tail
+  const rb = mulberry32(L.seed + 3), bcs = `rgba(${bc[0] | 0},${bc[1] | 0},${bc[2] | 0},`;
+  g.lineCap = 'round';
+  for (const s of [1, -1]) for (let i = 0; i < (thick ? 230 : 170); i++) {
+    const bt = Math.pow(rb(), 0.85), cy = 0.205 + 0.045 * Math.sin(Math.PI * Math.min(1, bt * 1.25)) - 0.03 * bt * bt, th = lerp(0.034, 0.016, bt) * (thick ? 1.25 : 1);
+    const x0 = s * (0.12 + 0.52 * bt), y0 = cy + (rb() - 0.5) * th * 1.5, ang = bt < 0.22 ? lerp(1.45, 0.75, bt / 0.22) : lerp(0.5, 0.1, (bt - 0.22) / 0.78) + (rb() - 0.5) * 0.25, ln = 0.016 + rb() * 0.02;
+    const x1 = x0 + s * Math.cos(ang) * ln, y1 = y0 + Math.sin(ang) * ln, zz = a => Math.sqrt(Math.max(0.05, 1 - a[0] * a[0] - a[1] * a[1]));
+    const p0 = faceUV(x0, y0, zz([x0, y0])), p1 = faceUV(x1, y1, zz([x1, y1]));
+    g.strokeStyle = bcs + (0.5 + rb() * 0.4) + ')'; g.lineWidth = 1.0 + rb() * 0.8; g.beginPath(); g.moveTo(p0[0], p0[1]); g.lineTo(p1[0], p1[1]); g.stroke();
+  }
+  // a few moles
+  for (let i = 0; i < (L.moles || 0); i++) {
+    const mx = (rb() - 0.5) * 1.1, my = -0.55 + rb() * 0.75, p = faceUV(mx, my, Math.sqrt(Math.max(0.1, 1 - mx * mx - my * my)));
+    g.fillStyle = `rgba(${sk[0] * 0.42 | 0},${sk[1] * 0.3 | 0},${sk[2] * 0.25 | 0},0.75)`; g.beginPath(); g.arc(p[0], p[1], 0.9 + rb() * 0.7, 0, TAU); g.fill();
+  }
   g.fillStyle = mixHex(L.skin, '#c96a5a', 0.12); g.fillRect(0, FH - 9, 9, 9);
   return c;
 }
@@ -2748,7 +2856,7 @@ function headDetail(R, cam, viewH) {
   R.head.getWorldPosition(_hv);
   const dist = _hv.distanceTo(cam.position), pxH = 0.23 / (2 * dist * Math.tan(cam.fov * Math.PI / 360)) * viewH, near = viewH < 0 || pxH > 55;
   const want = near ? HB.headHi : HB.head; if (R.head.geometry !== want) R.head.geometry = want;
-  R.eyes.forEach(e => { e.visible = near; });
+  R.eyes.forEach(e => { e.visible = near; }); if (R.cards) R.cards.visible = near;
   if (!near) return;
   _hl.copy(cam.position); R.head.worldToLocal(_hl);
   for (const e of R.eyes) {
@@ -3672,11 +3780,11 @@ function camTargets() {
   if (DBG.cam) { Object.assign(T, DBG.cam); return 40; }
   if (s === 'menu' || s === 'result') { T.tx = Math.sin(G.t * 0.06) * 30; T.tz = 4; T.h = 11 + Math.sin(G.t * 0.045) * 3; T.D = 40; T.vw = 74; T.shift = 0.6; T.yaw = 0.3; return 0.6; }
   if (s === 'goal' && G.scorer) { const sc = G.scorer; T.tx = sc.x * 0.75 + ball.x * 0.25; T.tz = sc.z * 0.8 + 1.5; T.h = 6.5; T.D = 19; T.vw = 21; T.shift = 0.56; T.yaw = 0; T.face = (G.goalTeam === 0 && G.goalT > 1.4 && G.goalT < 4.3) ? 1 : 0; return 1.6; }
-  if (s === 'stoppage' && G.pending && G.pending.offside && G.offAR) { const a = G.offAR, far = a.side > 0; T.tx = (a.x + G.offLineX) / 2; T.tz = far ? a.z - 2.6 : a.z + 1.5; T.h = 2.4; T.D = far ? 12 : 12.5; T.vw = 10; T.shift = 0.6; T.yaw = 0; return 2.5; }
+  if (s === 'stoppage' && G.pending && G.pending.offside && G.offAR) { const a = G.offAR, far = a.side > 0; T.tx = (a.x + G.offLineX) / 2; T.tz = far ? a.z - 2.6 : a.z + 2.6; T.h = 2.4; T.D = far ? 12 : -12; T.vw = 10; T.shift = 0.6; T.yaw = 0; return 2.5; }
   if (s === 'replay') {
     const prog = (G.rpPos - G.rpStart) / Math.max(1, G.rpEnd - G.rpStart), cam2 = prog > 0.52 ? 1 : 0;
     if (cam2 !== G.rpCam) { G.rpCam = cam2; G.camCut = 1; }
-    if (cam2) { const gx = dirOf(G.goalTeam < 0 ? 0 : G.goalTeam) * (PL + 10); T.free = 1; T.fp = [gx, 3.4, ball.rz * 0.25]; T.ft = [ball.rx, 0.8, ball.rz]; T.ffov = 0.62; return 4; }
+    if (cam2) { const gx = dirOf(G.goalTeam < 0 ? 0 : G.goalTeam) * (PL + 4.2); T.free = 1; T.fp = [gx, 2.9, clamp(ball.rz * 0.25, -8, 8)]; T.ft = [ball.rx, 0.8, ball.rz]; T.ffov = 0.66; return 4; }
   }
   if (s === 'setpiece' && G.pending && G.pending.kind === 'penalty') { const d = dirOf(G.pending.team); T.free = 1; T.fp = [d * (PL - 25), 4.6, 0]; T.ft = [d * PL, 1.0, 0]; T.ffov = 0.5; return 3; }
   if (s === 'stoppage' && G.pending && G.pending.foul) { const v = G.pending.foul; T.tx = v.x; T.tz = v.z * 0.85 + 1.5; T.h = 6.5; T.D = 15; T.vw = 17; T.shift = 0.55; T.yaw = 0.25; return 2.4; }
@@ -3802,9 +3910,10 @@ function hudTick(dt) {
     if (opp) { if (opp !== G.lastOpp) { G.lastOpp = opp; $('lr-pos').textContent = POSN[opp.idx]; $('lr-name').textContent = opp.name; } setPips('lr-pips', opp.stam); $('lr-stb').style.width = Math.round(opp.stam * 100) + '%'; }
   }
   if (G.gbarT > 0) G.gbarT -= dt;
-  $('gbar').classList.toggle('on', !$('hud').hidden && ((G.state === 'goal' && G.goalT > 4.4) || G.state === 'intro' || ((G.state === 'halftime' || G.state === 'fulltime') && G.stT > 0.5) || (G.state === 'kickoff' && G.gbarT > 0)));
+  const gbOn = !$('hud').hidden && (G.state === 'intro' || ((G.state === 'halftime' || G.state === 'fulltime') && G.stT > 0.5) || (G.state === 'kickoff' && G.gbarT > 0));
+  $('gbar').classList.toggle('on', gbOn);
   $('banner').classList.toggle('low', rig.face > 0.35);
-  if (!$('hud').hidden) { drawRadar(); $('hud').classList.toggle('cine', G.state === 'goal' || G.state === 'replay' || !!(G.pending && G.pending.offside && G.state === 'stoppage') || (G.state === 'setpiece' && !!G.pending && G.pending.kind === 'penalty')); }
+  if (!$('hud').hidden) { drawRadar(); $('hud').classList.toggle('cine', gbOn || G.state === 'goal' || G.state === 'replay' || !!(G.pending && G.pending.offside && G.state === 'stoppage') || (G.state === 'setpiece' && !!G.pending && G.pending.kind === 'penalty')); }
 }
 const RC = $('radar'), RX = RC.getContext('2d');
 function drawRadar() {
