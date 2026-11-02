@@ -1613,6 +1613,7 @@ function drawFan(g, L, pose) {
   const up = pose >= 4 ? 6 : 0, w = L.w, sx = 32 - 14 * w, ex = 32 + 14 * w, sy = 60 - up;
   // legs (mostly hidden by the row in front) and torso
   g.fillStyle = L.pants; g.fillRect(19, 100 - up, 26, 28 + up);
+  g.fillStyle = '#1d44a8'; g.fillRect(6, 112, 52, 16); g.fillStyle = 'rgba(255,255,255,0.12)'; g.fillRect(6, 112, 52, 2);   // blue seat back across the bottom of the sprite
   const tg = g.createLinearGradient(0, 52 - up, 0, 106 - up); tg.addColorStop(0, shade(L.shirt, 1.14)); tg.addColorStop(0.55, L.shirt); tg.addColorStop(1, shade(L.shirt, 0.6));
   const torso = () => { g.beginPath(); g.moveTo(32 - 19 * w, 106 - up); g.quadraticCurveTo(32 - 21 * w, 62 - up, sx, sy); g.quadraticCurveTo(32, 53 - up, ex, sy); g.quadraticCurveTo(32 + 21 * w, 62 - up, 32 + 19 * w, 106 - up); g.closePath(); };
   torso(); g.fillStyle = tg; g.fill();
@@ -1677,7 +1678,7 @@ function crowdAtlas(home, away) {
     const r = rng, hs = r(), hatR = r(), L = {
       shirt, skin: SKINS[Math.floor(r() * SKINS.length)], hair: HAIRS[Math.floor(r() * HAIRS.length)], w: 0.86 + r() * 0.3,
       hairStyle: hs < 0.14 ? 'bald' : hs < 0.3 ? 'long' : hs < 0.38 ? 'afro' : 'short', beard: r() < 0.22, long: r() < 0.38, jacket: r() < 0.2,
-      stripe: T && T.pattern === 'stripes' && T.stripe && r() < 0.45 ? T.stripe : null, pants: r() < 0.5 ? '#1b1d24' : '#2c3442',
+      stripe: T && T.pattern === 'stripes' && T.stripe && r() < 0.45 ? T.stripe : null, pants: r() < 0.5 ? '#14307e' : '#1a3c96',               // the seat in front of the legs: blue, so no grey shows in the rows
       trim: T ? (T.c2 || '#ffffff') : shade(shirt, 0.7), scarf: T && (i % 3 !== 1) ? T.c1 : null, scarf2: T ? (T.c2 || '#ffffff') : '#ffffff',
       hat: hatR < 0.1 ? 'beanie' : hatR < 0.17 ? 'cap' : null, hatCol: T && r() < 0.6 ? T.c1 : hatCols[Math.floor(r() * hatCols.length)], hatCol2: T ? (T.c2 || '#ffffff') : '#ffffff'
     };
@@ -2069,10 +2070,11 @@ function buildStadiumModel(P, idx, head, spots) {
   g.setAttribute('position', new THREE.BufferAttribute(P, 3)); g.setIndex(new THREE.BufferAttribute(idx, 1)); g.computeVertexNormals();
   // the model's light-blue stand fronts and the teal dugout trims are dark navy (#0a164b); the grey seating under the
   // crowd and the dugout seats are a slightly dark blue (#183478), so any seat that shows between fans reads as a blue seat
-  const NAVY = [0.003, 0.008, 0.07], SEAT = [0.0055, 0.0304, 0.191];
+  const NAVY = [0.003, 0.008, 0.07], SEAT = [0.004, 0.04, 0.34];                          // seats: a clear royal blue
   const RECOLOR = { 'Material.009': NAVY, 'Material.053': NAVY, 'Material.058': NAVY, 'Material.007': SEAT, 'Material.054': SEAT, 'Material.055': [0.003, 0.019, 0.125] };
   const mats = head.groups.map(gr => new THREE.MeshStandardMaterial({ color: new THREE.Color(...(RECOLOR[gr.name] || gr.color)), roughness: clamp(gr.rough, 0.35, 1), metalness: clamp(gr.metal, 0, 0.6),
     flatShading: true, side: THREE.DoubleSide, transparent: gr.opacity < 0.99, opacity: gr.opacity, depthWrite: gr.opacity >= 0.99 }));
+  head.groups.forEach((gr, i) => { if (RECOLOR[gr.name] === SEAT || gr.name === 'Material.055') { mats[i].roughness = 1; mats[i].metalness = 0; } });   // matte: no floodlight sheen turning the blue grey
   head.groups.forEach((gr, i) => g.addGroup(gr.i0, gr.ni, i));
   for (const mt of mats) mt.onBeforeCompile = sh => { sunUniforms(sh.uniforms);
     sh.vertexShader = 'varying vec3 vSW;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvSW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
@@ -2306,7 +2308,7 @@ const GKCLIP = { ready: [0.0, 0.839, 0.0, 0.031, 1.335, 0.056, 0.116, 1.444, 0.0
    Body-local axes: x = the player's left, y = up, z = forward.
    ===================================================================== */
 const A_NONE = 0, A_KICK = 1, A_SLIDE = 2, A_DIVE = 3, A_CELEB = 4, A_KNEE = 5, A_THROWH = 6, A_THROW = 7, A_HEAD = 8, A_GKHOLD = 9, A_SAD = 10, A_READY = 11;
-const A_WHISTLE = 12, A_FLAG = 13, A_TACKLE = 14, A_FALL = 15;
+const A_WHISTLE = 12, A_FLAG = 13, A_TACKLE = 14, A_FALL = 15, A_CATCH = 16;
 const LT = 0.46, LS = 0.45, LF = 0.23, UA = 0.29, FA = 0.26;
 const JL = new Float32Array(17 * 3);
 const J_PEL = 0, J_NECK = 1, J_HEAD = 2, J_LHIP = 3, J_LKNE = 4, J_LANK = 5, J_LTOE = 6, J_RHIP = 7, J_RKNE = 8, J_RANK = 9, J_RTOE = 10, J_LSH = 11, J_LELB = 12, J_LHND = 13, J_RSH = 14, J_RELB = 15, J_RHND = 16;
@@ -2315,6 +2317,35 @@ function setJ(i, f, u, r) { JL[i * 3] = f; JL[i * 3 + 1] = u; JL[i * 3 + 2] = r;
 function gkClipReady(p) {
   const P = GKCLIP.ready, b = 0.012 * Math.sin((p.rph || 0) * 0.5);
   for (let i = 0; i < 17; i++) setJ(i, P[i * 3], P[i * 3 + 1] + b, P[i * 3 + 2]);
+}
+// two-bone IK: the middle joint for a limb from a to c with lengths l1, l2, bending towards 'bend'
+function ikMid(a, c, l1, l2, bend) {
+  let dx = c[0] - a[0], dy = c[1] - a[1], dz = c[2] - a[2]; const d = Math.hypot(dx, dy, dz) || 1e-6, dm = Math.min(d, l1 + l2 - 1e-3);
+  dx /= d; dy /= d; dz /= d; const e = [a[0] + dx * dm, a[1] + dy * dm, a[2] + dz * dm];
+  const x = (l1 * l1 - l2 * l2 + dm * dm) / (2 * dm), hh = Math.sqrt(Math.max(0, l1 * l1 - x * x));
+  let bx = bend[0], by = bend[1], bz = bend[2]; const dt = bx * dx + by * dy + bz * dz; bx -= dt * dx; by -= dt * dy; bz -= dt * dz; const bl = Math.hypot(bx, by, bz) || 1;
+  return [[a[0] + dx * x + bx / bl * hh, a[1] + dy * x + by / bl * hh, a[2] + dz * x + bz / bl * hh], e];
+}
+// Clean catch for a shot he has read (long range): from the set position the gloves go out to meet the ball (scooped
+// up off the grass when low, a W-catch in front of the face when mid, a leap with arms up when high) and pull it into the
+// chest, giving a little with it. raux = the ball's height at him; contact at actT 0.42.
+function gkCatchPose(p) {
+  const R = GKCLIP.ready, t = clamp(p.ractT, 0, 1), h = clamp(p.raux || 1, 0.12, 2.6), J = [];
+  for (let i = 0; i < 17; i++) J.push([R[i * 3], R[i * 3 + 1], R[i * 3 + 2]]);
+  const reach = smooth(clamp(t / 0.42, 0, 1)), gather = smooth(clamp((t - 0.5) / 0.35, 0, 1)), give = Math.sin(Math.PI * clamp((t - 0.4) / 0.45, 0, 1));
+  const crouch = h < 0.65 ? (0.65 - h) * 0.95 * reach * (1 - gather * 0.55) + 0.04 : 0.04 * reach;
+  const lift = h > 1.5 ? clamp(h - 1.62, 0, 0.55) * Math.sin(Math.PI * clamp(t / 0.82, 0, 1)) : 0, pelU = J[0][1];
+  const lean = crouch * 0.9 - give * 0.07;
+  for (const i of [0, 1, 2, 3, 7, 11, 12, 13, 14, 15, 16]) { J[i][1] -= crouch; J[i][0] += Math.max(0, J[i][1] - pelU + crouch) * lean * 0.8 - give * 0.05; }
+  for (const j of J) j[1] += lift;
+  for (const [hip, kne, ank] of [[3, 4, 5], [7, 8, 9]]) { const r = ikMid(J[hip], J[ank], LT, LS, [1, 0, 0]); J[kne] = r[0]; J[ank] = r[1]; }
+  const chestU = J[1][1] - 0.3;
+  for (const [sh, el, hn, sd] of [[11, 12, 13, -1], [14, 15, 16, 1]]) {
+    const rd = J[hn], hit = [h < 0.65 ? 0.52 : h > 1.5 ? 0.28 : 0.45, h, sd * 0.11], chest = [0.24, chestU, sd * 0.09];
+    const tgt = [0, 1, 2].map(k => { const a = rd[k] + (hit[k] - rd[k]) * reach; return a + (chest[k] - a) * gather; });
+    const r = ikMid(J[sh], tgt, UA, FA, [-0.2, h > 1.5 ? 0.2 : -0.6, sd]); J[el] = r[0]; J[hn] = r[1];
+  }
+  for (let i = 0; i < 17; i++) setJ(i, J[i][0], J[i][1], J[i][2]);
 }
 // diving save (baked clip, dives to the keeper's left; mirrored for the right). aux = side * (10 + 2 * contactFrame + lift)
 const GK_SWAP = [0, 1, 2, 7, 8, 9, 10, 3, 4, 5, 6, 14, 15, 16, 11, 12, 13];
@@ -2349,6 +2380,7 @@ function gaitLeg(u, run) {
 function computePose(p) {
   if (p.ract === A_FALL && p.ragF) { ragPose(p); return; }
   if (p.role === 'GK' && p.team < 2) {                       // keepers: the uploaded set position and diving save
+    if (p.ract === A_CATCH) { gkCatchPose(p); return; }
     if (p.ract === A_DIVE && Math.abs(p.raux) >= 10) { gkClipDive(p); return; }
     if (p.ract === A_READY && p.rsp < 0.08) { gkClipReady(p); return; }
   }
@@ -2722,7 +2754,7 @@ function handTargets(p) {
   let c = 0.38, s = 0.25;
   if (a === A_CELEB) { c = 0.05; s = 1; }
   else if (a === A_KNEE) { c = 0.1; s = 0.9; }
-  else if (a === A_DIVE || a === A_READY) { c = 0.1; s = 0.95; }
+  else if (a === A_DIVE || a === A_READY || a === A_CATCH) { c = 0.1; s = 0.95; }
   else if (a === A_THROWH || a === A_THROW || a === A_GKHOLD) { c = 0.42; s = 0.8; }
   else if (a === A_SAD) { c = 0.3; s = 0.45; }
   else if (a === A_FALL) { c = 0.2; s = 0.7; }
@@ -3980,7 +4012,7 @@ function doShot(p, power, aimHint, err, volley) {
 /* ---------------- goalkeepers ---------------- */
 function gkUpdate(p, dt) {
   if (p.act === A_FALL) { steer(p, 0, 0, 30, dt); return; }
-  p.rush = false;
+  p.rush = false; if (p.noGrab > 0) p.noGrab -= dt;                               // sim time, so it also runs in stepped play
   const s = dirOf(p.team), gx = -s * PL;           // own goal line
   const bdx = ball.x - gx, dist = Math.hypot(bdx, ball.z);
   if (ball.owner === p) {
@@ -3993,7 +4025,7 @@ function gkUpdate(p, dt) {
       return;
     }
     if (p.act === A_NONE || p.act === A_READY) { p.act = A_GKHOLD; p.actT = 0; p.actDur = 99; }       // ball held to his chest
-    if (p.holdT > (p.team === 0 ? 1.0 : 1.5) && p.act !== A_DIVE) {             // back on his feet first
+    if (p.holdT > (p.team === 0 ? 1.0 : 1.5) && p.act !== A_DIVE && p.act !== A_CATCH) {             // back on his feet first
       const q = bestPassTarget(p, s, 0) || players[p.team * 11 + 2];
       const v = passVel(p, q, true); p.act = A_THROW; p.actT = 0; p.actDur = 0.5;
       p.pending = { vx: v.vx * 0.95, vy: v.vy, vz: v.vz * 0.95, power: 0.5, kind: 'gkthrow', target: q, at: 0.35 }; p.holdT = -99;
@@ -4007,6 +4039,7 @@ function gkUpdate(p, dt) {
     p.vx = (tx - p.x) / dt; p.vz = (tz - p.z) / dt; gkSaveCheck(p, dt); return;
   }
   if (p.act === A_DIVE) { p.vx *= 1 - dt * 3; p.vz = p.diveV || 0; p.diveV = (p.diveV || 0) * (1 - dt * 2.5); gkSaveCheck(p, dt); return; }
+  if (p.act === A_CATCH) { seek(p, p.x, p.catchZ != null ? p.catchZ : p.z, 3.2, dt, 30, 0.05); gkSaveCheck(p, dt); return; }
   if (ball.shot && ball.shot.team !== p.team && ball.shot.id === p.lastShot && !ball.owner && gkSaveCheck(p, dt)) return;   // a shot straight at him
   // a shot on its way: read it once (on target? will he get there?), then shuffle across and time the dive so that the
   // glove meets the ball at the top of his leap, not on the way down
@@ -4016,6 +4049,11 @@ function gkUpdate(p, dt) {
       const T = Math.abs(ball.x - gx) / vxIn, Tk = clamp(Math.abs(ball.x - p.x) / vxIn, 0.05, Math.max(0.05, T));
       const zk = ball.z + ball.vz * Tk, yk = Math.max(BR, ball.y + ball.vy * Tk - 0.5 * GRAV * Tk * Tk);
       const reachZ = p.willSave ? zk : p.planZ;
+      if (p.longShot && p.willSave) {          // a long shot he has read: across early and square, then a clean catch
+        const tz = clamp(reachZ, -GW + 0.15, GW - 0.15);
+        if (Tk > 0.36) { seek(p, p.x, tz, 4.8, dt, 30, 0.05); if (p.act === A_NONE) { p.act = A_READY; p.actT = 0; } return; }
+        if (Math.abs(tz - p.z) < 0.55 && yk < 2.35) { p.planDone = true; p.act = A_CATCH; p.aux = yk; p.actT = clamp(0.42 - Tk / 0.85, 0, 0.4); p.actDur = 0.85; p.catchZ = tz; return; }
+      }
       if (Tk > lerp(0.7, 0.44, clamp((yk - 0.3) / 1.7, 0, 1))) {                               // set: small quick steps across, weight forward (low balls need longer to get down to)
         seek(p, p.x, clamp(reachZ, -GW + 0.4, GW - 0.4), p.team === 0 ? 3.4 : 3.0, dt, 18, 0.05);
         if (p.act === A_NONE) { p.act = A_READY; p.actT = 0; } return;
@@ -4049,7 +4087,7 @@ function gkUpdate(p, dt) {
     }
   }
   // positioning
-  if (!ball.owner && dist < 16 && Math.hypot(ball.vx, ball.vz) < 7 && closestOf(p.team) === p) { seek(p, ball.x, ball.z, p.team === 0 ? 6 : 4.2, dt, 20, 1); p.act = A_NONE; p.rush = Math.hypot(ball.x - p.x, ball.z - p.z) > 2.5; return; }   // rushing out: he runs at it
+  if (!ball.owner && dist < 16 && Math.hypot(ball.vx, ball.vz) < 7 && closestOf(p.team) === p && !(p.noGrab > 0)) { seek(p, ball.x, ball.z, p.team === 0 ? 6 : 4.2, dt, 20, 1); p.act = A_NONE; p.rush = Math.hypot(ball.x - p.x, ball.z - p.z) > 2.5; return; }   // rushing out: he runs at it
   const out = clamp(dist * 0.07 * (p.team === 1 ? EASY.gkOut : 1), 0.6, 3.5 * (p.team === 1 ? EASY.gkOut : 1));
   if (!ball.shot || ball.owner) p.blockZ = null;
   const tx = gx + s * out, tz = p.blockZ != null ? p.blockZ : clamp(ball.z * (p.team === 1 ? 0.32 * EASY.gkOut : 0.32), -GW + 0.6, GW - 0.6);
@@ -4090,15 +4128,16 @@ function gkSaveCheck(p, dt = STEP) {
     let pc = clamp(1.25 - sp / 26, 0.12, 0.88) * (dm < BR + 0.12 ? 1.15 : 0.8) * (plan ? 1 : 0.5);   // slower and more central: held; hard and wide: pushed away
     if (p.longShot && plan) pc = 0.95;                                                       // a long shot he has read: caught
     // a read long shot is gathered in, even into the body
-    if (handsOK && (glove || (body && (sp < 15 || (p.longShot && plan)))) && Math.random() < pc) { const dv = p.act === A_DIVE; giveBall(p); if (dv) p.act = A_DIVE; toast(p.team === 1 ? 'Keeper collects' : 'Our keeper holds it'); }
+    if (handsOK && (glove || (body && (sp < 15 || (p.longShot && plan)))) && Math.random() < pc) { const ka = p.act === A_DIVE || p.act === A_CATCH ? p.act : 0, kt = p.actT; giveBall(p); if (ka) { p.act = ka; p.actT = kt; } toast(p.team === 1 ? 'Keeper collects' : 'Our keeper holds it'); }
     else {                                                                                  // parried away from goal
       G.offSnap = null; const side = Math.sign(ball.z - p.z) || Math.sign(ball.z) || 1;
-      ball.vx = s * rand(3.5, 7.5) * (body ? 0.7 : 1); ball.vz = side * rand(3.5, 8); ball.vy = rand(1.5, 4.5) * (body ? 0.6 : 1); ball.shot = null; ball.last = p.team;
+      ball.vx = s * rand(3.5, 7.5) * (body ? 0.7 : 1); ball.vz = side * rand(6, 10); ball.vy = rand(1.5, 4.5) * (body ? 0.6 : 1); ball.shot = null; ball.last = p.team;
+      p.noGrab = 1.6;                                                                    // one save: he does not go and claim his own rebound
       toast(body ? 'Blocked!' : 'Great save!'); sfxOoh();
     }
     sfxKick(0.4); G.hype = Math.max(G.hype, 0.4); p.cool = 0.25; return true;
   }
-  ball.vx *= 0.9; ball.vz += Math.sign(ball.z - p.z || 1) * rand(0.5, 1.5); toast('Fingertips!'); p.cool = 0.4;          // a touch, not enough
+  ball.vx *= 0.9; ball.vz += Math.sign(ball.z - p.z || 1) * rand(0.5, 1.5); toast('Fingertips!'); p.cool = 0.4; p.noGrab = 1.6;          // a touch, not enough
   return true;
 }
 // Dive (or get the body behind it) so that the leading glove, not his middle, is where the ball will be in Tk seconds
@@ -4476,7 +4515,8 @@ function tryCapture() {
     const reach = gk ? 0.9 : p.team === 0 ? 1.05 : 0.8, hmax = gk && inBox ? 2.25 : p.team === 0 ? 1.5 : 0.95;
     if (d > reach || ball.y > hmax) continue;
     if (p.team === 1 && !gk && bsp > 15) continue;
-    if (gk && ball.shot && ball.shot.team !== p.team) continue;                    // shots: only a real glove or body contact (gkSaveCheck)
+    if (gk && ball.shot && ball.shot.team !== p.team) continue;
+    if (gk && p.noGrab > 0) continue;                                         // one save: no snatching his own parry                    // shots: only a real glove or body contact (gkSaveCheck)
     if (d < bd) { bd = d; best = p; }
   }
   if (best) giveBall(best);
