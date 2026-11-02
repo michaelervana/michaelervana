@@ -19,6 +19,11 @@
   --glass-2:rgba(16,25,46,.78);
   --edge:rgba(255,255,255,.14);
   --gold:#ffd23d;
+  --lg:linear-gradient(135deg,rgba(255,255,255,.24) 0%,rgba(255,255,255,.07) 46%,rgba(255,255,255,.13) 100%);
+  --lg-hi:linear-gradient(135deg,rgba(255,255,255,.34) 0%,rgba(255,255,255,.12) 46%,rgba(255,255,255,.2) 100%);
+  --lg-edge:rgba(255,255,255,.42);
+  --lg-shadow:inset 0 1px 1px rgba(255,255,255,.7),inset 0 -1px 1px rgba(255,255,255,.16),inset 0 0 22px rgba(255,255,255,.07),0 10px 30px rgba(0,0,0,.28);
+  --lg-blur:blur(16px) saturate(1.7) brightness(1.06);
   --gold-2:#ff9d1a;
   --grass:#3ddc74;
   --live:#ff3d5f;
@@ -53,8 +58,9 @@ button{font:inherit;color:inherit;}
   font-size:clamp(48px,min(11vw,14vh),124px);letter-spacing:-.01em;text-wrap:balance;}
 .logo .l1{display:block;background:linear-gradient(180deg,#fff 0%,#fff 46%,#b9cdf5 54%,#e9f0ff 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 6px 22px rgba(80,140,255,.45));}
-.logo .l2{display:inline-block;margin-top:8px;font-size:.30em;letter-spacing:.42em;font-weight:800;color:var(--bg);
-  background:linear-gradient(90deg,var(--gold),var(--gold-2));padding:6px 10px 6px 18px;transform:skewX(-12deg);}
+.logo .l2{display:inline-block;margin-top:8px;font-size:.30em;letter-spacing:.42em;font-weight:800;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.35);
+  background:var(--lg);border:1px solid var(--lg-edge);box-shadow:var(--lg-shadow);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);
+  border-radius:10px;padding:6px 10px 6px 18px;transform:skewX(-12deg);}
 .tag{margin:0;color:#d3dcec;font-size:var(--t-md);text-align:center;max-width:52ch;text-wrap:balance;text-shadow:0 2px 10px rgba(0,0,0,.9),0 0 2px rgba(0,0,0,.8);}
 
 /* ---------- Team cards ---------- */
@@ -76,8 +82,8 @@ button{font:inherit;color:inherit;}
 .card-in::before{content:"";position:absolute;inset:-40% -30% auto auto;width:80%;height:90%;
   background:radial-gradient(closest-side,color-mix(in srgb,var(--c1) 70%,transparent),transparent);opacity:.55;pointer-events:none;}
 .card:hover,.card:focus-visible{transform:skewX(-6deg) translateY(-6px);}
-.card:focus-visible .card-in{outline:2px solid var(--gold);outline-offset:3px;}
-.card.sel .card-in{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold),0 22px 60px color-mix(in srgb,var(--c1) 60%,transparent);}
+.card:focus-visible .card-in{outline:2px solid rgba(255,255,255,.85);outline-offset:3px;}
+.card.sel .card-in{border-color:rgba(255,255,255,.75);box-shadow:0 0 0 2px rgba(255,255,255,.55),inset 0 1px 1px rgba(255,255,255,.6),0 22px 60px color-mix(in srgb,var(--c1) 60%,transparent);}
 .card.dim{filter:saturate(.5) brightness(.7);}
 .card-body{transform:skewX(6deg);display:flex;flex-direction:column;gap:8px;padding:16px 18px 18px;position:relative;}
 .card-top{display:flex;align-items:center;gap:12px;}
@@ -93,19 +99,23 @@ button{font:inherit;color:inherit;}
 .bar{height:5px;background:rgba(255,255,255,.1);overflow:hidden;transform:skewX(-20deg);}
 .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--c1),color-mix(in srgb,var(--c1) 40%,#fff));}
 .pick{position:absolute;top:12px;right:14px;font-family:var(--font-display);font-weight:800;font-size:12px;letter-spacing:.18em;
-  padding:4px 10px;background:var(--gold);color:var(--bg);opacity:0;transform:translateY(-4px);transition:.25s;}
+  padding:4px 10px;color:#fff;background:var(--lg-hi);border:1px solid var(--lg-edge);border-radius:8px;box-shadow:var(--lg-shadow);
+  backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);opacity:0;transform:translateY(-4px);transition:.25s;}
 .card.sel .pick{opacity:1;transform:none;}
 
 /* ---------- Buttons / chips ---------- */
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;}
-.cta{border:0;cursor:pointer;font-family:var(--font-display);font-weight:800;font-style:italic;font-size:clamp(20px,2.4vw,26px);
-  letter-spacing:.12em;text-transform:uppercase;color:var(--bg);padding:14px 40px;min-width:230px;
-  background:linear-gradient(90deg,var(--gold),var(--gold-2));transform:skewX(-12deg);
-  box-shadow:0 10px 30px rgba(255,170,30,.35);transition:transform .2s,filter .2s,box-shadow .2s;}
+.cta{position:relative;cursor:pointer;font-family:var(--font-display);font-weight:800;font-style:italic;font-size:clamp(20px,2.4vw,26px);
+  letter-spacing:.12em;text-transform:uppercase;color:#fff;padding:14px 40px;min-width:230px;text-shadow:0 1px 10px rgba(0,0,0,.35);
+  background:var(--lg);border:1px solid var(--lg-edge);border-radius:14px;box-shadow:var(--lg-shadow);
+  backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);transform:skewX(-12deg);overflow:hidden;
+  transition:transform .2s,filter .2s,box-shadow .2s,background .2s;}
+.cta::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,0) 52%),radial-gradient(120% 80% at 10% 0%,rgba(255,255,255,.22),rgba(255,255,255,0) 60%);}
 .cta>span{display:inline-block;transform:skewX(12deg);}
-.cta:hover{filter:brightness(1.08);box-shadow:0 14px 40px rgba(255,170,30,.55);}
+.cta:hover{background:var(--lg-hi);box-shadow:var(--lg-shadow),0 0 0 1px rgba(255,255,255,.25),0 14px 40px rgba(140,190,255,.25);}
 .cta:active{transform:skewX(-12deg) scale(.97);}
-.cta:disabled{filter:grayscale(1) brightness(.55);cursor:not-allowed;box-shadow:none;}
+.cta:disabled{opacity:.5;cursor:not-allowed;box-shadow:none;}
 .cta:focus-visible,.ghost:focus-visible,.chip:focus-visible,.iconbtn:focus-visible{outline:2px solid #fff;outline-offset:3px;}
 .ghost{cursor:pointer;background:var(--glass);border:1px solid var(--edge);color:var(--ink);padding:11px 22px;
   font-family:var(--font-display);font-weight:700;font-size:17px;letter-spacing:.12em;text-transform:uppercase;transform:skewX(-12deg);}
@@ -124,7 +134,7 @@ button{font:inherit;color:inherit;}
 .side .badge{width:clamp(72px,11vw,120px);height:clamp(72px,11vw,120px);}
 .side .tname{font-size:clamp(26px,4vw,48px);}
 .side-role{font-size:var(--t-xs);letter-spacing:.24em;font-weight:700;text-transform:uppercase;padding:3px 10px;background:rgba(255,255,255,.1);}
-.side-role.you{background:var(--gold);color:var(--bg);}
+.side-role.you{color:#fff;background:var(--lg-hi);border:1px solid var(--lg-edge);border-radius:8px;box-shadow:var(--lg-shadow);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);}
 .vs-mid{font-family:var(--font-display);font-style:italic;font-weight:900;font-size:clamp(44px,7vw,84px);color:var(--gold);
   text-shadow:0 0 30px rgba(255,190,40,.5);}
 .panel{background:var(--glass);border:1px solid var(--edge);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:14px 18px;}
@@ -229,7 +239,8 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 .banner.small .big{font-size:clamp(34px,6vw,64px);}
 .toast{position:absolute;left:50%;top:calc(64px + env(safe-area-inset-top,0px));transform:translate(-50%,-8px);opacity:0;transition:.3s;
   font-family:var(--font-display);font-weight:800;letter-spacing:.2em;text-transform:uppercase;font-size:16px;
-  background:rgba(5,9,18,.86);border-left:4px solid var(--gold);padding:8px 16px;white-space:nowrap;}
+  background:var(--lg);border:1px solid var(--lg-edge);border-radius:12px;box-shadow:var(--lg-shadow);backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);
+  text-shadow:0 1px 8px rgba(0,0,0,.45);padding:8px 18px;white-space:nowrap;}
 .toast.on{opacity:1;transform:translate(-50%,0);}
 .replay-tag{position:absolute;top:calc(14% + env(safe-area-inset-top,0px));right:calc(5% + env(safe-area-inset-right,0px));font-family:var(--font-display);
   font-weight:900;font-style:italic;font-size:26px;letter-spacing:.2em;color:#fff;display:flex;align-items:center;gap:10px;}
@@ -252,9 +263,10 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 .tb{position:absolute;border-radius:50%;display:grid;place-items:center;pointer-events:auto;font-family:var(--font-display);font-weight:800;
   letter-spacing:.1em;color:#fff;border:2px solid rgba(255,255,255,.35);box-shadow:0 6px 18px rgba(0,0,0,.45);text-transform:uppercase;}
 .tb.on{transform:scale(.92);filter:brightness(1.25);}
-.tb-shoot{width:96px;height:96px;right:0;bottom:8px;font-size:16px;background:radial-gradient(circle at 35% 30%,#ff7a59,#e0262f);}
-.tb-pass{width:74px;height:74px;right:112px;bottom:0;font-size:14px;background:radial-gradient(circle at 35% 30%,#56b8ff,#1d5fe0);}
-.tb-sprint{width:64px;height:64px;right:96px;bottom:96px;font-size:12px;background:radial-gradient(circle at 35% 30%,#ffe066,#e8a10c);color:#1a1200;}
+.tb{backdrop-filter:var(--lg-blur);-webkit-backdrop-filter:var(--lg-blur);border:1px solid var(--lg-edge);box-shadow:var(--lg-shadow);text-shadow:0 1px 6px rgba(0,0,0,.45);}
+.tb-shoot{width:96px;height:96px;right:0;bottom:8px;font-size:16px;background:radial-gradient(circle at 35% 28%,rgba(255,150,130,.55),rgba(224,38,47,.32));}
+.tb-pass{width:74px;height:74px;right:112px;bottom:0;font-size:14px;background:radial-gradient(circle at 35% 28%,rgba(130,200,255,.55),rgba(29,95,224,.32));}
+.tb-sprint{width:64px;height:64px;right:96px;bottom:96px;font-size:12px;background:radial-gradient(circle at 35% 28%,rgba(255,240,190,.45),rgba(232,161,12,.24));color:#fff;}
 
 .touch-on .radar{top:calc(62px + env(safe-area-inset-top,0px));bottom:auto;left:auto;right:calc(14px + env(safe-area-inset-right,0px));transform:none;width:138px;height:89px;}
 .touch-on .pbox{display:none;}
@@ -265,6 +277,84 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 .touch-on .gbar{bottom:calc(128px + env(safe-area-inset-bottom,0px));width:min(64vw,620px);}
 .touch-on .gb-crest{width:clamp(48px,7vw,80px);height:clamp(48px,7vw,80px);}
 .touch-on .hint{bottom:auto;top:calc(120px + env(safe-area-inset-top,0px));}
+
+/* ---------- Player Career ---------- */
+.pc-pick{flex-wrap:wrap;justify-content:center;gap:6px;max-width:100%;}
+.pc-pick[hidden]{display:none!important;}
+.chip.pchip{padding:6px 10px;font-size:15px;}
+.chip.pchip i{font-style:normal;font-size:11px;letter-spacing:.06em;color:#a6f56b;margin-right:3px;}
+.chip.pchip[aria-checked="true"] i{color:#1a4a12;}
+.chip.pchip small{font-size:12px;margin-left:4px;opacity:.75;}
+.howto-career{width:100%;font-size:var(--t-sm);color:var(--muted);line-height:1.45;text-align:center;}
+.howto-career[hidden]{display:none!important;}
+.howto-career b{color:#fff;font-family:var(--font-display);letter-spacing:.12em;text-transform:uppercase;margin-right:6px;}
+.pro-rt{position:absolute;left:calc(14px + env(safe-area-inset-left,0px));bottom:calc(60px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;
+  padding:4px 10px 4px 12px;background:rgba(5,9,18,.8);border:1px solid rgba(255,255,255,.22);font-family:var(--font-display);pointer-events:none;transition:opacity .3s;}
+.pro-rt[hidden]{display:none!important;}
+.pro-rt small{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;}
+.pro-rt b{font-size:24px;font-weight:900;color:#fff;font-variant-numeric:tabular-nums;min-width:38px;text-align:right;}
+.pro-pop{position:absolute;left:calc(14px + env(safe-area-inset-left,0px));bottom:calc(100px + env(safe-area-inset-bottom,0px));font-family:var(--font-display);font-weight:800;
+  font-size:17px;letter-spacing:.04em;opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8);}
+.pro-pop.on{opacity:1;transform:none;}
+.pro-pop.up{color:#5cf08a;}
+.pro-pop.dn{color:#ff6b6b;}
+#hud.cine .pro-rt,#hud.cine .pro-pop{opacity:0;}
+.touch-on .pro-rt{bottom:auto;top:calc(48px + env(safe-area-inset-top,0px));left:calc(14px + env(safe-area-inset-left,0px));}
+.touch-on .pro-pop{bottom:auto;top:calc(86px + env(safe-area-inset-top,0px));}
+.pc-res{width:100%;display:flex;flex-direction:column;gap:10px;}
+.pc-res[hidden]{display:none!important;}
+.pc-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.pc-head b{font-family:var(--font-display);font-size:26px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;}
+.pc-head em{font-style:normal;color:var(--muted);font-size:var(--t-sm);}
+.pc-tag{font-size:var(--t-xs);letter-spacing:.2em;text-transform:uppercase;font-weight:800;padding:3px 10px;color:#fff;background:var(--lg-hi);border:1px solid var(--lg-edge);border-radius:8px;box-shadow:var(--lg-shadow);}
+.pc-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.pc-rate{display:flex;flex-direction:column;align-items:center;padding:6px 14px;border:1px solid var(--edge);background:rgba(255,255,255,.06);}
+.pc-rate small{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+.pc-rate b{font-family:var(--font-display);font-size:34px;font-weight:900;font-variant-numeric:tabular-nums;}
+.pc-rate.hi b{color:#5cf08a;}
+.pc-rate.lo b{color:#ff8a8a;}
+.pc-line{display:flex;gap:14px;flex-wrap:wrap;}
+.pc-line span{display:flex;flex-direction:column;align-items:center;font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+.pc-line b{font-family:var(--font-display);font-size:22px;color:#fff;letter-spacing:0;font-variant-numeric:tabular-nums;}
+.pc-tot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:var(--t-sm);color:var(--muted);}
+.pc-tot b{color:#fff;}
+.pc-ovr{font-family:var(--font-display);font-size:18px;letter-spacing:.1em;color:var(--ink);}
+.pc-ovr b{font-size:26px;margin-left:4px;}
+.pc-ovr i{font-style:normal;font-size:15px;margin-left:6px;}
+.pc-ovr i.up{color:#5cf08a;}
+.pc-ovr i.dn{color:#ff6b6b;}
+
+/* ---------- Half-time statistics: a clear liquid-glass sheet over the softly blurred stadium ---------- */
+.ht{position:fixed;inset:0;z-index:18;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.08);
+  backdrop-filter:blur(3px) saturate(1.05);-webkit-backdrop-filter:blur(3px) saturate(1.05);animation:htIn .45s ease-out;}
+.ht[hidden]{display:none!important;}
+@keyframes htIn{from{opacity:0;}to{opacity:1;}}
+.ht-card{position:relative;width:min(560px,100%);max-height:100%;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:12px;padding:18px 22px 16px;
+  margin-right:clamp(0px,14vw,200px);border-radius:22px;
+  background:linear-gradient(135deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,.05) 48%,rgba(255,255,255,.1) 100%);border:1px solid rgba(255,255,255,.38);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.7),inset 0 -1px 1px rgba(255,255,255,.14),inset 0 0 40px rgba(255,255,255,.05),0 24px 60px rgba(0,0,0,.3);
+  backdrop-filter:blur(18px) saturate(1.6) brightness(1.04);-webkit-backdrop-filter:blur(18px) saturate(1.6) brightness(1.04);text-shadow:0 1px 6px rgba(0,0,0,.4);}
+.ht-card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.16) 0%,rgba(255,255,255,0) 32%),radial-gradient(90% 60% at 12% 0%,rgba(255,255,255,.14),rgba(255,255,255,0) 60%);}
+.ht-card>*{position:relative;}
+.ht-kicker{font-family:var(--font-display);font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.82);display:flex;gap:10px;align-items:center;}
+.ht-kicker span{color:#fff;padding:2px 10px;font-weight:800;background:var(--lg-hi);border:1px solid var(--lg-edge);border-radius:8px;box-shadow:var(--lg-shadow);}
+.ht-score{display:flex;align-items:center;gap:12px;font-family:var(--font-display);}
+.ht-score b{font-size:clamp(22px,3.4vw,30px);font-weight:900;letter-spacing:.06em;}
+.ht-score em{font-style:normal;font-weight:900;font-size:clamp(34px,5.6vw,52px);font-variant-numeric:tabular-nums;color:#fff;padding:0 16px;border-radius:12px;line-height:1.15;
+  background:var(--lg-hi);border:1px solid var(--lg-edge);box-shadow:var(--lg-shadow);text-shadow:0 2px 10px rgba(0,0,0,.45);}
+.ht-crest{width:clamp(34px,5vw,48px);height:clamp(34px,5vw,48px);display:grid;place-items:center;}
+.ht-crest img,.ht-crest svg{width:100%;height:100%;object-fit:contain;}
+.ht-scorers{color:rgba(255,255,255,.8);font-size:var(--t-sm);text-align:center;line-height:1.45;min-height:1.2em;}
+.ht-career{width:100%;display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:var(--t-sm);color:rgba(255,255,255,.78);border-top:1px solid rgba(255,255,255,.2);padding-top:10px;}
+.ht-career[hidden]{display:none!important;}
+.ht-career b{color:#fff;font-family:var(--font-display);font-size:18px;}
+.ht-hint{font-size:var(--t-xs);letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.72);}
+.ht .statgrid .srow{font-size:18px;}
+.ht .srow em{color:rgba(255,255,255,.78);}
+.ht .duel i{border-radius:3px;}
+@media (max-width:760px){.ht-card{margin-right:0;}}
+@media (max-height:520px){.ht-card{gap:8px;padding:12px 16px;}.ht .statgrid{gap:6px;}.ht .statgrid .srow{font-size:16px;}}
 
 /* ---------- Result ---------- */
 .result{display:flex;flex-direction:column;align-items:center;gap:18px;width:min(720px,100%);}
@@ -363,6 +453,11 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
       <div class="side opp" id="vs-opp" title="Click to change opponent"><div class="badge" id="vs-b2"></div><div class="tname" id="vs-n2"></div><div class="side-role" id="vs-role2">Opponent · Hard</div></div>
     </div>
     <div class="row">
+      <div class="chips" role="radiogroup" aria-label="Game mode">
+        <span class="chips-label">Mode</span>
+        <button class="chip mode" role="radio" aria-checked="true" data-mode="classic"><span>Classic</span></button>
+        <button class="chip mode" role="radio" aria-checked="false" data-mode="career"><span>Player Career</span></button>
+      </div>
       <button class="ghost" id="btn-swap"><span>Change opponent</span></button>
       <div class="chips" role="radiogroup" aria-label="Match length">
         <span class="chips-label">Length</span>
@@ -392,12 +487,14 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
         <button class="chip gfx" role="radio" aria-checked="true" data-gfx="ultra"><span>Ultra</span></button>
       </div>
     </div>
+    <div class="chips pc-pick" id="pc-pick" role="radiogroup" aria-label="Your player" hidden></div>
     <div class="howto panel" id="howto">
       <div><b>Move</b><span><kbd>W A S D</kbd> or <kbd>Arrows</kbd></span></div>
       <div><b>Shoot</b><span><kbd>Space</kbd> / <kbd>K</kbd>. Hold for a power shot</span></div>
       <div><b>Pass</b><span><kbd>J</kbd> / <kbd>Z</kbd>. Hold for a lofted pass</span></div>
       <div><b>Sprint</b><span><kbd>Shift</kbd> / <kbd>L</kbd>. When defending, <kbd>J</kbd> switches player</span></div>
     </div>
+    <div class="howto-career" id="howto-career" hidden><b>Player Career</b> You are one player for the whole match. Without the ball, <kbd>J</kbd> calls for a pass. <kbd>C</kbd> switches between the player camera and the broadcast camera. Your match rating builds your career.</div>
     <div class="row">
       <button class="ghost" id="btn-back"><span>Back</span></button>
       <button class="cta" id="btn-kick"><span>Kick Off</span></button>
@@ -419,6 +516,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   <div class="bug" aria-hidden="true"><div class="bug-tile"><img src="data:image/png;base64,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" alt="Indosiar"></div><span class="bug-live">LIVE</span></div>
   <div class="hud-btns">
     <button class="iconbtn" id="btn-sound" aria-label="Mute sound"><svg viewBox="0 0 24 24" id="ico-sound"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+    <button class="iconbtn" id="btn-cam" aria-label="Switch camera" title="Switch camera (C)"><svg viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.6"/></svg></button>
     <button class="iconbtn" id="btn-pause" aria-label="Pause"><svg viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></svg></button>
   </div>
   <div class="radar"><canvas id="radar" width="392" height="252"></canvas></div>
@@ -426,6 +524,8 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   <div class="pbox r" id="lower-r"><span class="pips" id="lr-pips"><i></i><i></i><i></i></span><span class="pos" id="lr-pos">CB</span><span class="pn" id="lr-name">Opponent</span><i class="stb"><b id="lr-stb"></b></i></div>
   <div class="gbar" id="gbar" aria-hidden="true"><span class="gb-crest" id="gb-b1"></span><div class="gb-band"><span class="gb-name" id="gb-n1"></span><span class="gb-score"><b id="gb-s1">0</b><b id="gb-s2">0</b></span><span class="gb-name" id="gb-n2"></span></div><span class="gb-crest" id="gb-b2"></span></div>
   <div class="banner" id="banner"><div class="big" id="bn-big">GOAL!</div><div class="sub"><span id="bn-sub"></span></div></div>
+  <div class="pro-rt" id="pro-rt" hidden><small>Match rating</small><b id="pro-rt-v">6.0</b></div>
+  <div class="pro-pop" id="pro-pop"></div>
   <div class="toast" id="toast"></div>
   <div class="replay-tag" id="replay-tag" hidden><i></i>REPLAY <small>Tap or press any button to skip</small></div>
   <div class="hint" id="hint" hidden></div>
@@ -441,6 +541,17 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   </div>
 </div>
 
+<section class="ht" id="ht" hidden aria-label="Half-time statistics">
+  <div class="ht-card">
+    <div class="ht-kicker"><span>Half-time</span> First-half statistics</div>
+    <div class="ht-score"><span class="ht-crest" id="ht-b1"></span><b id="ht-n1"></b><em id="ht-sc">0 – 0</em><b id="ht-n2"></b><span class="ht-crest" id="ht-b2"></span></div>
+    <div class="ht-scorers" id="ht-scorers"></div>
+    <div class="statgrid" id="ht-stats"></div>
+    <div class="ht-career" id="ht-career" hidden></div>
+    <button class="cta" id="btn-2nd"><span>Start second half</span></button>
+    <div class="ht-hint" id="ht-hint">Press J or Space to continue</div>
+  </div>
+</section>
 <section id="scr-pause" class="screen scrim" hidden aria-label="Paused">
   <div class="wrap">
     <div class="kicker">Match paused</div>
@@ -464,6 +575,7 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
       <div class="side"><div class="badge" id="res-b2"></div><div class="tname" id="res-n2"></div></div>
     </div>
     <div class="scorers" id="res-scorers"></div>
+    <div class="pc-res panel" id="res-career" hidden></div>
     <div class="statgrid panel" id="res-stats"></div>
     <div class="row">
       <button class="cta" id="btn-again"><span>Play Again</span></button>
@@ -1240,16 +1352,17 @@ function netTexture() {
   g.strokeStyle = '#fff'; g.lineWidth = 5; g.strokeRect(0, 0, 64, 64);
   const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4; return t;
 }
-/* The strings are drawn analytically per pixel: a thread is antialiased against its true width, so the mesh stays a
-   crisp lattice up close and turns into the faint white haze a broadcast camera sees from far away. */
+/* The threads are drawn analytically per pixel and never thinner than a pixel, so the mesh reads as clear white lines
+   both up close and from the broadcast camera; only when the cells shrink to a few pixels does it soften. */
 function netMaterial(alphaTex) {
-  const m = new THREE.MeshStandardMaterial({ color: lin('#f4f6f8'), emissive: lin('#f4f6f8', 0.1), alphaMap: alphaTex, transparent: true, alphaTest: 0.004, side: THREE.DoubleSide, roughness: 0.75 });
+  const m = new THREE.MeshStandardMaterial({ color: lin('#f6f8fa'), emissive: lin('#f6f8fa', 0.14), alphaMap: alphaTex, transparent: true, alphaTest: 0.004, side: THREE.DoubleSide, roughness: 0.75 });
   m.onBeforeCompile = sh => {
     sh.fragmentShader = sh.fragmentShader.replace('#include <alphamap_fragment>', `
-      { vec2 fw = max(fwidth(vUv), vec2(1e-4)), d = abs(fract(vUv + 0.5) - 0.5), wpx = vec2(0.055) / fw, hw = max(wpx, vec2(1.0)) * 0.5;
-        vec2 c = clamp(wpx, 0.0, 1.0) * (1.0 - smoothstep(hw - 0.5, hw + 0.5, d / fw));
-        float a = 1.0 - (1.0 - c.x) * (1.0 - c.y), far = 1.0 - clamp(min(wpx.x, wpx.y), 0.0, 1.0);
-        diffuseColor.a *= clamp(a * (1.0 + 1.3 * far), 0.0, 1.0); }`);
+      { vec2 fw = max(fwidth(vUv), vec2(1e-4)), cpx = 1.0 / fw, d = abs(fract(vUv + 0.5) - 0.5) * cpx;
+        vec2 dw = max(vec2(0.055) * cpx, vec2(1.0));
+        vec2 c = min(clamp(dw * 0.5 - d + 0.5, 0.0, 1.0) + clamp(dw * 0.5 - (cpx - d) + 0.5, 0.0, 1.0), vec2(1.0));
+        float a = 1.0 - (1.0 - c.x) * (1.0 - c.y), cell = min(cpx.x, cpx.y);
+        diffuseColor.a *= a * clamp((cell - 1.0) / 3.0, 0.35, 0.95); }`);
   };
   return m;
 }
@@ -1310,13 +1423,15 @@ function netPatch(s, nu, nv, at, mat, alphaTex, normalAt, memAt, over, pidAt) {
 // sg: +1 when the ball is inside the goal (it pushes the mesh outwards), -1 when it hits the net from outside, and then
 // only: the panel it is up against (0 roof, 1 back, 2 sides)
 function netStep(N, h, bx, by, bz, sg, bvx, bvy, bvz, only) {
-  const grav = -2.2 * h * h, damp = 0.986, rr = BR + 0.025, rr2 = rr * rr, CONE = 0.48, reach = 2.4;
+  const grav = -2.2 * h * h, damp = 0.99, rr = BR + 0.025, rr2 = rr * rr, CONE = 0.4, reach = 2.6;
+  const wa = (N.wind || 0) * h * h, wt = N.windT || 0;                 // a breeze: gusts roll across the mesh so it is never quite still
   for (const p of N.patches) {
     const { P, O, S, W, KM } = p;
     for (let k = 0; k < p.n; k++) {
       if (!W[k]) continue; const i = k * 3, km = KM[k];
       for (let c = 0; c < 3; c++) { const v = (P[i + c] - O[i + c]) * damp; O[i + c] = P[i + c]; P[i + c] += v + (S[i + c] - P[i + c]) * km; }
       P[i + 1] += grav;
+      if (wa) { const g = wa * (0.55 + 0.45 * Math.sin(wt * 1.9 + S[i] * 1.3 + S[i + 1] * 1.7 - S[i + 2] * 0.9)); P[i] += 0.62 * g; P[i + 1] += 0.18 * g; P[i + 2] -= 0.76 * g; }
     }
   }
   // threads are elastic (a soft correction per pass, so a disturbance travels across the mesh at a finite speed and
@@ -1353,6 +1468,17 @@ function netStep(N, h, bx, by, bz, sg, bvx, bvy, bvz, only) {
     for (let k = 0; k < p.n; k++) if (W[k] && P[k * 3 + 1] < 0.015) P[k * 3 + 1] = 0.015;
   }
 }
+// the moment the ball hits: the mesh round it is thrown outwards and the wave runs across the whole net
+function netKick(N, hx, hy, hz, v, sg) {
+  const R = 2.8, k = Math.min(v, 32) * 0.11 * sg / 120;
+  for (const p of N.patches) {
+    const { P, O, W, NRM } = p;
+    for (let i = 0; i < p.n; i++) {
+      if (!W[i]) continue; const j = i * 3, d = Math.hypot(P[j] - hx, P[j + 1] - hy, P[j + 2] - hz); if (d > R) continue;
+      const f = 1 - d / R, dv = k * f * f; O[j] -= NRM[j] * dv; O[j + 1] -= NRM[j + 1] * dv; O[j + 2] -= NRM[j + 2] * dv;
+    }
+  }
+}
 function updateNets(t, simDt) {
   let dt, k;
   if (simDt) { dt = simDt; k = 1; } else { dt = Math.min(0.05, Math.max(0, t - (W3.netT === undefined ? t : W3.netT))); W3.netT = t; k = G.state === 'replay' ? 0.5 : (G.timeScale || 1); }
@@ -1360,6 +1486,9 @@ function updateNets(t, simDt) {
   for (const N of NETS) {
     const d = (ball.rx - N.s * PL) * N.s;
     if (d > -3.5 && Math.abs(ball.rz) < GW + 4 && ball.ry < GH + 3) N.wake = 3;
+    N.windT = t || G.t; N.wind = isTouch ? 0 : (G.wx === 'rain' ? 10 : 7) * (0.6 + 0.4 * Math.sin(N.windT * 0.37 + N.s));
+    if (N.wind && !simDt && N.wake < 0.25) N.wake = 0.25;              // keep the nets breathing in the breeze (not on phones)
+    if (NETHIT.id !== N.hit) { N.hit = NETHIT.id; if (Math.sign(NETHIT.x) === N.s && Math.abs(NETHIT.x) > PL - 0.5) { netKick(N, NETHIT.x, NETHIT.y, -NETHIT.z, NETHIT.v, NETHIT.sg); N.wake = 3.5; } }
     if (N.wake <= 0) continue;
     // inside: in through the mouth (the same test the ball physics uses); otherwise the mesh is hit from outside
     const near = d > -0.6 && d < GD + 1.4 && Math.abs(ball.rz) < GW + 1.4 && ball.ry < GH + 1.4;
@@ -1456,30 +1585,86 @@ function buildBeams3(lamps) {
 }
 
 /* ---------------- crowd: instanced billboards from a painted atlas ---------------- */
+/* Crowd sprite atlas: 64 fans (home, away and neutral) in 6 poses each, drawn at 96x192 per cell (64x128 on touch
+   devices): standing, clapping (hands apart / together), one arm waving, both arms up, scarf held high.
+   The crowd shader cycles every fan through these, so the stands are never still. */
+const CROWD_POSES = 6;
+function drawFan(g, L, pose) {
+  const up = pose >= 4 ? 6 : 0, w = L.w, sx = 32 - 14 * w, ex = 32 + 14 * w, sy = 60 - up;
+  // legs (mostly hidden by the row in front) and torso
+  g.fillStyle = L.pants; g.fillRect(19, 100 - up, 26, 28 + up);
+  const tg = g.createLinearGradient(0, 52 - up, 0, 106 - up); tg.addColorStop(0, shade(L.shirt, 1.14)); tg.addColorStop(0.55, L.shirt); tg.addColorStop(1, shade(L.shirt, 0.6));
+  const torso = () => { g.beginPath(); g.moveTo(32 - 19 * w, 106 - up); g.quadraticCurveTo(32 - 21 * w, 62 - up, sx, sy); g.quadraticCurveTo(32, 53 - up, ex, sy); g.quadraticCurveTo(32 + 21 * w, 62 - up, 32 + 19 * w, 106 - up); g.closePath(); };
+  torso(); g.fillStyle = tg; g.fill();
+  if (L.stripe) { g.save(); torso(); g.clip(); g.fillStyle = L.stripe; for (let x = 32 - 18 * w + 2; x < 32 + 18 * w; x += 9) g.fillRect(x, 50 - up, 4.5, 60); g.restore(); }
+  g.save(); torso(); g.clip(); const sg = g.createLinearGradient(32 - 20 * w, 0, 32 + 20 * w, 0);
+  sg.addColorStop(0, 'rgba(0,0,0,0.32)'); sg.addColorStop(0.3, 'rgba(0,0,0,0)'); sg.addColorStop(0.7, 'rgba(0,0,0,0)'); sg.addColorStop(1, 'rgba(0,0,0,0.38)'); g.fillStyle = sg; g.fillRect(0, 40, 64, 80);
+  g.strokeStyle = 'rgba(0,0,0,0.16)'; g.lineWidth = 1.1; g.beginPath(); g.moveTo(26, 74 - up); g.quadraticCurveTo(31, 80 - up, 29, 92 - up); g.moveTo(39, 70 - up); g.quadraticCurveTo(35, 82 - up, 37, 96 - up); g.stroke();
+  if (L.jacket) { g.fillStyle = 'rgba(255,255,255,0.18)'; g.fillRect(31.2, 56 - up, 1.6, 50); }
+  g.restore();
+  // collar and neck
+  g.fillStyle = shade(L.skin, 0.8); g.beginPath(); g.moveTo(27.5, 45 - up); g.lineTo(36.5, 45 - up); g.lineTo(37.5, 56 - up); g.lineTo(26.5, 56 - up); g.closePath(); g.fill();
+  g.strokeStyle = L.trim; g.lineWidth = 2.2; g.beginPath(); g.moveTo(25.5, 55.5 - up); g.quadraticCurveTo(32, 61 - up, 38.5, 55.5 - up); g.stroke();
+  if (L.scarf && pose !== 5) {                     // scarf round the neck, ends hanging down the chest
+    g.fillStyle = L.scarf; g.beginPath(); g.ellipse(32, 55 - up, 9.5, 4, 0, 0, TAU); g.fill();
+    g.fillRect(34, 55 - up, 6, 22); g.fillStyle = L.scarf2; for (let y = 59; y < 77; y += 6) g.fillRect(34, y - up, 6, 2.5);
+  }
+  // arms: sleeve, forearm, hand
+  const arm = (s, el, hd) => {
+    const shx = s < 0 ? sx + 2 : ex - 2;
+    g.lineCap = 'round'; g.strokeStyle = shade(L.shirt, 0.86); g.lineWidth = 8.2; g.beginPath(); g.moveTo(shx, sy + 2); g.lineTo(el[0], el[1]); g.stroke();
+    g.strokeStyle = L.long ? shade(L.shirt, 0.78) : shade(L.skin, 0.92); g.lineWidth = 6.2; g.beginPath(); g.moveTo(el[0], el[1]); g.lineTo(hd[0], hd[1]); g.stroke();
+    g.fillStyle = L.skin; g.beginPath(); g.ellipse(hd[0], hd[1], 3.6, 3.9, 0, 0, TAU); g.fill();
+  };
+  const W2 = (d) => 32 + d * w;
+  if (pose === 0) { arm(-1, [W2(-18), 80], [W2(-16.5), 96]); arm(1, [W2(18), 80], [W2(16.5), 96]); }
+  else if (pose === 1) { arm(-1, [W2(-19), 75], [W2(-8), 64]); arm(1, [W2(19), 75], [W2(8), 64]); }
+  else if (pose === 2) { arm(-1, [W2(-18), 76], [32 - 2.4, 62]); arm(1, [W2(18), 76], [32 + 2.4, 62]); }
+  else if (pose === 3) { arm(-1, [W2(-18), 80], [W2(-16.5), 96]); arm(1, [W2(20), 42], [W2(21), 21]); }
+  else if (pose === 4) { arm(-1, [W2(-20), 42 - up], [W2(-24), 20 - up]); arm(1, [W2(20), 42 - up], [W2(24), 20 - up]); }
+  else { arm(-1, [W2(-19), 42 - up], [W2(-21), 22 - up]); arm(1, [W2(19), 42 - up], [W2(21), 22 - up]); }
+  if (pose === 5 && L.scarf) {                     // scarf stretched between the raised hands
+    const x0 = W2(-21), x1 = W2(21), y0 = 15 - up; g.fillStyle = L.scarf; g.fillRect(x0, y0, x1 - x0, 8);
+    g.fillStyle = L.scarf2; for (let x = x0 + 3; x < x1 - 2; x += 7) g.fillRect(x, y0, 3, 8);
+    g.strokeStyle = L.scarf; g.lineWidth = 1; g.beginPath(); for (const x of [x0, x1]) for (let k = -2; k <= 2; k++) { g.moveTo(x + k * 0.9, y0 + 8); g.lineTo(x + k * 1.1, y0 + 12); } g.stroke();
+  }
+  // head: ears, face, hair or hat, features
+  const hy = 37 - up, open = pose >= 3 ? 1 : pose >= 1 ? 0.55 : 0;
+  g.fillStyle = shade(L.skin, 0.82); g.beginPath(); g.ellipse(21.6, hy + 1, 2.2, 3.2, 0, 0, TAU); g.ellipse(42.4, hy + 1, 2.2, 3.2, 0, 0, TAU); g.fill();
+  if (L.hairStyle === 'long') { g.fillStyle = L.hair; g.beginPath(); g.ellipse(32, hy + 6, 12.5, 15, 0, 0, TAU); g.fill(); }
+  if (L.hairStyle === 'afro') { g.fillStyle = L.hair; g.beginPath(); g.ellipse(32, hy - 5, 14, 12, 0, 0, TAU); g.fill(); }
+  const hg = g.createRadialGradient(29, hy - 4, 2, 32, hy, 13.5); hg.addColorStop(0, shade(L.skin, 1.16)); hg.addColorStop(1, shade(L.skin, 0.72));
+  g.fillStyle = hg; g.beginPath(); g.ellipse(32, hy, 10, 12.2, 0, 0, TAU); g.fill();
+  if (L.hat === 'beanie') { g.fillStyle = L.hatCol; g.beginPath(); g.ellipse(32, hy - 6, 10.8, 9, 0, Math.PI, TAU); g.fill(); g.fillRect(21.2, hy - 7, 21.6, 4); g.fillStyle = L.hatCol2; g.fillRect(21.2, hy - 5, 21.6, 2); g.beginPath(); g.arc(32, hy - 15.5, 3, 0, TAU); g.fill(); }
+  else if (L.hat === 'cap') { g.fillStyle = L.hatCol; g.beginPath(); g.ellipse(32, hy - 6, 10.6, 8, 0, Math.PI, TAU); g.fill(); g.fillRect(24, hy - 7, 20, 2.6); g.fillStyle = shade(L.hatCol, 0.7); g.fillRect(32, hy - 6.6, 13, 2.4); }
+  else if (L.hairStyle !== 'bald') {
+    g.fillStyle = L.hair; g.beginPath(); g.ellipse(32, hy - 5.5, 10.6, L.hairStyle === 'afro' ? 8.5 : 7.2, 0, Math.PI * 1.02, TAU * 0.99); g.fill();
+    g.beginPath(); g.moveTo(21.6, hy - 5); g.quadraticCurveTo(24, hy - 1, 22.5, hy + 3); g.lineTo(21.4, hy - 2); g.fill(); g.beginPath(); g.moveTo(42.4, hy - 5); g.quadraticCurveTo(40, hy - 1, 41.5, hy + 3); g.lineTo(42.6, hy - 2); g.fill();
+  } else { g.fillStyle = 'rgba(255,255,255,0.18)'; g.beginPath(); g.ellipse(29, hy - 8, 4, 2.2, -0.3, 0, TAU); g.fill(); }
+  if (L.beard) { g.fillStyle = L.hair; g.globalAlpha = 0.75; g.beginPath(); g.moveTo(23, hy + 1); g.quadraticCurveTo(24, hy + 12.5, 32, hy + 12.6); g.quadraticCurveTo(40, hy + 12.5, 41, hy + 1); g.quadraticCurveTo(36, hy + 7, 32, hy + 7); g.quadraticCurveTo(28, hy + 7, 23, hy + 1); g.fill(); g.globalAlpha = 1; }
+  g.fillStyle = 'rgba(40,22,14,0.55)'; g.fillRect(26.2, hy - 3.6, 4.4, 1.2); g.fillRect(33.4, hy - 3.6, 4.4, 1.2);              // brows
+  g.fillStyle = '#1c120c'; g.beginPath(); g.ellipse(28.4, hy - 0.6, 1.35, 1.05, 0, 0, TAU); g.ellipse(35.6, hy - 0.6, 1.35, 1.05, 0, 0, TAU); g.fill();
+  g.fillStyle = 'rgba(0,0,0,0.14)'; g.beginPath(); g.moveTo(32, hy); g.lineTo(30.6, hy + 4.4); g.lineTo(33, hy + 4.6); g.closePath(); g.fill();   // nose shadow
+  if (open > 0) { g.fillStyle = '#4a1712'; g.beginPath(); g.ellipse(32, hy + 7.4, 2.6 * (0.6 + open * 0.4), 1.2 + open * 1.6, 0, 0, TAU); g.fill(); }
+  else { g.strokeStyle = 'rgba(70,30,22,0.7)'; g.lineWidth = 1.1; g.beginPath(); g.moveTo(29.6, hy + 7.2); g.quadraticCurveTo(32, hy + 8.2, 34.4, hy + 7.2); g.stroke(); }
+}
 function crowdAtlas(home, away) {
-  const c = mkCanvas(2048, 512), g = c.getContext('2d'), rng = mulberry32(11);
-  const neutral = ['#e8e8e8', '#2b2f3a', '#7f8796', '#c94b3a', '#3b5b8c', '#d9c38a'];
+  const CW = isTouch ? 64 : 96, CH = CW * 2, c = mkCanvas(32 * CW, 2 * CROWD_POSES * CH), g = c.getContext('2d'), rng = mulberry32(11), S = CW / 64;
+  const neutral = ['#e8e8e8', '#2b2f3a', '#7f8796', '#c94b3a', '#3b5b8c', '#d9c38a', '#1c1f26', '#55606e'];
+  const hatCols = ['#1d1f26', '#7a1f2b', '#2a4a7a', '#e6e6e6'];
   for (let i = 0; i < 64; i++) {
-    const shirt = i < 36 ? home.crowd[i % home.crowd.length] : i < 50 ? away.crowd[i % away.crowd.length] : neutral[i % neutral.length];
-    const skin = SKINS[Math.floor(rng() * SKINS.length)], hair = HAIRS[Math.floor(rng() * HAIRS.length)], scarf = i < 36 ? home.c1 : i < 50 ? away.c1 : null;
-    const hat = rng() < 0.18, w = 0.85 + rng() * 0.3;
-    for (let pose = 0; pose < 2; pose++) {
-      const cell = i + pose * 64, ox = (cell % 32) * 64, oy = Math.floor(cell / 32) * 128, up = pose ? 7 : 0;
-      g.save(); g.translate(ox, oy);
-      g.fillStyle = '#1b1d24'; g.fillRect(18, 100 - up, 28, 28);
-      const tg = g.createLinearGradient(0, 52 - up, 0, 104 - up); tg.addColorStop(0, shade(shirt, 1.12)); tg.addColorStop(1, shade(shirt, 0.62));
-      g.fillStyle = tg; g.beginPath(); g.moveTo(32 - 20 * w, 104 - up); g.quadraticCurveTo(32 - 22 * w, 58 - up, 32 - 10, 54 - up); g.lineTo(32 + 10, 54 - up); g.quadraticCurveTo(32 + 22 * w, 58 - up, 32 + 20 * w, 104 - up); g.closePath(); g.fill();
-      g.strokeStyle = shade(shirt, 0.85); g.lineWidth = 8; g.lineCap = 'round';
-      if (pose) { g.beginPath(); g.moveTo(32 - 15 * w, 62 - up); g.lineTo(32 - 21 * w, 24 - up); g.moveTo(32 + 15 * w, 62 - up); g.lineTo(32 + 21 * w, 24 - up); g.stroke(); g.fillStyle = skin; g.beginPath(); g.arc(32 - 21 * w, 20 - up, 4.5, 0, TAU); g.arc(32 + 21 * w, 20 - up, 4.5, 0, TAU); g.fill(); }
-      else { g.beginPath(); g.moveTo(32 - 18 * w, 64); g.lineTo(32 - 20 * w, 92); g.moveTo(32 + 18 * w, 64); g.lineTo(32 + 20 * w, 92); g.stroke(); }
-      if (scarf && (pose || i % 3 === 0)) { g.fillStyle = scarf; if (pose && i % 2 === 0) g.fillRect(32 - 24, 16 - up, 48, 7); else g.fillRect(32 - 12, 52 - up, 24, 6); }
-      g.fillStyle = shade(skin, 0.85); g.fillRect(28, 44 - up, 8, 10);
-      const hg = g.createRadialGradient(29, 33 - up, 2, 32, 37 - up, 13); hg.addColorStop(0, shade(skin, 1.15)); hg.addColorStop(1, shade(skin, 0.7));
-      g.fillStyle = hg; g.beginPath(); g.ellipse(32, 37 - up, 10, 12, 0, 0, TAU); g.fill();
-      g.fillStyle = hat ? (scarf || '#333') : hair; g.beginPath(); g.ellipse(32, 31 - up, 10.5, hat ? 8 : 7, 0, Math.PI, TAU); g.fill();
-      if (hat) g.fillRect(21, 30 - up, 22, 3);
-      g.fillStyle = 'rgba(30,15,10,0.6)'; g.fillRect(27, 37 - up, 3, 2); g.fillRect(34, 37 - up, 3, 2);
-      g.restore();
+    const T = i < 36 ? home : i < 50 ? away : null, shirt = T ? T.crowd[i % T.crowd.length] : neutral[i % neutral.length];
+    const r = rng, hs = r(), hatR = r(), L = {
+      shirt, skin: SKINS[Math.floor(r() * SKINS.length)], hair: HAIRS[Math.floor(r() * HAIRS.length)], w: 0.86 + r() * 0.3,
+      hairStyle: hs < 0.14 ? 'bald' : hs < 0.3 ? 'long' : hs < 0.38 ? 'afro' : 'short', beard: r() < 0.22, long: r() < 0.38, jacket: r() < 0.2,
+      stripe: T && T.pattern === 'stripes' && T.stripe && r() < 0.45 ? T.stripe : null, pants: r() < 0.5 ? '#1b1d24' : '#2c3442',
+      trim: T ? (T.c2 || '#ffffff') : shade(shirt, 0.7), scarf: T && (i % 3 !== 1) ? T.c1 : null, scarf2: T ? (T.c2 || '#ffffff') : '#ffffff',
+      hat: hatR < 0.1 ? 'beanie' : hatR < 0.17 ? 'cap' : null, hatCol: T && r() < 0.6 ? T.c1 : hatCols[Math.floor(r() * hatCols.length)], hatCol2: T ? (T.c2 || '#ffffff') : '#ffffff'
+    };
+    if (L.scarf && L.scarf.toLowerCase() === L.shirt.toLowerCase()) L.scarf2 = '#ffffff';
+    for (let pose = 0; pose < CROWD_POSES; pose++) {
+      const cell = i + pose * 64, ox = (cell % 32) * CW, oy = Math.floor(cell / 32) * CH;
+      g.save(); g.translate(ox, oy); g.scale(S, S); g.beginPath(); g.rect(0, 0, 64, 128); g.clip(); drawFan(g, L, pose); g.restore();
     }
   }
   return c;
@@ -1508,14 +1693,26 @@ function buildCrowd3() {
     uniforms: Object.assign({ tifoBox: { value: new THREE.Vector4() }, tifoOn: { value: 0 }, atlas: { value: W3.crowdTex }, time: { value: 0 }, hype: { value: 0 }, flash: { value: 0.0006 }, lightK: { value: G.tod === 'night' ? 0.55 : 1.0 }, hS: { value: W3.crowdSpots ? 1.5 : 1.26 } }, (() => { const u = {}; sunUniforms(u); return u; })()),
     vertexShader: `attribute vec3 offset; attribute vec4 data; uniform float time, hype, flash, hS, tifoOn; uniform vec4 tifoBox; varying vec2 vUv; varying float vShade, vFlash;
       ${SUN_GLSL}
-      void main(){ float seed = data.y; float cheer = (tifoOn > 0.5 && data.w > 1.5) ? 1.0 : step(0.55, hype * (0.55 + 0.45 * sin(time * 6.5 + seed * 40.0)));
-        float idx = data.x + cheer * 64.0; float col = mod(idx, 32.0), row = floor(idx / 32.0);
-        vUv = vec2((col + uv.x) / 32.0, 1.0 - (row + 1.0 - uv.y) / 4.0);
+      void main(){ float seed = data.y;
+        // every fan changes what they are doing every few seconds, out of step with the rest: clapping, waving,
+        // scarves up, standing; on big moments most of the stand is up with arms raised
+        float slot = floor(time / (4.0 + seed * 3.0) + seed * 9.0), r = fract(sin(slot * 12.9898 + seed * 78.233) * 43758.5453);
+        float clap = step(0.5, fract(time * (2.0 + seed * 0.9) + seed * 3.7)), wav = step(0.5, fract(time * (1.1 + seed * 0.5) + seed * 5.3));
+        float excite = hype * (0.55 + 0.45 * sin(time * 6.5 + seed * 40.0)), pose = 0.0;
+        if (tifoOn > 0.5 && data.w > 1.5) pose = 4.0;
+        else if (excite > 0.55) pose = r < 0.42 ? 4.0 : r < 0.66 ? 5.0 : r < 0.84 ? 3.0 : 1.0 + clap;
+        else if (r < 0.34 + hype * 0.3) pose = 1.0 + clap;
+        else if (r < 0.46 + hype * 0.3) pose = wav * 3.0;
+        else if (r < 0.52 + hype * 0.3) pose = 5.0;
+        float idx = data.x + pose * 64.0; float col = mod(idx, 32.0), row = floor(idx / 32.0);
+        vUv = vec2((col + uv.x) / 32.0, 1.0 - (row + 1.0 - uv.y) / 12.0);
         vec3 toC = cameraPosition - offset; toC.y = 0.0; toC = normalize(toC); vec3 right = vec3(toC.z, 0.0, -toC.x);
-        float bob = hype * 0.2 * max(0.0, sin(time * 8.0 + seed * 31.0)) + 0.012 * sin(time * 1.7 + seed * 17.0);
+        // never still: a slow sway, breathing, a little bounce with the claps, jumping when the stand is up
+        float sway = 0.035 * sin(time * (0.9 + seed * 0.6) + seed * 21.0);
+        float bob = 0.012 * sin(time * 1.7 + seed * 17.0) + (pose > 0.5 && pose < 2.5 ? 0.014 * clap : 0.0) + (pose > 3.5 ? (0.05 + hype * 0.17) * max(0.0, sin(time * 7.5 + seed * 31.0)) : 0.0);
         float near = smoothstep(7.0, 11.0, distance(cameraPosition, offset));
         if (tifoOn > 0.5 && data.w > 0.5 && data.w < 1.5) near = 0.0;   // fans under the tifo (holders stay)
-        vec3 p = offset + (right * (position.x * 0.62) + vec3(0.0, position.y * hS + bob, 0.0)) * near;
+        vec3 p = offset + (right * (position.x * 0.62 + sway) + vec3(0.0, position.y * hS + bob, 0.0)) * near;
         vShade = data.z * mix(0.5, 1.0, sunLit4(offset + vec3(0.0, 0.9, 0.0))); vFlash = step(1.0 - flash, fract(sin(seed * 91.7 + floor(time * 14.0) * 13.1) * 43758.5));
         gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0); }`,
     fragmentShader: `uniform sampler2D atlas; uniform float lightK; varying vec2 vUv; varying float vShade, vFlash;
@@ -1848,7 +2045,10 @@ function loadStadiumModel() {
 function buildStadiumModel(P, idx, head, spots) {
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.BufferAttribute(P, 3)); g.setIndex(new THREE.BufferAttribute(idx, 1)); g.computeVertexNormals();
-  const mats = head.groups.map(gr => new THREE.MeshStandardMaterial({ color: new THREE.Color(gr.color[0], gr.color[1], gr.color[2]), roughness: clamp(gr.rough, 0.35, 1), metalness: clamp(gr.metal, 0, 0.6),
+  // the model's light-blue stand fronts, the teal dugouts and the terraces under the crowd are dark navy (#0a164b),
+  // so the gaps between fans read as dark blue seats
+  const RECOLOR = { 'Material.009': [0.003, 0.008, 0.07], 'Material.053': [0.003, 0.008, 0.07], 'Material.058': [0.003, 0.008, 0.07], 'Material.007': [0.004, 0.008, 0.05] };
+  const mats = head.groups.map(gr => new THREE.MeshStandardMaterial({ color: new THREE.Color(...(RECOLOR[gr.name] || gr.color)), roughness: clamp(gr.rough, 0.35, 1), metalness: clamp(gr.metal, 0, 0.6),
     flatShading: true, side: THREE.DoubleSide, transparent: gr.opacity < 0.99, opacity: gr.opacity, depthWrite: gr.opacity >= 0.99 }));
   head.groups.forEach((gr, i) => g.addGroup(gr.i0, gr.ni, i));
   for (const mt of mats) mt.onBeforeCompile = sh => { sunUniforms(sh.uniforms);
@@ -1923,7 +2123,7 @@ function placeRibbonsForModel() {
 }
 // crowd spots from the model's seats (three space), skipping the rows behind the hung LED band
 function modelCrowdSpots(add, pickCell) {
-  const S = W3.crowdSpots, n = S.length / 3, keep = isTouch ? 0.6 : 1;
+  const S = W3.crowdSpots, n = S.length / 3, keep = isTouch ? 0.45 : 1;
   for (let i = 0; i < n; i++) {
     if (keep < 1 && (i * 0.618034) % 1 > keep) continue;
     const x = S[i * 3], y = S[i * 3 + 1], z = S[i * 3 + 2], gz = -z;
@@ -1939,28 +2139,33 @@ function buildBigScreens() {
   const c = mkCanvas(1024, 512); W3.bigCanvas = c; W3.bigSig = '';
   const tex = tex3(c, true, 8); W3.bigTex = tex;
   const face = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.75, 1.75, 1.75), fog: false }); W3.bigMat = face;
-  const frameM = new THREE.MeshStandardMaterial({ color: lin('#0a0c10'), roughness: 0.55, metalness: 0.4 });
+  const frameM = new THREE.MeshStandardMaterial({ color: lin('#07080a'), roughness: 0.42, metalness: 0.35 });
   W3.bigScreens = []; W3.screenMats = [face]; W3.screenFlarePts = [];
   // soft light spill around each screen (additive, hidden where it overlaps the casing)
   const hc = mkCanvas(256, 256), hg = hc.getContext('2d'), rg = hg.createRadialGradient(128, 128, 8, 128, 128, 128);
   rg.addColorStop(0, 'rgba(255,255,255,1)'); rg.addColorStop(0.42, 'rgba(255,255,255,0.4)'); rg.addColorStop(1, 'rgba(255,255,255,0)'); hg.fillStyle = rg; hg.fillRect(0, 0, 256, 256);
   W3.haloMat = new THREE.MeshBasicMaterial({ map: tex3(hc, true, 2), color: new THREE.Color(0.2, 0.34, 0.85), transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, side: THREE.DoubleSide });
-  // the model's corner screen (its picture panel was dropped in conversion): a lit face inside its housing
-  { const Ac = [38.96, 35.9, -54.32], Dc = [52.98, 35.56, -45.59], Cc = [38.84, 27.58, -54.45], Bc = [52.85, 27.24, -45.72], n = [-0.53, 0, 0.85], kx = -0.024, ky = -0.045;
-    const ins = (p, q, r, f = 0.2) => p.map((v, i) => v + (q[i] - v) * kx + (r[i] - v) * ky + n[i] * f);
-    const pts = [ins(Cc, Bc, Ac), ins(Bc, Cc, Dc), ins(Dc, Ac, Bc), ins(Ac, Dc, Cc)];
-    const ctr = [0, 1, 2].map(i => (pts[0][i] + pts[1][i] + pts[2][i] + pts[3][i]) / 4), hp = pts.map(p => p.map((v, i) => ctr[i] + (v - ctr[i]) * 1.9 - n[i] * 0.35));
+  // the model's corner screen (its picture panel was dropped in conversion). Its grey housing (a shared stadium
+  // material) is boxed in black, and the lit face sits inside a thin black bezel.
+  { const Ac = [38.96, 35.9, -54.32], Dc = [52.98, 35.56, -45.59], Cc = [38.84, 27.58, -54.45], Bc = [52.85, 27.24, -45.72];
+    const V3 = a => new THREE.Vector3(...a), ctr = V3(Ac).add(V3(Bc)).add(V3(Cc)).add(V3(Dc)).multiplyScalar(0.25);
+    const ux = V3(Dc).sub(V3(Ac)).normalize(), nz = ux.clone().cross(V3(Ac).sub(V3(Cc))).normalize(), vy = nz.clone().cross(ux).normalize();
+    const HU = 8.7, HV = 4.6, BZ = 0.25, at = (u, v, w) => ctr.clone().addScaledVector(ux, u).addScaledVector(vy, v).addScaledVector(nz, w);
+    const box = new THREE.Mesh(new THREE.BoxGeometry(HU * 2, HV * 2, 0.95), frameM);       // housing spans w -0.67..0.22 around the old face
+    box.matrixAutoUpdate = false; box.matrix.makeBasis(ux, vy, nz).setPosition(at(0, 0, -0.225)); SCN.add(box);
+    const pts = [at(-HU + BZ, -HV + BZ, 0.27), at(HU - BZ, -HV + BZ, 0.27), at(HU - BZ, HV - BZ, 0.27), at(-HU + BZ, HV - BZ, 0.27)].map(v => v.toArray());
+    const hp = [at(-HU * 1.9, -HV * 1.9, -0.6), at(HU * 1.9, -HV * 1.9, -0.6), at(HU * 1.9, HV * 1.9, -0.6), at(-HU * 1.9, HV * 1.9, -0.6)].map(v => v.toArray());
     const hgeo = new THREE.BufferGeometry(); hgeo.setAttribute('position', new THREE.Float32BufferAttribute(hp.flat(), 3)); hgeo.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2)); hgeo.setIndex([0, 1, 2, 0, 2, 3]);
     const halo = new THREE.Mesh(hgeo, W3.haloMat); halo.renderOrder = 3; SCN.add(halo);
-    W3.screenFlarePts.push({ p: new THREE.Vector3(...ctr), n: new THREE.Vector3(...n).normalize(), w: 17 });
+    W3.screenFlarePts.push({ p: ctr.clone(), n: nz.clone(), w: 17 });
     const cg = new THREE.BufferGeometry(); cg.setAttribute('position', new THREE.Float32BufferAttribute(pts.flat(), 3)); cg.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 1], 2)); cg.setIndex([0, 1, 2, 0, 2, 3]);
     const cm = new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1.75, 1.75, 1.75), side: THREE.DoubleSide, fog: false }); W3.screenMats.push(cm);
     const corner = new THREE.Mesh(cg, cm); SCN.add(corner); W3.cornerScreen = corner; }
   const pc = mkCanvas(1024, 512); W3.promoCanvas = pc; W3.promoTex = tex3(pc, true, 8); drawUclPromo();
   for (const s of [1, -1]) {
     const grp = new THREE.Group();
-    // edge-to-edge LED face: the picture covers the whole front, the casing only shows from the side and back
-    const frame = new THREE.Mesh(new THREE.BoxGeometry(25.2, 13.0, 0.9), frameM); frame.position.z = -0.48; grp.add(frame);
+    // LED face in a thin black bezel (0.25 m round a 25.5 m picture); the casing is black on every side
+    const frame = new THREE.Mesh(new THREE.BoxGeometry(26.0, 13.8, 0.9), frameM); frame.position.z = -0.48; grp.add(frame);
     const scr = new THREE.Mesh(new THREE.PlaneGeometry(25.5, 13.3), face); scr.position.z = 0.0; grp.add(scr);
     const halo = new THREE.Mesh(new THREE.PlaneGeometry(25.5 * 1.9, 13.3 * 2.2), W3.haloMat); halo.position.z = -0.5; halo.renderOrder = 3; grp.add(halo);
     for (const hx of [-8, 8]) { const cable = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 2.6, 6), frameM); cable.position.set(hx, 7.9, -0.6); grp.add(cable); }
@@ -3354,10 +3559,11 @@ function resetKickoff(kickTeam) {
   const taker = players[kickTeam * 11 + 9];
   taker.f = kickTeam === 0 ? 0 : Math.PI;
   G.kickTeam = kickTeam;
-  if (kickTeam === 0) setUser(taker);
+  if (CAREER.on) setUser(players[CAREER.idx]);
+  else if (kickTeam === 0) setUser(taker);
   else setUser(players[9]);
 }
-function setUser(p) { if (user === p) return; user = p; G.lastSwitch = G.t; updateLower(); }
+function setUser(p) { if (user === p || (CAREER.on && G.state !== 'menu' && p !== players[CAREER.idx])) return; user = p; G.lastSwitch = G.t; updateLower(); }
 
 /* ---------------- movement ---------------- */
 function steer(p, tvx, tvz, acc, dt) {
@@ -3402,6 +3608,7 @@ function giveBall(p) {
   if (ball.owner === p) return;
   if (checkOffside(p)) return;
   const prevTeam = ball.owner ? ball.owner.team : ball.last;
+  careerOnPossession(p, ball.kick); ball.kick = null;
   ball.owner = p; ball.last = p.team; ball.held = false; ball.passTo = null; ball.shot = null; ball.vy = 0;
   p.protect = p.team === 0 ? 1.1 : 0.45;
   if (p.team === 0 && p.role !== 'GK') setUser(p);
@@ -3425,7 +3632,8 @@ function processPending(p) {
   const k = p.pending; if (!k || p.actT < k.at) return;
   p.pending = null;
   if (ball.owner !== p && !(k.kind === 'volley')) return;
-  releaseBall(p, k.vx, k.vy, k.vz, k.power, k.kind);
+  releaseBall(p, k.vx, k.vy, k.vz, k.power, k.kind); ball.kick = { by: p, kind: k.kind };
+  if (CAREER.on && p === players[CAREER.idx]) { if (k.kind === 'shot') CAREER.stats.shots++; else if (k.kind === 'pass' || k.kind === 'throw') CAREER.stats.passes++; }
   if (k.kind === 'shot' || k.kind === 'volley') { ball.shot = { team: p.team, by: p, id: Math.random() }; G.stats.shots[p.team]++; G.hype = Math.max(G.hype, 0.5); }
   if (k.kind === 'pass' || k.kind === 'throw' || k.kind === 'gkthrow') { ball.passTo = k.target; G.stats.passes[p.team]++; if (p.team === 0 && k.target) setUser(k.target); }
   if ((k.kind === 'pass' || k.kind === 'gkthrow') && G.state === 'play') snapOffside(p); else if (k.kind === 'shot') G.offSnap = null;
@@ -3458,7 +3666,7 @@ function updateBall(dt) {
   if (sp > 0.05 && ball.y < BR + 0.05) rotateBall(ball.rot, mvz / sp, 0, -mvx / sp, -sp * dt / BR);
   else if (sp > 0.05) rotateBall(ball.rot, mvz / sp, 0, -mvx / sp, -sp * dt / BR * 0.6);
 }
-const NET_TD = 1.0, NETC = [0, 0, 0, 0, 0, 0], NETIN = [0, 0];   // NETIN: the ball came in through that goal's mouth
+const NET_TD = 1.0, NETC = [0, 0, 0, 0, 0, 0], NETIN = [0, 0], NETHIT = { id: 0, x: 0, y: 0, z: 0, v: 0, sg: 1 };   // NETIN: the ball came in through that goal's mouth
 /* The net as the ball feels it: a stiff-ish spring along the panel normal n (pointing the way the ball is pushing the
    mesh) that gives way, swallows most of the energy and lets go gently, plus grip that damps sliding along the mesh.
    pen is how far the ball surface has gone past the panel; e is how far the contact is from the nearest edge laced to
@@ -3466,9 +3674,9 @@ const NET_TD = 1.0, NETC = [0, 0, 0, 0, 0, 0], NETIN = [0, 0];   // NETIN: the b
 function netPull(pen, nx, ny, nz, ci, dt, e) {
   if (pen <= 0) { NETC[ci] = 0; return; }
   e = Math.max(0.05, e);
-  const SPR = 430 * clamp(1.2 / e, 1, 5), DOUT = 15, DIN = 70, MAXP = Math.min(1.15, 0.1 + 0.55 * e);
+  const SPR = 330 * clamp(1.2 / e, 1, 5), DOUT = 12, DIN = 70, MAXP = Math.min(1.2, 0.1 + 0.6 * e);
   let vn = ball.vx * nx + ball.vy * ny + ball.vz * nz;
-  if (!NETC[ci]) { NETC[ci] = 1; if (vn > 2.5) sfxNet(); }
+  if (!NETC[ci]) { NETC[ci] = 1; if (vn > 2.5) { sfxNet(); Object.assign(NETHIT, { id: NETHIT.id + 1, x: ball.x, y: ball.y, z: ball.z, v: vn, sg: ci < 3 ? 1 : -1 }); } }   // the hit sends a ripple through the mesh
   if (pen > MAXP) { const e = pen - MAXP; ball.x -= nx * e; ball.y -= ny * e; ball.z -= nz * e; if (vn > 0) { ball.vx -= nx * vn; ball.vy -= ny * vn; ball.vz -= nz * vn; vn = 0; } }
   let a = (-SPR * Math.min(pen, MAXP) - (vn > 0 ? DOUT : DIN) * vn) * dt;
   if (vn + a < -1.6) a = Math.min(0, -1.6 - vn);                                            // the net lets go of the ball gently
@@ -3531,8 +3739,7 @@ function bestPassTarget(p, dx, dz) {
   }
   return best;
 }
-function passVel(p, q, lofted, err = 0) {
-  const lead = 0.5;
+function passVel(p, q, lofted, err = 0, lead = 0.5) {
   let tx = q.x + q.vx * lead + rand(-err, err), tz = q.z + q.vz * lead + rand(-err, err);
   tx = clamp(tx, -PL + 1, PL - 1); tz = clamp(tz, -PW + 1, PW - 1);
   const dx = tx - p.x, dz = tz - p.z, d = Math.max(1, Math.hypot(dx, dz));
@@ -3564,6 +3771,7 @@ function doShot(p, power, aimHint, err, volley) {
     p.act = ball.y > 1.35 ? A_HEAD : A_KICK; p.actT = 0.35; p.actDur = 0.35; if (p.act === A_HEAD) { p.jv = 3.5; p.jump = 0.01; }
     ball.owner = null; ball.vx = v.vx; ball.vy = Math.min(v.vy, 4); ball.vz = v.vz; ball.last = p.team; ball.lastKicker = p; p.cool = 0.4;
     ball.shot = { team: p.team, by: p, id: Math.random() }; G.stats.shots[p.team]++; sfxKick(power); G.hype = Math.max(G.hype, 0.5);
+    ball.kick = { by: p, kind: 'volley' }; if (CAREER.on && p === players[CAREER.idx]) CAREER.stats.shots++;
     return;
   }
   startKick(p, v.vx, v.vy, v.vz, power, 'shot');
@@ -3594,6 +3802,7 @@ function gkUpdate(p, dt) {
         const zc = ball.z + ball.vz * T, yc = ball.y + ball.vy * T - 0.5 * GRAV * T * T;
         const onTarget = Math.abs(zc) < GW + 0.1 && yc < GH + 0.1;
         if (onTarget) G.stats.onT[ball.shot.team]++;
+        if (CAREER.on && ball.shot.by === players[CAREER.idx]) { if (onTarget) { CAREER.stats.onT++; careerEvent(0.12, 'On target'); } else careerEvent(-0.05, 'Off target'); }
         const speed = Math.hypot(ball.vx, ball.vz);
         let P = p.team === 0 ? 0.82 : EASY.gkSave;
         if (p.team === 1) { if (speed < 17) P += 0.25; if (Math.abs(zc) < 1.3) P += 0.3; if (Math.abs(zc) > GW - 1.0) P -= G.diff === 'hard' ? 0.06 : 0.12; if (yc > 1.9) P -= 0.05; }
@@ -3676,6 +3885,7 @@ function aiUpdate(p, dt) {
 function steal(p, from) {
   from.cool = 0.7; from.protect = 0; from.vx *= 0.3; from.vz *= 0.3;
   giveBall(p); spawnTurf(p.x, p.z, 6, 1); sfxKick(0.25);
+  if (CAREER.on) { const pro = players[CAREER.idx]; if (p === pro) { CAREER.stats.tackles++; careerEvent(0.15, 'Ball won'); } else if (from === pro) careerEvent(-0.1, 'Dispossessed'); }
   p.act = A_TACKLE; p.actT = 0; p.actDur = 0.45; p.f = Math.atan2(from.z - p.z, from.x - p.x);
   if (p.team === 0) toast('Ball won!');
 }
@@ -3702,7 +3912,8 @@ function aiCarrier1(p, dt) {
     if (nd < 5) tz = clamp(p.z + Math.sign(p.z - nz || 1) * 7 * EASY.evade, -28, 28); }
   seek(p, p.x - 10, tz, EASY.aiSpeed * EASY.dribble, dt, 9, 2);
 }
-function aiCarrier0(p, dt) { // our AI keeper/teammate briefly holding the ball before the user takes over
+function aiCarrier0(p, dt) { // our AI teammate with the ball: in Player Career it plays on; otherwise the user takes over at once
+  if (CAREER.on) { careerCarrier(p, dt); return; }
   steer(p, 0, 0, 12, dt);
 }
 
@@ -3714,6 +3925,7 @@ function userUpdate(p, dt) {
   const mx = IN.mx, mz = IN.mz, mag = Math.hypot(mx, mz);
   const has = ball.owner === p;
   let maxSp = IN.sprint ? EASY.userSpeed + (EASY.userSprint - EASY.userSpeed) * (0.35 + 0.65 * p.stam) : EASY.userSpeed; if (has) maxSp *= 0.94; if (p.pending) maxSp *= 0.4;
+  if (CAREER.on) maxSp *= 0.95 + (CAREER.ovr - 60) * 0.0025;                      // your overall rating grows your pace a little
   if (mag > 0.15) steer(p, mx / Math.max(1, mag) * maxSp, mz / Math.max(1, mag) * maxSp, has ? 26 : 30, dt);
   else if (!ball.owner && (ball.passTo === p || Math.hypot(ball.x - p.x, ball.z - p.z) < 7)) seek(p, ball.x + ball.vx * 0.3, ball.z + ball.vz * 0.3, EASY.userSpeed, dt, 18, 0.5);
   else steer(p, 0, 0, 18, dt);
@@ -3723,7 +3935,7 @@ function userUpdate(p, dt) {
     if (IN.pass.released && !p.pending) { doPass(p, dx, dz, IN.pass.held > 0.28, 0); IN.pass.released = false; }
     if (IN.shoot.released && !p.pending) {
       const power = clamp(0.38 + IN.shoot.held * 0.75, 0.38, 1);
-      doShot(p, power, Math.abs(dz) > 0.35 ? Math.sign(dz) : null, 0.3, false); IN.shoot.released = false;
+      doShot(p, power, Math.abs(dz) > 0.35 ? Math.sign(dz) : null, CAREER.on ? clamp(0.42 - (CAREER.ovr - 60) * 0.006, 0.15, 0.45) : 0.3, false); IN.shoot.released = false;
     }
     return;
   }
@@ -3736,7 +3948,11 @@ function userUpdate(p, dt) {
   }
   if (IN.shoot.pressed && !ball.owner && bd < 2.2 && ball.y < 2.6 && p.cool <= 0) { doShot(p, 0.75, Math.abs(dz) > 0.35 ? Math.sign(dz) : null, 0.35, true); IN.shoot.pressed = false; return; }
   if (IN.shoot.pressed && p.tackleCD <= 0) { p.act = A_SLIDE; p.actT = 0; p.actDur = 0.75; p.slideV = 9.5; p.slideHit = false; if (mag > 0.15) p.f = Math.atan2(dz, dx); p.tackleCD = 1.0; spawnTurf(p.x, p.z, 8, 1); IN.shoot.pressed = false; return; }
-  if (IN.pass.pressed) { const c = closestField(0, p); if (c) setUser(c); IN.pass.pressed = false; }
+  if (IN.pass.pressed) {
+    if (CAREER.on) { if (ball.owner && ball.owner.team === 0 && ball.owner !== p) { CAREER.callT = G.t; p.callT = G.t; } }    // call for the ball
+    else { const c = closestField(0, p); if (c) setUser(c); }
+    IN.pass.pressed = false;
+  }
   const own = ball.owner;
   if (own && own.team === 1 && bd < 1.25 && p.tackleCD <= 0 && own.protect <= 0 && !ball.held) { p.tackleCD = 0.25; if (Math.random() < 0.75) steal(p, own); }
 }
@@ -3744,12 +3960,12 @@ function slideCheck(p) {
   const fx = p.x + Math.cos(p.f) * 0.7, fz = p.z + Math.sin(p.f) * 0.7, d = Math.hypot(ball.x - fx, ball.z - fz);
   if (p.slideHit) return;
   if (!(d < 1.4 && ball.y < 0.8)) {
-    for (let i = 11; i < 22; i++) { const q = players[i]; if (q.act !== A_FALL && Math.hypot(q.x - fx, q.z - fz) < 0.8) { p.slideHit = true; knockDown(q, p.f, 4.2); foul(0, q); return; } }
+    for (let i = 11; i < 22; i++) { const q = players[i]; if (q.act !== A_FALL && Math.hypot(q.x - fx, q.z - fz) < 0.8) { p.slideHit = true; knockDown(q, p.f, 4.2); foul(0, q); if (CAREER.on) { CAREER.stats.fouls++; careerEvent(-0.25, 'Foul'); } return; } }
   }
   if (d < 1.4 && ball.y < 0.8) {
     G.offSnap = null; p.slideHit = true;
     if (ball.owner && ball.owner.team === 1 && !ball.held && Math.random() < 0.6) knockDown(ball.owner, p.f, 2.8);
-    if (ball.owner && ball.owner.team === 1 && !ball.held) { const o = ball.owner; o.cool = 0.9; ball.owner = null; ball.vx = Math.cos(p.f) * 6; ball.vz = Math.sin(p.f) * 6; ball.last = 0; spawnTurf(ball.x, ball.z, 10, 1.4); sfxKick(0.35); toast('Clean tackle!'); p.cool = 0.15; }
+    if (ball.owner && ball.owner.team === 1 && !ball.held) { const o = ball.owner; o.cool = 0.9; ball.owner = null; ball.vx = Math.cos(p.f) * 6; ball.vz = Math.sin(p.f) * 6; ball.last = 0; spawnTurf(ball.x, ball.z, 10, 1.4); sfxKick(0.35); toast('Clean tackle!'); p.cool = 0.15; if (CAREER.on) { CAREER.stats.tackles++; careerEvent(0.2, 'Clean tackle'); } }
     else if (!ball.owner) { giveBall(p); }
   }
 }
@@ -3802,6 +4018,153 @@ function arUpdate(a, dt) {
 }
 function officialsStep(dt) { integrate(referee, dt); for (const a of ars) { arUpdate(a, dt); integrate(a, dt); } }
 function whistleAnim(kind) { if (!referee) return; referee.act = A_WHISTLE; referee.actT = 0; referee.actDur = kind === 'final' ? 1.6 : kind === 'long' ? 1.1 : 0.75; }
+/* =====================================================================
+   PLAYER CAREER: you are one player on the pitch
+   You pick one outfield player and control only him. Teammates play on their own; PASS without the ball calls for
+   it. A third-person camera sits behind your player. Every action moves a live match rating, and appearances, goals,
+   assists and an overall rating carry over from match to match (saved in the browser).
+   ===================================================================== */
+const CAREER = { on: false, idx: 9, rating: 6, stats: null, callT: -9, pops: [], ovr: 74 };
+const CAREER_KEY = 'golazo-career-v1';
+function careerLoad() { try { return JSON.parse(localStorage.getItem(CAREER_KEY) || '{}') || {}; } catch (e) { return {}; } }
+function careerSaveAll(all) { try { localStorage.setItem(CAREER_KEY, JSON.stringify(all)); } catch (e) { } }
+function careerKey(teamIdx, idx) { const T = TEAMS[teamIdx]; return T.short + ':' + (T.squad ? T.squad[idx][0] : idx); }
+function careerRecord(teamIdx, idx) { const r = careerLoad()[careerKey(teamIdx, idx)]; return Object.assign({ apps: 0, goals: 0, assists: 0, rsum: 0, ovr: 72 + (idx >= 8 ? 4 : idx >= 5 ? 3 : 2) }, r || {}); }
+const proOf = () => CAREER.on ? players[CAREER.idx] : null;
+
+function careerStart() {
+  CAREER.rating = 6.0; CAREER.callT = -9; CAREER.pops.length = 0;
+  CAREER.stats = { goals: 0, assists: 0, shots: 0, onT: 0, passes: 0, passOK: 0, tackles: 0, fouls: 0 };
+  CAREER.ovr = CAREER.on ? careerRecord(G.myIdx, CAREER.idx).ovr : 74;
+  G.camMode = CAREER.on ? 'pro' : 'tv'; G.camYaw = null;
+  $('pro-rt').hidden = !CAREER.on; careerHud();
+}
+// a rating change with a small caption by the rating box
+function careerEvent(delta, label) {
+  if (!CAREER.on || !['play', 'goal', 'setpiece', 'stoppage', 'kickoff'].includes(G.state)) return;
+  CAREER.rating = clamp(CAREER.rating + delta, 3, 10);
+  const el = $('pro-pop'); el.textContent = (delta >= 0 ? '+' : '–') + Math.abs(delta).toFixed(1) + '  ' + label;
+  el.className = 'pro-pop on ' + (delta >= 0 ? 'up' : 'dn'); clearTimeout(careerEvent.t); careerEvent.t = setTimeout(() => { el.className = 'pro-pop'; }, 1700);
+  careerHud();
+}
+function careerHud() { if (CAREER.on) $('pro-rt-v').textContent = CAREER.rating.toFixed(1); }
+
+// --- possession bookkeeping (called from giveBall): completed and intercepted passes, assists, saves
+function careerOnPossession(p, kick) {
+  if (!CAREER.on) return;
+  const pro = proOf();
+  if (kick && kick.by === pro && (kick.kind === 'pass' || kick.kind === 'throw')) {
+    if (p.team === 0) { CAREER.stats.passOK++; careerEvent(0.06, 'Pass'); }
+    else careerEvent(-0.12, 'Pass intercepted');
+  }
+  if (kick && kick.by === pro && (kick.kind === 'shot' || kick.kind === 'volley') && p.team === 1 && p.role === 'GK') careerEvent(0.08, 'Shot saved');
+  // the receiver remembers who passed to him (assists); a turnover clears it
+  if (p.team === 0) p.assistFrom = kick && kick.by && kick.by.team === 0 && kick.by !== p && (kick.kind === 'pass' || kick.kind === 'throw') ? kick.by : null;
+}
+function careerOnGoal(team, scorer) {
+  if (!CAREER.on) return;
+  const pro = proOf();
+  if (team === 0) {
+    if (scorer === pro) { CAREER.stats.goals++; careerEvent(1.0, 'GOAL'); }
+    else if (scorer && scorer.assistFrom === pro) { CAREER.stats.assists++; careerEvent(0.6, 'Assist'); }
+    else careerEvent(0.1, 'Team goal');
+  } else careerEvent(pro.role === 'DEF' ? -0.3 : -0.15, 'Goal conceded');
+}
+
+// --- teammates with the ball: carry it forward, pass (to you when you call or are open), shoot in range
+function careerCarrier(p, dt) {
+  const pro = proOf(); p.think -= dt;
+  if (p.pending) { steer(p, 0, 0, 10, dt); return; }
+  let press = 99; for (let i = 11; i < 22; i++) { const q = players[i]; press = Math.min(press, Math.hypot(q.x - p.x, q.z - p.z)); }
+  const toGoal = Math.hypot(PL - p.x, p.z), dPro = Math.hypot(pro.x - p.x, pro.z - p.z);
+  const called = G.t - CAREER.callT < 1.8 && pro.act !== A_FALL && dPro > 3 && dPro < 46;
+  if (called) {                                              // you asked for it: through ball if you are running into space
+    CAREER.callT = -9; const run = pro.vx > 2.5 && Math.hypot(pro.vx, pro.vz) > 4;
+    const v = passVel(p, pro, dPro > 28 || (run && dPro > 16), 0.6, run ? 0.95 : 0.5);
+    p.f = Math.atan2(v.vz, v.vx); startKick(p, v.vx, v.vy, v.vz, v.power, 'pass', pro); return;
+  }
+  if (p.think <= 0) {
+    p.think = rand(0.35, 0.85);
+    if (toGoal < 21 && (Math.random() < 0.4 || toGoal < 13)) { const kp = gkOf(1); doShot(p, rand(0.6, 0.95), (kp.z > 0 ? -1 : 1) * rand(0.5, 1), 0.7, false); return; }
+    if ((press < 3.6 && Math.random() < 0.85) || Math.random() < 0.3) {
+      if (pro !== p && pro.act !== A_FALL && openness(pro) > 4 && pro.x > p.x - 6 && dPro > 5 && dPro < 34 && Math.random() < 0.55) {
+        const v = passVel(p, pro, dPro > 26, 0.8); p.f = Math.atan2(v.vz, v.vx); startKick(p, v.vx, v.vy, v.vz, v.power, 'pass', pro); return;
+      }
+      if (doPass(p, 1, (Math.random() - 0.5) * 0.8, Math.random() < 0.15, 1.0)) return;
+      if (doPass(p, 0, 0, Math.random() < 0.2, 1.0)) return;
+    }
+  }
+  let tz = clamp(p.z * 0.75 + Math.sin(G.t * 0.6 + p.wob) * 7, -27, 27);
+  let nd = 9, nz = 0; for (let i = 12; i < 22; i++) { const q = players[i], ax = q.x - p.x; if (ax > -1 && ax < 6) { const d = Math.hypot(q.x - p.x, q.z - p.z); if (d < nd) { nd = d; nz = q.z; } } }
+  if (nd < 5) tz = clamp(p.z + Math.sign(p.z - nz || 1) * 6, -28, 28);
+  seek(p, p.x + 10, tz, EASY.mateSpeed * 0.96, dt, 9, 2);
+}
+
+// --- set pieces: who takes them when you are the pro
+function careerTaker(kind, pos, taker) {
+  const pro = proOf(); if (!pro || pro.act === A_FALL) return taker;
+  const dGoal = Math.hypot(PL - pos.x, pos.z);
+  if (kind === 'penalty' && pro.idx >= 5) return pro;
+  if (kind === 'freekick' && pro.idx >= 5 && dGoal < 34) return pro;
+  if (kind === 'corner' && (pro.idx === 8 || pro.idx === 10 || pro.idx === 7)) return pro;
+  return taker;
+}
+
+// --- third-person camera behind your player, turned towards the play so the ball stays in view
+function proCam(T) {
+  const p = user; if (!p) return 3;
+  const sp = G.state === 'setpiece' && G.setTaker === p && G.pending && G.pending.kind !== 'penalty';
+  if (sp) {                                                   // you take it: stand behind the ball, looking down the aim line
+    const a = G.aim || 0, fx = Math.cos(a), fz = Math.sin(a);
+    T.free = 1; T.fp = [clamp(ball.x - fx * 6.5, -PL - 5, PL + 5), 2.7, clamp(ball.z - fz * 6.5, -PW - 4, PW + 4)]; T.ft = [ball.x + fx * 14, 0.6, ball.z + fz * 14]; T.ffov = 0.9;
+  } else {
+    const vx = ball.x - p.x, vz = ball.z - p.z, bd = Math.hypot(vx, vz);
+    let yaw = 0;                                              // down the pitch towards the goal you attack
+    if (bd > 1.5) yaw = clamp(angDiff(0, Math.atan2(vz, vx)), -1.05, 1.05) * clamp((bd - 1.5) / 7, 0, 1) * 0.62;
+    const fx = Math.cos(yaw), fz = Math.sin(yaw), back = 7.4, look = Math.min(bd, 20) * 0.42;
+    const cx = clamp(p.x - fx * back, -PL - 5, PL + 5), cz = clamp(p.z - fz * back, -PW - 4, PW + 4);
+    const ux = bd > 0.1 ? vx / bd : 0, uz = bd > 0.1 ? vz / bd : 0;
+    T.free = 1; T.fp = [cx, 3.35, cz]; T.ft = [p.x + fx * 5 + ux * look, 0.85, p.z + fz * 5 + uz * look]; T.ffov = 0.92;
+  }
+  T.tx = clamp((p.x + ball.x) / 2, -42, 42); T.tz = clamp((p.z + ball.z) / 2, -26, 26); T.h = 23; T.D = 38; T.vw = 41; T.shift = 0.5; T.yaw = 1;
+  return 4.5;
+}
+function proViewOn() { return G.camMode === 'pro' && ['play', 'kickoff', 'setpiece', 'stoppage'].includes(G.state) && !(G.pending && (G.pending.offside || G.pending.foul) && G.state === 'stoppage') && !(G.state === 'setpiece' && G.pending && G.pending.kind === 'penalty'); }
+function toggleCam() { if (!inMatchState(G.state) || G.state === 'paused') return; G.camMode = G.camMode === 'pro' ? 'tv' : 'pro'; G.camCut = 0; toast(G.camMode === 'pro' ? 'Player camera' : 'Broadcast camera'); }
+
+// --- end of the match: rating, line and career totals
+function careerResult() {
+  const box = $('res-career'); if (!CAREER.on) { box.hidden = true; return; }
+  const all = careerLoad(), key = careerKey(G.myIdx, CAREER.idx), rec = careerRecord(G.myIdx, CAREER.idx), s = CAREER.stats, r = CAREER.rating;
+  const before = rec.ovr, grow = clamp(Math.round((r - 6.6) * 0.9), -1, 3);
+  rec.apps++; rec.goals += s.goals; rec.assists += s.assists; rec.rsum += r; rec.ovr = clamp(rec.ovr + grow, 60, 94);
+  all[key] = rec; careerSaveAll(all);
+  const p = proOf(), T = TEAMS[G.myIdx], d = rec.ovr - before;
+  box.innerHTML = `<div class="pc-head"><span class="pc-tag">Player Career</span><b>${p.name}</b><em>${POSN[p.idx]} · #${p.num} · ${T.name}</em></div>
+    <div class="pc-row"><div class="pc-rate ${r >= 7 ? 'hi' : r < 6 ? 'lo' : ''}"><small>Match rating</small><b>${r.toFixed(1)}</b></div>
+      <div class="pc-line"><span><b>${s.goals}</b>Goals</span><span><b>${s.assists}</b>Assists</span><span><b>${s.shots}</b>Shots</span><span><b>${s.passOK}/${s.passes}</b>Passes</span><span><b>${s.tackles}</b>Tackles</span></div></div>
+    <div class="pc-tot"><span>Career: <b>${rec.apps}</b> apps · <b>${rec.goals}</b> goals · <b>${rec.assists}</b> assists · avg <b>${(rec.rsum / rec.apps).toFixed(1)}</b></span>
+      <span class="pc-ovr">OVR <b>${rec.ovr}</b>${d ? `<i class="${d > 0 ? 'up' : 'dn'}">${d > 0 ? '▲' : '▼'}${Math.abs(d)}</i>` : ''}</span></div>`;
+  box.hidden = false;
+}
+
+// --- match setup: mode chips and the squad picker
+function careerFillPicker() {
+  const T = TEAMS[G.myIdx], box = $('pc-pick'); if (!T || !T.squad) return;
+  if (CAREER.idx < 1 || CAREER.idx > 10) CAREER.idx = 9;
+  box.innerHTML = '<span class="chips-label">Your player</span>' + [9, 10, 8, 7, 6, 5, 4, 3, 2, 1].map(i => {
+    const rec = careerRecord(G.myIdx, i);
+    return `<button class="chip pchip" role="radio" aria-checked="${i === CAREER.idx}" data-idx="${i}"><span><i>${POSN[i]}</i> ${T.squad[i][0]} <small>${rec.ovr}</small></span></button>`;
+  }).join('');
+  box.querySelectorAll('.chip.pchip').forEach(c => c.addEventListener('click', () => { CAREER.idx = +c.dataset.idx; box.querySelectorAll('.chip.pchip').forEach(o => o.setAttribute('aria-checked', o === c ? 'true' : 'false')); sfxUI(620); }));
+  box.hidden = !CAREER.on;
+}
+function careerWire() {
+  document.querySelectorAll('.chip.mode').forEach(c => c.addEventListener('click', () => {
+    document.querySelectorAll('.chip.mode').forEach(o => o.setAttribute('aria-checked', o === c ? 'true' : 'false'));
+    CAREER.on = c.dataset.mode === 'career'; careerFillPicker(); $('howto-career').hidden = !CAREER.on; sfxUI(640);
+  }));
+}
 
 /* =====================================================================
    MATCH FLOW
@@ -3849,6 +4212,7 @@ function setupSetPiece() {
   if (kind === 'goalkick') taker = gkOf(team);
   else if (kind === 'penalty') taker = G.pending.taker && G.pending.taker.team === team ? G.pending.taker : players[team * 11 + 9];
   else { let bd = 1e9; for (let i = team * 11 + 1; i < team * 11 + 11; i++) { const p = players[i], dd = Math.hypot(p.x - pos.x, p.z - pos.z) + (kind === 'corner' && p.role === 'DEF' ? 40 : 0); if (dd < bd) { bd = dd; taker = p; } } }
+  if (CAREER.on && team === 0) taker = careerTaker(kind, pos, taker);
   for (const p of players) { p.vx = p.vz = 0; p.act = A_NONE; p.pending = null; p.cool = 0.4; p.jump = 0; p.jv = 0; }
   if (kind === 'corner') {
     const gx = d * PL, spots = [[-6.5, -3.5], [-6, 3], [-10.5, 0.5], [-9, -7.5], [-12, 7]];
@@ -3872,7 +4236,7 @@ function setupSetPiece() {
   // aim arrow: default direction for each set piece
   G.aim = kind === 'throw' ? Math.atan2(-Math.sign(pos.z) * 0.8, d * 0.6) : kind === 'corner' ? Math.atan2(-pos.z, d * (PL - 9) - pos.x) : kind === 'penalty' ? (d > 0 ? 0 : Math.PI) + rand(-0.12, 0.12)
     : kind === 'freekick' ? Math.atan2(-pos.z * 0.6, d * PL - pos.x) : (d > 0 ? 0 : Math.PI);
-  if (team === 0 && (taker.role !== 'GK' || kind === 'goalkick')) { if (taker.role !== 'GK') setUser(taker);
+  if (team === 0 && (CAREER.on ? taker === user : (taker.role !== 'GK' || kind === 'goalkick'))) { if (taker.role !== 'GK') setUser(taker);
     showHint({ throw: 'Aim with the stick, PASS to throw', freekick: 'Aim with the stick · PASS or SHOOT', corner: 'Aim with the stick · PASS / SHOOT to cross', goalkick: 'Aim with the stick · PASS for a goal kick', penalty: 'Aim with the stick · hold SHOOT, release to kick' }[kind]); }
   G.state = 'setpiece';
 }
@@ -3889,7 +4253,7 @@ function setpieceStep(dt) {
   const tk = G.setTaker, kind = G.pending.kind;
   for (const p of players) { if (p !== tk) { if (p.role === 'GK') gkUpdate(p, dt); else steer(p, 0, 0, 8, dt); } else steer(p, 0, 0, 20, dt); }
   if (ball.owner === tk && !tk.pending) {
-    const userTake = tk.team === 0 && (tk.role !== 'GK' || kind === 'goalkick');
+    const userTake = tk.team === 0 && (CAREER.on ? tk === user : (tk.role !== 'GK' || kind === 'goalkick'));
     if (userTake && Math.hypot(IN.mx, IN.mz) > 0.3) {
       let want = Math.atan2(IN.mz, IN.mx);
       if (kind === 'penalty') { const base = dirOf(tk.team) > 0 ? 0 : Math.PI; want = base + clamp(angDiff(base, want), -0.26, 0.26); }
@@ -3917,7 +4281,7 @@ function kickoffStep(dt) {
   if (ball.owner !== tk) { ball.owner = tk; ball.held = false; }
   updateBall(dt);
   G.setT += dt;
-  const go = G.kickTeam === 0 ? (IN.pass.released || IN.shoot.released || IN.moved || G.setT > 6) : G.setT > 1.6;
+  const go = G.kickTeam === 0 && (!CAREER.on || tk === user) ? (IN.pass.released || IN.shoot.released || IN.moved || G.setT > 6) : G.setT > 1.6;
   if (go && !tk.pending) {
     const mate = players[G.kickTeam * 11 + 6], v = passVel(tk, mate, false);
     tk.f = Math.atan2(mate.z - tk.z, mate.x - tk.x); tk.protect = 0;
@@ -3928,7 +4292,7 @@ function kickoffStep(dt) {
 function onGoal(team) {
   G.state = 'goal'; G.goalT = 0; G.goalDone = false; G.goalTeam = team; G.score[team]++; hideHint();
   const sc = ball.lastKicker && ball.lastKicker.team === team ? ball.lastKicker : closestField(team);
-  G.scorer = sc; G.goalFrame = recTotal;
+  G.scorer = sc; G.goalFrame = recTotal; careerOnGoal(team, sc);
   const minute = matchMinute(); G.halfGoals = (G.halfGoals || 0) + 1;
   G.scorers.push({ team, name: sc.name, min: minute });
   G.hype = 1; crowdLevel(1, 0.3); sfxCheer(team === 0);
@@ -4022,17 +4386,36 @@ function fullTime() {
   for (const p of players) { if (p.role === 'GK') continue; if (w === -1) continue; p.act = p.team === w ? A_CELEB : A_SAD; p.actT = 0; p.actDur = 99; }
   if (w === 0) { spawnConfetti(G.fwCols || [TEAMS_SEL[0].c1, '#fff', '#ffd23d'], 200); }
 }
+function halfTimeShow() {
+  G.htShow = true; G.htT = 0; G.htGo = false; hideBanner(); G.camCut = 1;
+  const [a, b] = TEAMS_SEL, s = G.score;
+  $('ht-b1').innerHTML = badgeSVG(a); $('ht-b2').innerHTML = badgeSVG(b); $('ht-n1').textContent = a.short; $('ht-n2').textContent = b.short; $('ht-sc').textContent = `${s[0]} – ${s[1]}`;
+  $('ht-scorers').innerHTML = G.scorers.length ? G.scorers.map(g => `<b>${TEAMS_SEL[g.team].short}</b> · ${g.name} ${g.min}'`).join('<br>') : 'No goals in the first half';
+  $('ht-stats').innerHTML = statRows(G.stats, a, b);
+  const hc = $('ht-career'); hc.hidden = !CAREER.on;
+  if (CAREER.on) { const c = CAREER.stats; hc.innerHTML = `<span>${proOf().name}</span><span>Rating <b>${CAREER.rating.toFixed(1)}</b></span><span>Goals <b>${c.goals}</b></span><span>Assists <b>${c.assists}</b></span><span>Passes <b>${c.passOK}/${c.passes}</b></span>`; }
+  $('ht-hint').textContent = isTouch ? 'Tap to continue' : 'Press J or Space to continue';
+  $('ht').hidden = false; $('touch').hidden = true;
+}
+function halfTimeEnd() {
+  $('ht').hidden = true; G.htShow = false; $('touch').hidden = !isTouch;
+  G.half = 2; G.clock = G.dur / 2; G.addMin = 0; G.halfStops = 0; G.halfGoals = 0; resetKickoff(1); G.state = 'kickoff'; G.setT = 0; hideBanner();
+}
 function breakStep(dt) {
   G.stT += dt;
   for (const p of players) { steer(p, 0, 0, 6, dt); integrate(p, dt); }
   officialsStep(dt); updateBall(dt);
-  if (G.state === 'halftime' && G.stT > 3.4 && !G.fading) fadeThen(() => { G.half = 2; G.clock = G.dur / 2; G.addMin = 0; G.halfStops = 0; G.halfGoals = 0; resetKickoff(1); G.state = 'kickoff'; G.setT = 0; hideBanner(); });
+  if (G.state === 'halftime') {                                  // a pause with the first-half statistics, then the second half
+    if (!G.htShow) { if (G.stT > 2.6 && !G.fading) fadeThen(halfTimeShow); }
+    else { G.htT += dt; if (((G.htT > 1.0 && (IN.pass.released || IN.shoot.released || G.htGo)) || G.htT > 30) && !G.fading) { G.htGo = false; fadeThen(halfTimeEnd); } }
+  }
   if (G.state === 'fulltime' && G.stT > 4 && !G.fading) fadeThen(() => { hideBanner(); showResult(); });
 }
 
 /* ---------------- one simulation step ---------------- */
 const trailW = [];
 function autoSwitch() {
+  if (CAREER.on) return;                                     // Player Career: you are always the same player
   if ((ball.owner && ball.owner.team === 0) || (ball.passTo && ball.passTo.team === 0)) return;
   if (G.t - G.lastSwitch < 0.7 || user.act === A_SLIDE) return;
   const c = closestField(0); if (!c || c === user) return;
@@ -4078,7 +4461,7 @@ function simStep(dt) {
   switch (G.state) {
     case 'menu': case 'result': warmStep(dt); break;
     case 'intro': G.stT += dt; for (const p of players) { steer(p, 0, 0, 10, dt); integrate(p, dt); } officialsStep(dt); updateBall(dt);
-      if (G.stT > 2.6) { G.state = 'kickoff'; G.setT = 0; IN.moved = false; hideBanner(); if (G.kickTeam === 0) showHint('Press PASS to kick off'); } break;
+      if (G.stT > 2.6) { G.state = 'kickoff'; G.setT = 0; IN.moved = false; hideBanner(); if (G.kickTeam === 0 && (!CAREER.on || players[9] === user)) showHint('Press PASS to kick off'); } break;
     case 'kickoff': kickoffStep(dt); break;
     case 'play': playStep(dt); break;
     case 'stoppage': G.stT += dt; G.clock += dt; for (const p of players) { steer(p, 0, 0, 7, dt); integrate(p, dt); } officialsStep(dt); updateBall(dt);
@@ -4116,7 +4499,11 @@ function camTargets() {
   if (s === 'setpiece' && G.pending && G.pending.kind === 'penalty') { const d = dirOf(G.pending.team); T.free = 1; T.fp = [d * (PL - 25), 4.6, 0]; T.ft = [d * PL, 1.0, 0]; T.ffov = 0.5; return 3; }
   if (s === 'stoppage' && G.pending && G.pending.foul) { const v = G.pending.foul; T.tx = v.x; T.tz = v.z * 0.85 + 1.5; T.h = 6.5; T.D = 15; T.vw = 17; T.shift = 0.55; T.yaw = 0.25; return 2.4; }
   if (s === 'replay') { T.tx = ball.rx; T.tz = ball.rz * 0.6 + 2; T.h = 8; T.D = 24; T.vw = 30; T.shift = 0.56; T.yaw = 0.45; return 3; }
+  if (s === 'halftime' && G.htShow) {                            // half-time: wide shot of the stands with the big LED screen on the right, drifting slowly
+    const k = Math.min(1, (G.htT || 0) / 30); T.free = 1; T.fp = [18 + k * 2.5, 7.5 + k * 1.2, -20 + k * 3]; T.ft = [40.9, 18.2, 12.8]; T.ffov = 0.95; return 0.6;
+  }
   if (s === 'halftime' || s === 'fulltime') { T.tx = ball.x * 0.3; T.tz = 6; T.h = 16; T.D = 42; T.vw = 62; T.shift = 0.58; T.yaw = 0.3; return 0.8; }
+  if (proViewOn()) return proCam(T);
   if (s === 'setpiece' && G.pending && G.pending.kind === 'corner') { const d = Math.sign(G.pending.pos.x); T.tx = d * 38; T.tz = G.pending.pos.z * 0.3 + 3; T.h = 22; T.D = 38; T.vw = 44; T.shift = 0.5; T.yaw = 1; return 2.5; }
   const lead = ball.owner ? ball.owner.vx * 0.5 : ball.vx * 0.3;
   T.tx = clamp(ball.x + lead, -42, 42); T.tz = clamp(ball.z * 0.55 + 2, -14, 17);
@@ -4131,11 +4518,13 @@ function updateCamera(dt) {
   rig.free += ((rigT.free || 0) - (rig.free || 0)) * damp(3, dt);
   if (rigT.fp) { const a2 = damp(k, dt); rig.fp = rig.fp || rigT.fp.slice(); rig.ft = rig.ft || rigT.ft.slice(); for (let i = 0; i < 3; i++) { rig.fp[i] += (rigT.fp[i] - rig.fp[i]) * a2; rig.ft[i] += (rigT.ft[i] - rig.ft[i]) * a2; } rig.ffov = rigT.ffov || 0.6; }
   rig.shake *= Math.exp(-dt * 3);
+  G.camYaw = proViewOn() && rig.free > 0.5 && rig.fp ? Math.atan2(rig.ft[2] - rig.fp[2], rig.ft[0] - rig.fp[0]) : null;   // stick turns with the player camera
   if (G.camCut) { G.camCut = 0; for (const k of ['tx', 'tz', 'h', 'D', 'vw', 'shift', 'yaw', 'face', 'free']) rig[k] = rigT[k] || 0; if (rigT.fp) { rig.fp = rigT.fp.slice(); rig.ft = rigT.ft.slice(); } }
 }
 
 function callOffside(p, s) {
   G.stats.offsides[s.team]++;
+  if (CAREER.on && p === players[CAREER.idx]) careerEvent(-0.1, 'Offside');
   const ar = s.team === 0 ? ars[0] : ars[1];
   ar.act = A_FLAG; ar.actT = 0; ar.actDur = 3.2;
   G.offLineX = s.lineX; G.offShowT = 3.4;
@@ -4158,6 +4547,7 @@ function btnDown(b) { if (b.down) return; b.down = true; b.held = 0; b.pressed =
 function btnUp(b) { if (!b.down) return; b.down = false; b.held = (performance.now() - b.t0) / 1000; b.released = true; }
 addEventListener('keydown', e => {
   if (e.code === 'Escape' || e.code === 'KeyP') { if (G.state === 'paused' || inMatchState(G.state)) { e.preventDefault(); togglePause(); } return; }
+  if (e.code === 'KeyC' && inMatchState(G.state) && G.state !== 'paused') { e.preventDefault(); if (!e.repeat) toggleCam(); return; }
   const k = KEYMAP[e.code]; if (!k || !inMatchState(G.state)) return;
   e.preventDefault(); if (e.repeat) return; IN.keys[k] = true;
   if (k === 'pa') btnDown(IN.pass); if (k === 'sh') btnDown(IN.shoot);
@@ -4168,6 +4558,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && inM
 function pollInput() {
   let mx = (IN.keys.r ? 1 : 0) - (IN.keys.l ? 1 : 0), mz = (IN.keys.u ? 1 : 0) - (IN.keys.d ? 1 : 0);
   if (IN.joy.active) { mx = IN.joy.vx; mz = IN.joy.vy; }
+  if (G.camYaw !== null && G.camYaw !== undefined) { const fx = Math.cos(G.camYaw), fz = Math.sin(G.camYaw), wx = mx * fz + mz * fx, wz = mz * fz - mx * fx; mx = wx; mz = wz; }   // player camera: up = where the camera looks
   IN.mx = mx; IN.mz = mz; IN.sprint = !!IN.keys.sp || IN.touchSprint;
   if (Math.abs(mx) + Math.abs(mz) > 0.3) IN.moved = true;
   const now = performance.now();
@@ -4237,10 +4628,10 @@ function hudTick(dt) {
     if (opp) { if (opp !== G.lastOpp) { G.lastOpp = opp; $('lr-pos').textContent = POSN[opp.idx]; $('lr-name').textContent = opp.name; } setPips('lr-pips', opp.stam); $('lr-stb').style.width = Math.round(opp.stam * 100) + '%'; }
   }
   if (G.gbarT > 0) G.gbarT -= dt;
-  const gbOn = !$('hud').hidden && (G.state === 'intro' || ((G.state === 'halftime' || G.state === 'fulltime') && G.stT > 0.5) || (G.state === 'kickoff' && G.gbarT > 0));
+  const gbOn = !$('hud').hidden && (G.state === 'intro' || ((G.state === 'halftime' || G.state === 'fulltime') && G.stT > 0.5 && !G.htShow) || (G.state === 'kickoff' && G.gbarT > 0));
   $('gbar').classList.toggle('on', gbOn);
   $('banner').classList.toggle('low', rig.face > 0.35);
-  if (!$('hud').hidden) { drawRadar(); $('hud').classList.toggle('cine', gbOn || G.state === 'goal' || G.state === 'replay' || !!(G.pending && G.pending.offside && G.state === 'stoppage') || (G.state === 'setpiece' && !!G.pending && G.pending.kind === 'penalty')); }
+  if (!$('hud').hidden) { drawRadar(); $('hud').classList.toggle('cine', gbOn || G.htShow || G.state === 'goal' || G.state === 'replay' || !!(G.pending && G.pending.offside && G.state === 'stoppage') || (G.state === 'setpiece' && !!G.pending && G.pending.kind === 'penalty')); }
 }
 const RC = $('radar'), RX = RC.getContext('2d');
 function drawRadar() {
@@ -4293,7 +4684,7 @@ function fillVs() {
 function openVs() {
   const others = TEAMS.map((t, k) => k).filter(k => k !== G.myIdx);
   if (!others.includes(G.oppIdx)) G.oppIdx = pick(others);
-  fillVs(); $('scr-select').hidden = true; $('scr-vs').hidden = false; sfxUI(760);
+  fillVs(); careerFillPicker(); $('scr-select').hidden = true; $('scr-vs').hidden = false; sfxUI(760);
 }
 // Kit clash: the visiting side switches to its away kit when the two home shirts are too alike
 const KIT_KEYS = ['shirt', 'sleeve', 'shorts', 'socks', 'sockTop', 'trim', 'collar', 'num'];
@@ -4311,9 +4702,9 @@ function startMatch() {
   TEAMS_SEL = matchKits(TEAMS[G.myIdx], TEAMS[G.oppIdx]);
   fadeThen(() => {
     buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]); refreshWorldTeams(); buildTeams(); rebuildRigs();
-    Object.assign(G, { score: [0, 0], clock: 0, half: 1, scorers: [], addMin: 0, halfStops: 0, halfGoals: 0, gbarT: 0, hype: 0.35, goalTeam: -1, timeScale: 1, fwCols: null, stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0], offsides: [0, 0], fouls: [0, 0] } });
+    $('ht').hidden = true; Object.assign(G, { htShow: false, htGo: false, score: [0, 0], clock: 0, half: 1, scorers: [], addMin: 0, halfStops: 0, halfGoals: 0, gbarT: 0, hype: 0.35, goalTeam: -1, timeScale: 1, fwCols: null, stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0], offsides: [0, 0], fouls: [0, 0] } });
     recTotal = 0; trailW.length = 0; conf.length = 0; fws.length = 0;
-    resetKickoff(0);
+    resetKickoff(0); careerStart();
     for (const id of ['scr-select', 'scr-vs', 'scr-result', 'scr-pause']) $(id).hidden = true;
     applyTimeOfDay(G.tod); setupHud(); $('hud').hidden = false; $('touch').hidden = !isTouch; $('replay-tag').hidden = true; hideHint();
     Object.assign(rig, { tx: -24, tz: 8, h: 30, D: 58, vw: 92, shift: 0.56 });
@@ -4332,7 +4723,7 @@ function togglePause() {
 }
 function resume() { $('scr-pause').hidden = true; G.state = G.prev; $('touch').hidden = !isTouch; if (AU.ctx && AU.on) AU.ctx.resume(); lastT = performance.now(); }
 function goToMenu() {
-  for (const id of ['scr-vs', 'scr-result', 'scr-pause', 'hud', 'touch']) $(id).hidden = true;
+  for (const id of ['scr-vs', 'scr-result', 'scr-pause', 'hud', 'touch', 'ht']) $(id).hidden = true; G.htShow = false;
   hideBanner(); hideHint(); conf.length = 0; fws.length = 0; G.goalTeam = -1; G.timeScale = 1;
   if (AU.ctx && AU.on) AU.ctx.resume(); crowdLevel(0.1); menuMusic(true); rainSound(false); $('btn-sound-menu').hidden = false;
   for (const p of players) { p.act = A_NONE; p.tx = p.x; p.tz = p.z; }
@@ -4345,10 +4736,14 @@ function showResult() {
   $('res-b1').innerHTML = badgeSVG(a); $('res-b2').innerHTML = badgeSVG(b); $('res-n1').textContent = a.name; $('res-n2').textContent = b.name;
   $('res-score').textContent = `${s[0]} – ${s[1]}`;
   $('res-scorers').innerHTML = G.scorers.length ? G.scorers.map(g => `<b>${TEAMS_SEL[g.team].short}</b> · ${g.name} ${g.min}'`).join('<br>') : 'No goals in this match';
-  const ps = G.stats.poss[0] + G.stats.poss[1] || 1, p0 = Math.round(G.stats.poss[0] / ps * 100);
-  const rows = [['Possession (%)', p0, 100 - p0], ['Shots', G.stats.shots[0], G.stats.shots[1]], ['On target', G.stats.onT[0], G.stats.onT[1]], ['Passes', G.stats.passes[0], G.stats.passes[1]], ['Fouls', G.stats.fouls[0], G.stats.fouls[1]], ['Offsides', G.stats.offsides[0], G.stats.offsides[1]]];
-  $('res-stats').innerHTML = rows.map(([l, x, y]) => `<div class="srow"><span>${x}</span><div><em>${l}</em><div class="duel">${x + y ? `<i style="flex:${x || 0.0001};background:${a.c1}"></i><i style="flex:${y || 0.0001};background:${b.c1}"></i>` : '<i style="flex:1;background:rgba(255,255,255,.12)"></i>'}</div></div><span>${y}</span></div>`).join('');
+  $('res-stats').innerHTML = statRows(G.stats, a, b);
+  careerResult();
   $('scr-result').hidden = false; crowdLevel(0.12); menuMusic(true); rainSound(false); $('btn-sound-menu').hidden = false;
+}
+function statRows(st, a, b) {
+  const ps = st.poss[0] + st.poss[1] || 1, p0 = Math.round(st.poss[0] / ps * 100);
+  const rows = [['Possession (%)', p0, 100 - p0], ['Shots', st.shots[0], st.shots[1]], ['On target', st.onT[0], st.onT[1]], ['Passes', st.passes[0], st.passes[1]], ['Fouls', st.fouls[0], st.fouls[1]], ['Offsides', st.offsides[0], st.offsides[1]]];
+  return rows.map(([l, x, y]) => `<div class="srow"><span>${x}</span><div><em>${l}</em><div class="duel">${x + y ? `<i style="flex:${x || 0.0001};background:${a.c1}"></i><i style="flex:${y || 0.0001};background:${b.c1}"></i>` : '<i style="flex:1;background:rgba(255,255,255,.12)"></i>'}</div></div><span>${y}</span></div>`).join('');
 }
 // Intro film before the menus (only in builds that ship the video): press/tap to start (lets it play with sound), skip any time
 function setupIntro() {
@@ -4384,6 +4779,8 @@ function wireUI() {
   document.querySelectorAll('.chip.tod').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('.chip.tod').forEach(o => o.setAttribute('aria-checked', o === c ? 'true' : 'false')); applyTimeOfDay(c.dataset.tod); sfxUI(600); }));
   $('btn-back').addEventListener('click', () => { $('scr-vs').hidden = true; $('scr-select').hidden = false; sfxUI(500); });
   $('btn-kick').addEventListener('click', startMatch);
+  careerWire(); $('btn-cam').addEventListener('click', toggleCam);
+  $('btn-2nd').addEventListener('click', e => { e.stopPropagation(); G.htGo = true; }); $('ht').addEventListener('pointerdown', e => { if (G.htT > 1.0 && !e.target.closest('#btn-2nd')) G.htGo = true; });
   $('btn-pause').addEventListener('click', togglePause);
   $('btn-sound').addEventListener('click', () => { audioInit(); setSound(!AU.on); });
   $('btn-sound-menu').addEventListener('click', () => { audioInit(); setSound(!AU.on); menuMusic(true); });
@@ -4472,7 +4869,7 @@ function syncRender() {
 function drawLabels(t) {
   const p = user; if (!p) return;
   proj(p.rx, 2.25 + p.rjump + Math.sin(t * 5) * 0.04, p.rz, P0); if (P0.d < 2) return;
-  const w = Math.max(5 * RS, 0.17 * P0.s);
+  const pv = G.camYaw !== null && G.camYaw !== undefined, w = pv ? clamp(0.12 * P0.s, 5 * RS, 10 * RS) : Math.max(5 * RS, 0.17 * P0.s);
   X.fillStyle = TEAMS_SEL[0].c1; X.strokeStyle = 'rgba(255,255,255,0.95)'; X.lineWidth = Math.max(1.2 * RS, 0.03 * P0.s); X.lineJoin = 'round';
   X.beginPath(); X.moveTo(P0.x - w, P0.y - w * 1.3); X.lineTo(P0.x + w, P0.y - w * 1.3); X.lineTo(P0.x, P0.y); X.closePath(); X.fill(); X.stroke();
   if (IN.sprint || p.stam < 0.97) {
@@ -4487,6 +4884,23 @@ function drawLabels(t) {
     X.fillStyle = 'rgba(4,8,18,0.8)'; X.fillRect(bx - 2 * RS, by - 2 * RS, bw + 4 * RS, bh + 4 * RS);
     const g = X.createLinearGradient(bx, 0, bx + bw, 0); g.addColorStop(0, '#3ddc74'); g.addColorStop(0.6, '#ffd23d'); g.addColorStop(1, '#ff3d5f');
     X.fillStyle = g; X.fillRect(bx, by, bw * pw, bh);
+  }
+  if (p.callT && G.t - p.callT < 1.3) {                       // Player Career: calling for the ball
+    const a = 1 - clamp((G.t - p.callT - 0.9) / 0.4, 0, 1), fs = Math.round(15 * RS), by = P0.y - w * 1.3 - 30 * RS;
+    X.globalAlpha = a; X.font = `800 ${fs}px "Barlow Condensed", Arial, sans-serif`; X.textAlign = 'center'; X.textBaseline = 'middle';
+    const tw = X.measureText('PASS!').width + 14 * RS; X.fillStyle = 'rgba(255,210,61,0.95)'; X.fillRect(P0.x - tw / 2, by - fs * 0.75, tw, fs * 1.5);
+    X.fillStyle = '#0b1426'; X.fillText('PASS!', P0.x, by + 1); X.globalAlpha = 1;
+  }
+  if (pv) {                                                    // ball out of the player camera's view: an arrow at the edge points to it
+    proj(ball.rx, ball.ry, ball.rz, P1); const m = 34 * RS;
+    if (P1.d < 0.3 || P1.x < m || P1.x > W - m || P1.y < m || P1.y > H - m) {
+      let dx = P1.x - W / 2, dy = P1.y - H / 2; if (P1.d < 0.3) { dx = -dx; dy = -dy; }
+      const L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, k = Math.min((W / 2 - m) / Math.abs(ux || 1e-6), (H / 2 - m) / Math.abs(uy || 1e-6));
+      const ax = W / 2 + ux * k, ay = H / 2 + uy * k, s = 13 * RS;
+      X.fillStyle = 'rgba(255,255,255,0.92)'; X.strokeStyle = 'rgba(4,8,18,0.8)'; X.lineWidth = 2 * RS;
+      X.beginPath(); X.moveTo(ax + ux * s, ay + uy * s); X.lineTo(ax - ux * s * 0.6 - uy * s * 0.8, ay - uy * s * 0.6 + ux * s * 0.8); X.lineTo(ax - ux * s * 0.6 + uy * s * 0.8, ay - uy * s * 0.6 - ux * s * 0.8); X.closePath(); X.fill(); X.stroke();
+      X.beginPath(); X.arc(ax - ux * s * 1.7, ay - uy * s * 1.7, s * 0.42, 0, TAU); X.fill(); X.stroke();
+    }
   }
 }
 let lb = 0;
@@ -4553,7 +4967,7 @@ function boot() {
   requestAnimationFrame(t => { lastT = t; frame(t); });
   const fl = document.fonts && document.fonts.load ? Promise.race([Promise.all([document.fonts.load('italic 800 30px "Barlow Condensed"'), document.fonts.load('700 30px "Barlow Condensed"'), document.fonts.load('800 30px "Barlow Condensed"'), LOGO_READY]), new Promise(r => setTimeout(r, 2500))]) : LOGO_READY;
   fl.then(() => { G.fontsOk = true; if (G.state === 'menu') { buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]); refreshWorldTeams(); rebuildRigs(); } }).catch(() => { });
-  window.__golazo = { netTick: () => { syncRender(); updateNets(0, STEP); }, get sel() { return TEAMS_SEL; }, DBG, MENU, wx: applyWeather, knockDown, foul, G, ball, players, officials, ars, snapOffside, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
+  window.__golazo = { CAREER, toggleCam, netTick: () => { syncRender(); updateNets(0, STEP); }, get sel() { return TEAMS_SEL; }, DBG, MENU, wx: applyWeather, knockDown, foul, G, ball, players, officials, ars, snapOffside, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
 }
 boot();
 })();
