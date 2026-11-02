@@ -13,14 +13,31 @@ Licensed under CC BY-NC-SA 4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0
 These changes were made for the game:
 
 - Mirrored, re-centred on the pitch, and simplified by vertex clustering.
-- The seats, pitch, goals, boards and ground were removed. Spectator positions are sampled from the seat cushions.
+- The seats, pitch, goals, boards and ground were removed. Spectator positions are sampled from the seat cushions and the dugout seats.
 - The roof panels over the pitch and the hanging screen objects were removed.
 
 Under the same license, the modified model is non-commercial, needs attribution, and must be shared alike.
 
+## Goalkeeper model
+
+`keeper.js` contains a repacked version of:
+
+**"654230010 SHANNON GOALKEEPER BODY BLOCK"** by 654230010
+(https://sketchfab.com/654230010), from
+https://sketchfab.com/3d-models/654230010-shannon-goalkeeper-body-block-dcb2ecef5d3146b3af612ecaa4bea183
+
+Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+
+These changes were made for the game:
+
+- The materials were converted to metal/rough.
+- The textures were re-encoded and unused UV sets removed.
+- Goalkeeper gloves were painted over the hands.
+- In the game the kit is tinted in each team's goalkeeper colours, and the skeleton is driven by the game's own animation.
+
 ## Not included in this public copy
 
-The player-supplied competition intro video and the menu stadium-atmosphere recording are used only in the private build of the game. They are not stored in this repository.
+The player-supplied competition intro video, the menu stadium-atmosphere recording and the Chelsea win film (with its soundtrack) are used only in the private build of the game. They are not stored in this repository.
 
 ## Trademarks
 
