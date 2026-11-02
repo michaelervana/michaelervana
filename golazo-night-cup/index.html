@@ -2076,9 +2076,15 @@ function buildStadiumModel(P, idx, head, spots) {
     flatShading: true, side: THREE.DoubleSide, transparent: gr.opacity < 0.99, opacity: gr.opacity, depthWrite: gr.opacity >= 0.99 }));
   head.groups.forEach((gr, i) => { if (RECOLOR[gr.name] === SEAT || gr.name === 'Material.055') { mats[i].roughness = 1; mats[i].metalness = 0; } });   // matte: no floodlight sheen turning the blue grey
   head.groups.forEach((gr, i) => g.addGroup(gr.i0, gr.ni, i));
-  for (const mt of mats) mt.onBeforeCompile = sh => { sunUniforms(sh.uniforms);
+  // every grey surface where the spectators stand (outside the pitch, below the roof): floors royal blue, step faces navy
+  const GREYS = new Set(['CC-06.008', 'Material.003', 'Material.013', 'Material.014', 'Material.015', 'Material.043']);
+  mats.forEach((mt, i) => { const grey = GREYS.has(head.groups[i].name); mt.onBeforeCompile = sh => { sunUniforms(sh.uniforms);
     sh.vertexShader = 'varying vec3 vSW;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvSW = (modelMatrix * vec4(transformed, 1.0)).xyz;');
-    sh.fragmentShader = 'varying vec3 vSW;\n' + SUN_GLSL + '\n' + sh.fragmentShader.replace('#include <output_fragment>', 'outgoingLight *= mix(0.5, 1.0, sunLit(vSW));\n#include <output_fragment>'); };
+    sh.fragmentShader = 'varying vec3 vSW;\n' + SUN_GLSL + '\n' + sh.fragmentShader
+      .replace('#include <color_fragment>', '#include <color_fragment>\n' + (grey ? `{ vec3 wn = normalize(cross(dFdx(vSW), dFdy(vSW)));
+        if (vSW.y < 30.0 && (abs(vSW.x) > 57.0 || abs(vSW.z) > 38.5)) diffuseColor.rgb = abs(wn.y) > 0.6 ? vec3(0.004, 0.04, 0.34) : vec3(0.003, 0.012, 0.09); }` : ''))
+      .replace('#include <output_fragment>', 'outgoingLight *= mix(0.5, 1.0, sunLit(vSW));\n#include <output_fragment>'); };
+    if (grey) { mt.customProgramCacheKey = () => 'stand-blue'; mt.roughness = 1; mt.metalness = 0; } });
   const m = new THREE.Mesh(g, mats); m.castShadow = false; m.receiveShadow = true; m.frustumCulled = false;
   SCN.add(m); W3.model = m; W3.modelCredit = head.credit;
   // only the roof trusses and inner ring throw shadows onto the pitch (thin striped shade, the play stays readable)
