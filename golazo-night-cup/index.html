@@ -2146,7 +2146,7 @@ function placeRibbonsForModel() {
   if (!W3.ribbon) return;
   const farW = W3.ribbon[0].geometry.parameters.width, endW = W3.ribbon[1].geometry.parameters.width;
   const set = (i, x, y, z, w, wOrig) => { for (const o of [W3.ribbon[i], W3.ribbonOv[i]]) { o.position.set(x, y, z); o.scale.x = w / wOrig; } };
-  set(0, 0, 14.0, -61.6, 118, farW);
+  set(0, 0, 14.85, -60.7, 118, farW);                                  // raised and brought forward: the UEFA Champions League text clears the tier lip
   set(1, 82.4, 14.0, 0, 76, endW); set(2, -82.4, 14.0, 0, 76, endW);
   if (W3.ribbon[3]) { const farW2 = W3.ribbon[3].geometry.parameters.width, endW2 = W3.ribbon[4].geometry.parameters.width;
     set(3, 0, 32.6, -90.2, 150, farW2); set(4, 111.5, 30.8, 0, 120, endW2); set(5, -111.5, 30.8, 0, 120, endW2); }
