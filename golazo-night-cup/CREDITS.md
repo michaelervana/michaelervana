@@ -34,6 +34,17 @@ These changes were made for the game:
 - The textures were re-encoded and unused UV sets removed.
 - Goalkeeper gloves were painted over the hands.
 - In the game the kit is tinted in each team's goalkeeper colours, and the skeleton is driven by the game's own animation.
+- The model's diving-save animation is baked into joint poses (in `index.html`) and drives the keepers' dives.
+
+## Goalkeeper set position
+
+The keepers' set position is baked from the animation of:
+
+**"Goalkeeper Stylized - Rig and Animation"** by P-Vi.Art
+(https://sketchfab.com/dpducphong), from
+https://sketchfab.com/3d-models/goalkeeper-stylized-rig-and-animation-7de86f9c36f84152a777f27a73646ada
+
+Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/). Only the motion is used: the joint positions are resampled onto the game's skeleton.
 
 ## Not included in this public copy
 
