@@ -87,6 +87,17 @@ These changes were made for the game:
 - The ball scan was baked onto a sphere map (white-balanced) and is wrapped on the game's ball.
 - The grass model is used three ways: its blade heights, baked from above into a seamless tile, drive the layered 3D grass over the whole pitch; the same bake gives the turf its fine detail; and 380 of its tufts, each simplified, form a tile of real blades planted around the camera for close views.
 
+## Goal
+
+`pitch.js` also contains the frame of the "Football goal" model supplied by the project owner (an FBX with rope textures; its archive carries no author or licence file, so none can be credited here).
+
+- Used: posts and crossbar, ground frame, the three rear poles and the stay lines, with depths fitted to the game's net.
+- Not used as geometry: the rope net (about 220,000 triangles). The game draws the net as a simulated cloth in the same honeycomb mesh, so the ball can spear and shake it.
+
+## Commentary
+
+The spoken commentary uses the browser's own English speech voice (Web Speech API); no recorded audio is shipped.
+
 ## Goalkeeper set position
 
 The keepers' set position is baked from the animation of:
