@@ -96,7 +96,7 @@ These changes were made for the game:
 
 ## Commentary
 
-The spoken commentary uses the browser's own English speech voice (Web Speech API); no recorded audio is shipped.
+`voice.js` holds 95 short commentary clips generated with Google AI Studio (Gemini speech, voice "Fenrir"): kick-offs, goals, scores nil to twenty, ball won back, goal kicks and free kicks, naming clubs only. They are played back to back to form each line. If the clips cannot load, the browser's own English speech voice (Web Speech API) reads the same lines.
 
 ## Goalkeeper set position
 
