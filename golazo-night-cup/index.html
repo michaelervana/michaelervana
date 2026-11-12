@@ -2059,46 +2059,72 @@ function buildCrowd3() {
 }
 
 /* ---------------- Chelsea tifo: the supplied banner photo, held over the home section and rippling like a flag ---------------- */
-function buildTifo() {
-  if (W3.tifo) { SCN.remove(W3.tifo); W3.tifo.geometry.dispose(); W3.tifo = null; }
-  const u = W3.crowd && W3.crowd.material.uniforms; if (u) u.tifoOn.value = 0;
-  const ci = TEAMS_SEL ? TEAMS_SEL.findIndex(t => t.id === 'che') : -1, img = logoImg('tifo'); if (ci < 0 || !u || !img) return;
-  const offA = W3.crowd.geometry.attributes.offset, dataA = W3.crowd.geometry.attributes.data, off = offA.array, dat = dataA.array;
-  const xc = ci === 0 ? -14 : 26, Wd = 38, x0 = xc - Wd / 2, top = {};
-  for (let i = 0; i < off.length; i += 3) { const x = off[i], y = off[i + 1], gz = -off[i + 2]; if (gz < 38 || gz > 75 || x < x0 - 1 || x > x0 + Wd + 1 || y > 16.5) continue; const b = Math.round(gz); top[b] = Math.max(top[b] || -9, y); }
-  const bins = Object.keys(top).map(Number).sort((a, b) => a - b); if (bins.length < 4) return;
-  const hAt = gz => { let lo = bins[0], hi = bins[bins.length - 1]; for (const b of bins) { if (b <= gz) lo = b; if (b >= gz) { hi = b; break; } } const t = hi > lo ? (gz - lo) / (hi - lo) : 0; return lerp(top[lo], top[hi], t); };
-  // banner depth along the slope matches the photo's aspect (about 3:1)
-  const depth = Wd * img.naturalHeight / img.naturalWidth, gz0 = bins[0] - 0.3, prof = [[gz0, 0]];
-  let gz1 = gz0, sAcc = 0; for (let gz = gz0 + 0.25; gz < 75 && sAcc < depth; gz += 0.25) { sAcc += Math.hypot(0.25, hAt(gz) - hAt(gz - 0.25)); prof.push([gz, sAcc]); gz1 = gz; }
-  const gzAt = v => { const s = v * sAcc; for (let k = 1; k < prof.length; k++) if (prof[k][1] >= s) { const a = prof[k - 1], b = prof[k]; return lerp(a[0], b[0], (s - a[1]) / Math.max(1e-6, b[1] - a[1])); } return gz1; };
-  const vAt = gz => { if (gz <= gz0) return 0; for (let k = 1; k < prof.length; k++) if (prof[k][0] >= gz) { const a = prof[k - 1], b = prof[k]; return lerp(a[1], b[1], (gz - a[0]) / (b[0] - a[0])) / sAcc; } return 1; };
-  const SX = 110, SV = 36, pos = [], uv = [], idx = [];
-  for (let j = 0; j <= SV; j++) { const v = j / SV, gz = gzAt(v), y = hAt(gz) + lerp(1.05, 1.6, Math.min(1, v * 4)); for (let i = 0; i <= SX; i++) { pos.push(x0 + (i / SX) * Wd, y, -gz); uv.push(i / SX, v); } }
-  for (let j = 0; j < SV; j++) for (let i = 0; i < SX; i++) { const a = j * (SX + 1) + i, b = a + SX + 1; idx.push(a, b, a + 1, a + 1, b, b + 1); }
-  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals();
-  if (!W3.tifoTex) { const c = mkCanvas(img.naturalWidth, img.naturalHeight); c.getContext('2d').drawImage(img, 0, 0); W3.tifoAlpha = c.getContext('2d').getImageData(0, 0, c.width, c.height); W3.tifoTex = tex3(c, true, 8); W3.tifoT = { value: 0 }; }
-  const m = new THREE.MeshStandardMaterial({ map: W3.tifoTex, alphaTest: 0.5, roughness: 0.82, metalness: 0, side: THREE.DoubleSide, emissive: new THREE.Color(1, 1, 1), emissiveMap: W3.tifoTex, emissiveIntensity: G.tod === 'night' ? 0.28 : 0.16 });
-  W3.tifoMat = m;
+// Tifos on the far stand: the club's banner when Chelsea play, and a navy banner with the big-eared cup at the far right
+// of the stand for every match. Both are cloth draped over the seats and roll in fast, strong waves.
+function tifoCupCanvas() {
+  const c = mkCanvas(768, 480), g = c.getContext('2d'), bg = g.createLinearGradient(0, 0, 768, 480); bg.addColorStop(0, '#10228c'); bg.addColorStop(0.55, '#0b1a74'); bg.addColorStop(1, '#081258');
+  g.fillStyle = bg; g.fillRect(0, 0, 768, 480);
+  g.save(); g.translate(384, 452); g.scale(0.93, 0.93); g.fillStyle = '#f4f6fb'; g.strokeStyle = '#f4f6fb'; g.lineCap = 'round';
+  g.beginPath(); g.ellipse(0, -10, 74, 13, 0, 0, TAU); g.fill(); g.fillRect(-60, -44, 120, 34);
+  g.beginPath(); g.moveTo(-28, -44); g.bezierCurveTo(-18, -74, -14, -92, -34, -118); g.lineTo(34, -118); g.bezierCurveTo(14, -92, 18, -74, 28, -44); g.closePath(); g.fill();
+  g.beginPath(); g.moveTo(-42, -118); g.bezierCurveTo(-96, -170, -90, -270, -80, -318); g.lineTo(80, -318); g.bezierCurveTo(90, -270, 96, -170, 42, -118); g.closePath(); g.fill();
+  g.beginPath(); g.ellipse(0, -318, 82, 13, 0, 0, TAU); g.fill();
+  for (const sd of [-1, 1]) { g.lineWidth = 15; g.beginPath(); g.moveTo(sd * 76, -300); g.bezierCurveTo(sd * 140, -330, sd * 150, -450, sd * 100, -446); g.bezierCurveTo(sd * 62, -442, sd * 66, -390, sd * 84, -368); g.stroke();
+    g.lineWidth = 13; g.beginPath(); g.moveTo(sd * 80, -170); g.bezierCurveTo(sd * 175, -220, sd * 182, -410, sd * 106, -446); g.stroke(); }
+  g.restore(); return c;
+}
+function tifoMaterial(map) {
+  const m = new THREE.MeshStandardMaterial({ map, alphaTest: 0.5, roughness: 0.82, metalness: 0, side: THREE.DoubleSide, emissive: new THREE.Color(1, 1, 1), emissiveMap: map, emissiveIntensity: G.tod === 'night' ? 0.28 : 0.16 });
   m.onBeforeCompile = sh => { sh.uniforms.uT = W3.tifoT; sunUniforms(sh.uniforms);
-    const wave = `float wA = transformed.x * 0.55 - uT * 3.1 + transformed.z * 0.22, wB = transformed.x * 1.35 - uT * 4.6 + transformed.z * 0.5, wE = 0.55 + 0.45 * sin(uT * 0.7 + transformed.x * 0.08);`;
+    const wave = `float wA = transformed.x * 0.55 - uT * 5.4 + transformed.z * 0.22, wB = transformed.x * 1.35 - uT * 8.2 + transformed.z * 0.5, wE = 0.7 + 0.3 * sin(uT * 1.1 + transformed.x * 0.08);`;
     sh.vertexShader = 'uniform float uT;\nvarying vec3 vSW;\n' + sh.vertexShader
       .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
         { vec3 transformed = position; ${wave}
-          float dx = wE * (0.36 * 0.55 * cos(wA) + 0.1 * 1.35 * cos(wB)), dz = wE * (0.36 * 0.22 * cos(wA) + 0.1 * 0.5 * cos(wB));
+          float dx = wE * (0.62 * 0.55 * cos(wA) + 0.2 * 1.35 * cos(wB)), dz = wE * (0.62 * 0.22 * cos(wA) + 0.2 * 0.5 * cos(wB));
           objectNormal = normalize(objectNormal + vec3(-dx, 0.0, -dz) * 1.4); }`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
-        { ${wave} transformed.y += wE * (0.36 * sin(wA) + 0.1 * sin(wB)); }
+        { ${wave} transformed.y += wE * (0.62 * sin(wA) + 0.2 * sin(wB)); }
         vSW = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
     sh.fragmentShader = 'varying vec3 vSW;\n' + SUN_GLSL + '\n' + sh.fragmentShader.replace('#include <output_fragment>', 'outgoingLight *= mix(0.55, 1.0, sunLit(vSW));\n#include <output_fragment>'); };
-  W3.tifo = new THREE.Mesh(g, m); W3.tifo.receiveShadow = true; SCN.add(W3.tifo);
-  // fans under the opaque part of the banner are hidden; the front row stays visible holding the edge
-  const A = W3.tifoAlpha, aw = A.width, ah = A.height;
+  return m;
+}
+function buildTifo() {
+  for (const t of W3.tifos || []) { SCN.remove(t); t.geometry.dispose(); t.material.dispose(); } W3.tifos = []; W3.tifoMats = [];
+  const u = W3.crowd && W3.crowd.material.uniforms; if (!u) return; u.tifoOn.value = 0;
+  if (!W3.tifoT) W3.tifoT = { value: 0 };
+  const offA = W3.crowd.geometry.attributes.offset, dataA = W3.crowd.geometry.attributes.data, off = offA.array, dat = dataA.array, laid = [];
+  const lay = (xc, Wd, tex, aspect, A) => {
+    const x0 = xc - Wd / 2, top = {};
+    for (let i = 0; i < off.length; i += 3) { const x = off[i], y = off[i + 1], gz = -off[i + 2]; if (gz < 38 || gz > 75 || x < x0 - 1 || x > x0 + Wd + 1 || y > 16.5) continue; const b = Math.round(gz); top[b] = Math.max(top[b] || -9, y); }
+    const bins = Object.keys(top).map(Number).sort((a, b) => a - b); if (bins.length < 4) return;
+    const hAt = gz => { let lo = bins[0], hi = bins[bins.length - 1]; for (const b of bins) { if (b <= gz) lo = b; if (b >= gz) { hi = b; break; } } const t = hi > lo ? (gz - lo) / (hi - lo) : 0; return lerp(top[lo], top[hi], t); };
+    // banner depth along the slope follows the picture's aspect
+    const depth = Wd * aspect, gz0 = bins[0] - 0.3, prof = [[gz0, 0]];
+    let gz1 = gz0, sAcc = 0; for (let gz = gz0 + 0.25; gz < 75 && sAcc < depth; gz += 0.25) { sAcc += Math.hypot(0.25, hAt(gz) - hAt(gz - 0.25)); prof.push([gz, sAcc]); gz1 = gz; }
+    const gzAt = v => { const s = v * sAcc; for (let k = 1; k < prof.length; k++) if (prof[k][1] >= s) { const a = prof[k - 1], b = prof[k]; return lerp(a[0], b[0], (s - a[1]) / Math.max(1e-6, b[1] - a[1])); } return gz1; };
+    const vAt = gz => { if (gz <= gz0) return 0; for (let k = 1; k < prof.length; k++) if (prof[k][0] >= gz) { const a = prof[k - 1], b = prof[k]; return lerp(a[1], b[1], (gz - a[0]) / (b[0] - a[0])) / sAcc; } return 1; };
+    const SX = Math.max(40, Math.round(Wd * 2.9)), SV = 36, pos = [], uv = [], idx = [];
+    for (let j = 0; j <= SV; j++) { const v = j / SV, gz = gzAt(v), y = hAt(gz) + lerp(1.2, 1.9, Math.min(1, v * 4)); for (let i = 0; i <= SX; i++) { pos.push(x0 + (i / SX) * Wd, y, -gz); uv.push(i / SX, v); } }
+    for (let j = 0; j < SV; j++) for (let i = 0; i < SX; i++) { const a = j * (SX + 1) + i, b = a + SX + 1; idx.push(a, b, a + 1, a + 1, b, b + 1); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx); g.computeVertexNormals();
+    const m = tifoMaterial(tex), mesh = new THREE.Mesh(g, m); mesh.receiveShadow = true; SCN.add(mesh); W3.tifos.push(mesh); W3.tifoMats.push(m);
+    laid.push({ x0, Wd, gz0, gz1, vAt, A });
+  };
+  const ci = TEAMS_SEL ? TEAMS_SEL.findIndex(t => t.id === 'che') : -1, img = logoImg('tifo');
+  if (ci >= 0 && img) {
+    if (!W3.tifoTex) { const c = mkCanvas(img.naturalWidth, img.naturalHeight); c.getContext('2d').drawImage(img, 0, 0); W3.tifoAlpha = c.getContext('2d').getImageData(0, 0, c.width, c.height); W3.tifoTex = tex3(c, true, 8); }
+    lay(ci === 0 ? -14 : 18, 38, W3.tifoTex, img.naturalHeight / img.naturalWidth, W3.tifoAlpha);
+  }
+  if (!W3.cupTex) W3.cupTex = tex3(tifoCupCanvas(), true, 8);
+  lay(49.5, 18, W3.cupTex, 480 / 768, null);                             // the cup, far right of the stand
+  if (!laid.length) return;
+  // fans under the opaque part of a banner are hidden; the front rows stay visible holding its edge
   for (let i = 0, k = 0; i < off.length; i += 3, k += 4) {
     const x = off[i], gz = -off[i + 2]; let hide = 0;
-    if (x > x0 - 0.5 && x < x0 + Wd + 0.5 && gz > gz0 - 0.5 && gz < gz1 + 0.6) {
-      const uu = clamp((x - x0) / Wd, 0, 0.999), vv = vAt(gz), px = Math.min(aw - 1, uu * aw | 0), py = Math.min(ah - 1, (1 - vv) * ah | 0), op = A.data[(py * aw + px) * 4 + 3] > 140;
-      hide = op ? (gz < gz0 + 2.8 ? 2 : 1) : (vv < 0.97 && gz < gz0 + 2.8 ? 2 : 0);    // front rows hold the banner up, the rest are under it
+    for (const T of laid) if (x > T.x0 - 0.5 && x < T.x0 + T.Wd + 0.5 && gz > T.gz0 - 0.5 && gz < T.gz1 + 0.6) {
+      const uu = clamp((x - T.x0) / T.Wd, 0, 0.999), vv = T.vAt(gz); let op = true;
+      if (T.A) { const aw = T.A.width, ah = T.A.height, px = Math.min(aw - 1, uu * aw | 0), py = Math.min(ah - 1, (1 - vv) * ah | 0); op = T.A.data[(py * aw + px) * 4 + 3] > 140; }
+      hide = Math.max(hide, op ? (gz < T.gz0 + 2.8 ? 2 : 1) : (vv < 0.97 && gz < T.gz0 + 2.8 ? 2 : 0));
     }
     dat[k + 3] = hide;
   }
@@ -2334,7 +2360,7 @@ function applyTimeOfDay(tod) {
   if (FINAL) { FINAL.uniforms.grade.value = day ? 0.45 : 1; FINAL.uniforms.vignette.value = day ? 0.28 : 0.55; FINAL.uniforms.saturation.value = (day ? 0.96 : 1.1) * (wet ? 0.82 : 1); FINAL.uniforms.exposure.value = (day ? 0.92 : 1.0) * (wet ? 1.06 : 1); }
   if (BLOOM) { BLOOM.strength = day ? 0.2 : 0.58; BLOOM.threshold = day ? 1.3 : 0.98; }
   if (W3.sunScene) bakeSunShadow(); else SUN.on.value = 0;
-  if (W3.tifoMat) W3.tifoMat.emissiveIntensity = day ? 0.16 : 0.28;
+  for (const m of W3.tifoMats || []) m.emissiveIntensity = day ? 0.16 : 0.28;
   for (const m of W3.screenMats || []) m.color.setScalar(day ? (wet ? 1.6 : 1.85) : 2.3);
   if (W3.haloMat) W3.haloMat.color.setRGB(0.2, 0.34, 0.85).multiplyScalar(day ? (wet ? 0.8 : 0.65) : 1.2);
 }
