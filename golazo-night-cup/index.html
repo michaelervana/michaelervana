@@ -105,6 +105,58 @@ button{font:inherit;color:inherit;}
 .pick svg{width:100%;height:100%;display:block;transform:skewX(6deg);}
 .pick .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);}
 
+/* ---------- Club hub: one club at a time, in tiles ---------- */
+.hubwrap{width:min(1180px,100%);gap:clamp(8px,1.6vh,16px);}
+.hub-head{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;}
+.logo.sm{font-size:clamp(30px,min(5vw,7.5vh),58px);display:flex;align-items:center;gap:14px;text-align:left;}
+.logo.sm .l1{filter:drop-shadow(0 3px 12px rgba(80,140,255,.45));}
+.logo.sm .l2{margin-top:0;font-size:.32em;}
+.hub{--c1:#0a4fd6;--ca:color-mix(in srgb,var(--c1) 62%,#8fb2ff);display:grid;width:100%;gap:clamp(8px,1vw,12px);height:clamp(300px,58vh,470px);
+  grid-template-columns:1.25fr .95fr 1.55fr 1fr;grid-template-rows:minmax(0,1fr) auto;grid-template-areas:"club kit info stats" "club cap xi stats";}
+.tile{position:relative;min-width:0;min-height:0;overflow:hidden;border-radius:14px;padding:clamp(10px,1.3vw,18px);display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;
+  background:linear-gradient(180deg,rgba(19,28,50,.88),rgba(8,13,26,.92));border:1px solid var(--edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 14px 36px rgba(0,0,0,.35);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+.tl{font-size:var(--t-xs);letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.tv{font-family:var(--font-display);font-weight:800;font-size:clamp(16px,1.7vw,22px);letter-spacing:.06em;text-transform:uppercase;line-height:1.05;overflow-wrap:anywhere;}
+.hub-club{grid-area:club;justify-content:space-between;border-color:color-mix(in srgb,var(--ca) 70%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px color-mix(in srgb,var(--ca) 35%,transparent),0 18px 54px color-mix(in srgb,var(--c1) 42%,transparent);}
+.hub-club::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(86% 58% at 50% 50%,color-mix(in srgb,var(--ca) 34%,transparent),transparent 72%);}
+.hub-club>*{position:relative;}
+.hub-league{font-family:var(--font-display);font-weight:700;letter-spacing:.34em;font-size:var(--t-sm);color:var(--gold);text-transform:uppercase;padding-bottom:6px;width:100%;border-bottom:1px solid var(--edge);}
+.hub-name{font-family:var(--font-display);font-style:italic;font-weight:900;font-size:clamp(24px,3vw,42px);line-height:.95;text-transform:uppercase;margin-top:6px;text-wrap:balance;}
+.hub-crest{display:flex;align-items:center;justify-content:center;gap:clamp(4px,1vw,14px);width:100%;flex:1;min-height:0;}
+.hub-logo{height:100%;max-height:clamp(84px,26vh,210px);aspect-ratio:1;min-width:0;filter:drop-shadow(0 10px 24px rgba(0,0,0,.55));}
+.hub-logo svg,.hub-logo img{width:100%;height:100%;object-fit:contain;display:block;}
+.hub-arrow{flex:none;width:44px;height:44px;border-radius:50%;cursor:pointer;display:grid;place-items:center;font-size:15px;color:#fff;
+  background:var(--lg);border:1px solid var(--lg-edge);box-shadow:var(--lg-shadow);transition:transform .15s,background .15s;}
+.hub-arrow:hover,.hub-arrow:focus-visible{background:var(--lg-hi);transform:scale(1.1);outline:none;}
+.hub-arrow:active{transform:scale(.94);}
+.hub-stars{color:var(--gold);font-size:clamp(16px,2vw,24px);letter-spacing:.22em;line-height:1;text-shadow:0 0 14px rgba(255,210,61,.45);}
+.hub-stars i{font-style:normal;opacity:.25;}
+.hub-dots{display:flex;gap:6px;margin-top:4px;}
+.hub-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:.2s;}
+.hub-dots i.on{background:#fff;box-shadow:0 0 10px var(--ca);transform:scale(1.25);}
+.hub-kit{grid-area:kit;}
+.hub-kit .kit{flex:1;min-height:0;width:100%;height:auto;object-fit:contain;display:block;}
+.hub-sw{display:flex;gap:6px;}
+.hub-sw i{width:24px;height:8px;border-radius:4px;border:1px solid rgba(255,255,255,.35);}
+.hub-cap{grid-area:cap;justify-content:center;}
+.hub-xi{grid-area:xi;justify-content:center;}
+.hub-info{grid-area:info;justify-content:space-evenly;}
+.hub-big{font-family:var(--font-display);font-weight:900;font-style:italic;font-size:clamp(40px,6vw,86px);line-height:.9;
+  background:linear-gradient(180deg,#fff 0%,#fff 46%,#b9cdf5 54%,#e9f0ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.hub-two{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:8px;align-items:start;}
+.hub-n{font-family:var(--font-display);font-weight:800;font-size:clamp(24px,3vw,40px);line-height:1;font-variant-numeric:tabular-nums;}
+.hub-line{width:86%;height:1px;background:var(--edge);flex:none;}
+.hub-stats{grid-area:stats;display:flex;flex-direction:column;gap:clamp(8px,1vw,12px);min-height:0;}
+.hub-stat{flex:1;align-items:flex-start;justify-content:space-between;text-align:left;
+  background:linear-gradient(135deg,rgba(15,21,38,.94) 28%,color-mix(in srgb,var(--c1) 58%,#0b1020) 140%);}
+.hub-stat b{position:absolute;right:clamp(10px,1.2vw,16px);top:clamp(6px,1vw,12px);font-family:var(--font-display);font-style:italic;font-weight:900;font-size:clamp(26px,3vw,42px);line-height:1;font-variant-numeric:tabular-nums;}
+.hub-stat .bar{width:100%;}
+.hub-stat .bar i{background:linear-gradient(90deg,var(--ca),#fff);}
+.hub.swap .hub-logo,.hub.swap .hub-name,.hub.swap .hub-big{animation:hubin .28s ease-out;}
+@keyframes hubin{from{opacity:0;transform:translateY(8px) scale(.96);}to{opacity:1;transform:none;}}
+
 /* ---------- Buttons / chips ---------- */
 .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center;}
 .cta{position:relative;cursor:pointer;font-family:var(--font-display);font-weight:800;font-style:italic;font-size:clamp(20px,2.4vw,26px);
@@ -405,6 +457,10 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   .stat{grid-template-columns:64px 1fr 22px;}
   .howto{grid-template-columns:repeat(2,minmax(0,1fr));}
   .logo{font-size:clamp(48px,15vw,90px);}
+  .hub-head{flex-direction:column;gap:6px;}
+  .hub{height:auto;grid-template-columns:1.15fr 1fr;grid-template-rows:auto;grid-template-areas:"club kit" "club stats" "info info";}
+  .hub-cap,.hub-xi{display:none;}
+  .hub-club{min-height:270px;} .hub-kit{min-height:150px;} .hub-info{gap:10px;}
 }
 @media (max-width:560px){
   .kicker{letter-spacing:.2em;text-align:center;}
@@ -426,6 +482,14 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
   .wrap{gap:10px;}
   .card-body{gap:6px;padding:10px 14px;}
   .tag{display:none;}
+  .hub{height:calc(100vh - 132px);min-height:176px;grid-template-rows:minmax(0,1fr);grid-template-areas:"club kit info stats";}
+  .hub-cap,.hub-xi,.hub-head .kicker,#scr-select .credit,.hub-line{display:none;}
+  #hub-kit{display:block;}
+  .hub-big{font-size:clamp(28px,11vh,56px);} .hub-name{font-size:clamp(18px,6vh,30px);margin-top:2px;} .hub-arrow{width:36px;height:36px;}
+  .hub-league{padding-bottom:3px;}
+}
+@media (max-height:520px) and (max-width:760px){
+  .hub{height:auto;grid-template-columns:1.15fr 1fr;grid-template-rows:auto;grid-template-areas:"club kit" "club stats" "info info";}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;}
@@ -444,13 +508,33 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
 </section>
 
 <section id="scr-select" class="screen scrim" aria-labelledby="logo">
-  <div class="wrap">
-    <div class="kicker">Nusantara Stadium · Kick-off 19:45</div>
-    <h1 class="logo" id="logo"><span class="l1">GOLAZO</span><span class="l2">NIGHT CUP</span></h1>
-    <p class="tag">Pick your team, set the difficulty and take on a smart, pressing opponent.</p>
-    <div class="cards-wrap"><button class="cnav l" id="cards-prev" aria-label="Previous teams">&#8249;</button><div class="cards" id="cards" role="radiogroup" aria-label="Choose a team"></div><button class="cnav r" id="cards-next" aria-label="More teams">&#8250;</button></div>
-    <button class="cta" id="btn-next" disabled><span id="btn-next-label">Choose a team first</span></button>
-    <p class="credit">Stadium model: “Al Wakrah Stadium Worldcup 2022” by Ninh Phạm (Sketchfab), CC BY-NC-SA 4.0</p>
+  <div class="wrap hubwrap">
+    <div class="hub-head">
+      <h1 class="logo sm" id="logo"><span class="l1">GOLAZO</span><span class="l2">NIGHT CUP</span></h1>
+      <div class="kicker">Nusantara Stadium · Kick-off 19:45</div>
+    </div>
+    <div class="hub" id="cards" role="group" aria-label="Choose a club">
+      <div class="tile hub-club" id="hub-club">
+        <div class="hub-league" id="hub-league"></div>
+        <div class="hub-name" id="hub-name" aria-live="polite"></div>
+        <div class="hub-crest"><button class="hub-arrow" id="cards-prev" aria-label="Previous club">&#9664;</button><div class="hub-logo" id="hub-logo"></div><button class="hub-arrow" id="cards-next" aria-label="Next club">&#9654;</button></div>
+        <div class="hub-stars" id="hub-stars" aria-hidden="true"></div>
+        <div class="tnick" id="hub-nick"></div>
+        <div class="hub-dots" id="hub-dots" aria-hidden="true"></div>
+      </div>
+      <div class="tile hub-kit"><div class="tl">Kit</div><div class="tv">Home kit</div><canvas class="kit" id="hub-kit" width="480" height="300"></canvas><div class="hub-sw" id="hub-sw" aria-hidden="true"></div></div>
+      <div class="tile hub-cap"><div class="tl">Captain</div><div class="tv" id="hub-cap"></div></div>
+      <div class="tile hub-info">
+        <div><div class="tl">Founded</div><div class="hub-big" id="hub-founded"></div></div>
+        <div class="hub-two"><div><div class="hub-n" id="hub-ovr"></div><div class="tl">Overall</div></div><div><div class="hub-n">4-3-3</div><div class="tl">Formation</div></div></div>
+        <div class="hub-line"></div>
+        <div class="hub-two"><div><div class="tl">Country</div><div class="tv" id="hub-country"></div></div><div><div class="tl">Star player</div><div class="tv" id="hub-star"></div></div></div>
+      </div>
+      <div class="tile hub-xi"><div class="tl">Front three</div><div class="tv" id="hub-xi"></div></div>
+      <div class="hub-stats" id="hub-stats"></div>
+    </div>
+    <button class="cta" id="btn-next"><span id="btn-next-label">Continue</span></button>
+    <p class="credit">Stadium model: “Al Wakrah Stadium Worldcup 2022” by Ninh Phạm (Sketchfab), CC BY-NC-SA 4.0 · Player, official, ball and grass models: see CREDITS</p>
   </div>
 </section>
 
@@ -477,8 +561,8 @@ kbd{font-family:var(--font-display);font-weight:700;font-size:13px;padding:1px 6
       </div>
       <div class="chips" role="radiogroup" aria-label="Kick-off time">
         <span class="chips-label">Time</span>
-        <button class="chip tod" role="radio" aria-checked="true" data-tod="day"><span>Day</span></button>
-        <button class="chip tod" role="radio" aria-checked="false" data-tod="night"><span>Night</span></button>
+        <button class="chip tod" role="radio" aria-checked="false" data-tod="day"><span>Day</span></button>
+        <button class="chip tod" role="radio" aria-checked="true" data-tod="night"><span>Night</span></button>
       </div>
       <div class="chips" role="radiogroup" aria-label="Weather">
         <span class="chips-label">Weather</span>
@@ -1205,9 +1289,9 @@ const lin = (h, k = 1) => new THREE.Color(h).convertSRGBToLinear().multiplyScala
 function tex3(c, srgb = true, aniso = 8) { const t = new THREE.CanvasTexture(c); if (srgb) t.encoding = THREE.sRGBEncoding; t.anisotropy = Math.min(aniso, R3.capabilities.getMaxAnisotropy()); return t; }
 
 const FINAL_SHADER = {
-  uniforms: { tDiffuse: { value: null }, exposure: { value: 1.0 }, vignette: { value: 0.55 }, saturation: { value: 1.12 }, ca: { value: 0 }, grain: { value: 0 }, time: { value: 0 } },
+  uniforms: { tDiffuse: { value: null }, exposure: { value: 1.0 }, vignette: { value: 0.55 }, saturation: { value: 1.12 }, grade: { value: 1 }, ca: { value: 0 }, grain: { value: 0 }, time: { value: 0 } },
   vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float exposure, vignette, saturation, ca, grain, time; varying vec2 vUv;
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float exposure, vignette, saturation, grade, ca, grain, time; varying vec2 vUv;
     float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
     vec3 aces(vec3 x){ return clamp((x*(2.51*x+0.03))/(x*(2.43*x+0.59)+0.14), 0.0, 1.0); }
     vec3 srgb(vec3 c){ return mix(c*12.92, 1.055*pow(c, vec3(1.0/2.4))-0.055, step(0.0031308, c)); }
@@ -1215,6 +1299,9 @@ const FINAL_SHADER = {
       if (ca > 0.0) { c.r = texture2D(tDiffuse, vUv + dd * ca * r2).r; c.b = texture2D(tDiffuse, vUv - dd * ca * r2).b; }
       c *= exposure; c = aces(c);
       float l = dot(c, vec3(0.2126, 0.7152, 0.0722)); c = mix(vec3(l), c, saturation);
+      // broadcast grade: cool shadows, warm highlights, a gentle contrast curve
+      c *= mix(vec3(1.0), mix(vec3(0.9, 0.98, 1.13), vec3(1.07, 1.0, 0.92), smoothstep(0.12, 0.78, l)), grade);
+      c = mix(c, c * c * (3.0 - 2.0 * c), 0.08 + 0.2 * grade);
       vec2 d = vUv - 0.5; c *= 1.0 - vignette * dot(d, d) * 1.4;
       c += (hash(vUv * 1000.0 + time) - 0.5) * grain;
       gl_FragColor = vec4(srgb(max(c, 0.0)), 1.0); }`
@@ -1236,7 +1323,7 @@ function initGL() {
   const fill = new THREE.DirectionalLight(lin('#a9bfff'), 0.55); fill.position.set(60, 45, 70); SCN.add(fill);
   const rim = new THREE.DirectionalLight(lin('#ffd7a8'), 0.45); rim.position.set(-70, 40, 60); SCN.add(rim);
   W3.fill = fill; W3.rim = rim; W3.keyOff = [-32, 72, -48];
-  buildSky(); buildPitch3(); buildLines3(); buildGoals3(); buildFlags3(); buildStadium3(); buildBoards3(); buildBall3(); buildFxMeshes(); buildRain3();
+  buildSky(); buildPitch3(); buildLines3(); buildGoals3(); buildFlags3(); buildStadium3(); buildBoards3(); buildBall3(); buildFxMeshes(); buildRain3(); buildAtmosphere();
 }
 function setupComposer(w, h) {
   R3.setSize(w, h, false);
@@ -1246,6 +1333,62 @@ function setupComposer(w, h) {
   COMP.addPass(new THREE.RenderPass(SCN, CAM3));
   BLOOM = new THREE.UnrealBloomPass(new THREE.Vector2(w, h), 0.5, 0.6, 1.0); BLOOM.enabled = Q3.bloom; COMP.addPass(BLOOM);
   FINAL = new THREE.ShaderPass(FINAL_SHADER); COMP.addPass(FINAL);
+}
+
+/* ---------------- atmosphere ----------------
+   Night-match air: motes drifting through the floodlights, a soft glow of haze under the roof lights, and club-coloured
+   pyro smoke rising behind both goals at kick-off and after every goal. All three are GPU-animated point clouds / sprites. */
+const ATM = { n: 0, next: 0, max: 260 };
+function buildAtmosphere() {
+  const rng = mulberry32(77), N = isTouch ? 380 : 900, P = new Float32Array(N * 3), S = new Float32Array(N);
+  for (let i = 0; i < N; i++) { P[i * 3] = (rng() - 0.5) * 128; P[i * 3 + 1] = 1.5 + rng() * rng() * 30; P[i * 3 + 2] = (rng() - 0.5) * 88; S[i] = rng(); }
+  const mg = new THREE.BufferGeometry(); mg.setAttribute('position', new THREE.BufferAttribute(P, 3)); mg.setAttribute('seed', new THREE.BufferAttribute(S, 1));
+  W3.motes = new THREE.Points(mg, new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false,
+    uniforms: { time: { value: 0 }, k: { value: 1 }, px: { value: 600 } },
+    vertexShader: `attribute float seed; uniform float time, px; varying float vA;
+      void main(){ vec3 p = position + vec3(sin(time * 0.11 + seed * 50.0) * 3.0, sin(time * 0.07 + seed * 31.0) * 1.5, cos(time * 0.09 + seed * 77.0) * 3.0);
+        vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_Position = projectionMatrix * mv;
+        float sz = (0.05 + seed * 0.08) * px / max(1.0, -mv.z); gl_PointSize = max(1.5, sz);
+        vA = (0.45 + 0.55 * sin(time * (1.1 + seed * 1.9) + seed * 100.0)) * min(1.0, sz / 1.5) * smoothstep(3.0, 9.0, -mv.z); }`,
+    fragmentShader: 'uniform float k; varying float vA; void main(){ float d = length(gl_PointCoord - 0.5) * 2.0; gl_FragColor = vec4(vec3(1.0, 0.95, 0.84) * 0.5 * k * vA * smoothstep(1.0, 0.1, d), 1.0); }' }));
+  W3.motes.frustumCulled = false; SCN.add(W3.motes);
+  // haze: big soft sprites hanging under the roof lights
+  const hc = mkCanvas(128, 128), hg = hc.getContext('2d'), gr = hg.createRadialGradient(64, 64, 0, 64, 64, 64);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.45, 'rgba(255,255,255,0.35)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); hg.fillStyle = gr; hg.fillRect(0, 0, 128, 128);
+  const ht = new THREE.CanvasTexture(hc); W3.hazeMat = new THREE.SpriteMaterial({ map: ht, color: new THREE.Color(0.6, 0.72, 1.0), opacity: 0.075, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
+  W3.haze = [];
+  for (let i = 0; i < (isTouch ? 6 : 10); i++) { const a = i / (isTouch ? 6 : 10) * TAU + 0.3, sp = new THREE.Sprite(W3.hazeMat); sp.position.set(Math.cos(a) * 62, 27, Math.sin(a) * 42); sp.scale.set(84, 30, 1); SCN.add(sp); W3.haze.push(sp); }
+  // pyro smoke pool
+  const M = ATM.max, pg = new THREE.BufferGeometry();
+  pg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(M * 3), 3)); pg.setAttribute('vel', new THREE.BufferAttribute(new Float32Array(M * 3), 3));
+  pg.setAttribute('col', new THREE.BufferAttribute(new Float32Array(M * 3), 3)); pg.setAttribute('born', new THREE.BufferAttribute(new Float32Array(M * 2).fill(-999), 2));
+  W3.pyro = new THREE.Points(pg, new THREE.ShaderMaterial({ transparent: true, depthWrite: false, fog: false,
+    uniforms: { time: { value: 0 }, px: { value: 600 }, lit: { value: 1 } },
+    vertexShader: `attribute vec3 vel, col; attribute vec2 born; uniform float time, px; varying vec4 vC;
+      void main(){ float age = time - born.x, life = 5.0 + born.y * 3.0, t = age / life;
+        if (age < 0.0 || t > 1.0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); gl_PointSize = 0.0; vC = vec4(0.0); return; }
+        vec3 p = position + vec3(vel.x, 0.0, vel.z) * age * (1.0 - 0.4 * t) + vec3(0.0, vel.y * (1.0 - exp(-age * 0.45)) / 0.45, 0.0)
+          + vec3(sin(age * 0.7 + born.y * 40.0), 0.0, cos(age * 0.5 + born.y * 17.0)) * 1.6 * t;
+        vec4 mv = modelViewMatrix * vec4(p, 1.0); gl_Position = projectionMatrix * mv;
+        gl_PointSize = (1.6 + 8.5 * t) * px / max(1.0, -mv.z);
+        vC = vec4(mix(col, vec3(0.9), 0.18 + 0.4 * t), smoothstep(0.0, 0.07, t) * pow(1.0 - t, 1.4) * 0.5); }`,
+    fragmentShader: 'uniform float lit; varying vec4 vC; void main(){ float d = length(gl_PointCoord - 0.5) * 2.0; gl_FragColor = vec4(vC.rgb * lit * (0.62 + 0.38 * (1.0 - d)), vC.a * smoothstep(1.0, 0.25, d)); }' }));
+  W3.pyro.frustumCulled = false; W3.pyro.renderOrder = 5; SCN.add(W3.pyro);
+}
+// n puffs of smoke from (x, z) on the ground, staggered over `spread` seconds
+function pyro(x, z, hex, n, spread) {
+  if (!W3.pyro) return; const g = W3.pyro.geometry, P = g.attributes.position, V = g.attributes.vel, C = g.attributes.col, B = g.attributes.born, c = lin(hex);
+  for (let i = 0; i < n; i++) { const k = ATM.next; ATM.next = (ATM.next + 1) % ATM.max;
+    P.setXYZ(k, x + rand(-0.6, 0.6), 0.8, z + rand(-0.6, 0.6)); V.setXYZ(k, rand(-0.5, 0.5), rand(2.2, 4.2), rand(-0.5, 0.5)); C.setXYZ(k, c.r, c.g, c.b); B.setXY(k, G.t + i / n * spread + rand(0, 0.15), Math.random()); }
+  P.needsUpdate = V.needsUpdate = C.needsUpdate = B.needsUpdate = true;
+}
+// flares behind both goals: each end burns in one team's colours
+function pyroEnds(teams, n, spread) {
+  for (const [end, T] of teams) { if (!T) continue; const x = end * (PL + 7.5); [-13, -4.5, 4.5, 13].forEach((z, i) => pyro(x, z, i % 2 ? (T.c2 || '#ffffff') : T.c1, n, spread)); }
+}
+function updateAtmosphere(t) {
+  if (!W3.motes) return; const px = H / (2 * Math.tan(CAM3.fov * Math.PI / 360));
+  W3.motes.material.uniforms.time.value = t; W3.motes.material.uniforms.px.value = px; W3.pyro.material.uniforms.time.value = G.t; W3.pyro.material.uniforms.px.value = px;
 }
 
 /* ---------------- sky ---------------- */
@@ -1286,21 +1429,22 @@ function grassDetailCanvas() {
 }
 function grassify(mat, strength, bump, refl) {
   mat.onBeforeCompile = sh => {
-    sh.uniforms.tDetail = { value: W3.detailTex }; sunUniforms(sh.uniforms);
+    sh.uniforms.tDetail = { value: W3.detailTex }; sh.uniforms.uDetK = W3.detK; sunUniforms(sh.uniforms);
     if (refl) { Object.assign(sh.uniforms, W3.reflU); }
     sh.vertexShader = (refl ? 'uniform mat4 uReflMat;\nvarying vec4 vReflP;\n' : '') + 'varying vec3 vWP;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.0)).xyz;' + (refl ? '\nvReflP = uReflMat * vec4(vWP, 1.0);' : ''));
     sh.fragmentShader = (refl ? `uniform sampler2D tRefl; uniform float uWet, uTime; varying vec4 vReflP;
       float rn(vec2 p){ vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f); float a = fract(sin(dot(i, vec2(127.1, 311.7))) * 43758.5), b = fract(sin(dot(i + vec2(1, 0), vec2(127.1, 311.7))) * 43758.5),
-        c = fract(sin(dot(i + vec2(0, 1), vec2(127.1, 311.7))) * 43758.5), d = fract(sin(dot(i + vec2(1, 1), vec2(127.1, 311.7))) * 43758.5); return mix(mix(a, b, f.x), mix(c, d, f.x), f.y); }\n` : '') + 'uniform sampler2D tDetail;\nvarying vec3 vWP;\n' + SUN_GLSL + '\n' + sh.fragmentShader
+        c = fract(sin(dot(i + vec2(0, 1), vec2(127.1, 311.7))) * 43758.5), d = fract(sin(dot(i + vec2(1, 1), vec2(127.1, 311.7))) * 43758.5); return mix(mix(a, b, f.x), mix(c, d, f.x), f.y); }\n` : '') + 'uniform sampler2D tDetail; uniform vec3 uDetK;\nvarying vec3 vWP;\n' + SUN_GLSL + '\n' + sh.fragmentShader
       .replace('#include <map_fragment>', `#include <map_fragment>
-        vec2 duv = vWP.xz * 0.25;
-        vec3 dA = texture2D(tDetail, duv).rgb, dB = texture2D(tDetail, duv * 0.173 + vec2(0.37, 0.11)).rgb;
+        vec2 duv = vWP.xz * uDetK.x;
+        vec3 dA = texture2D(tDetail, duv).rgb, dB = texture2D(tDetail, vWP.xz * 0.04325 + vec2(0.37, 0.11)).rgb;
+        float dNear = 1.0 - smoothstep(12.0, 52.0, distance(cameraPosition, vWP)); dA = mix(vec3(0.5), dA, mix(0.22, 1.0, dNear));
         diffuseColor.rgb *= mix(vec3(1.0), dA * 2.0, ${strength.toFixed(2)}) * mix(vec3(1.0), dB * 2.0, ${(strength * 0.45).toFixed(2)});`)
       .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
         { float h0 = texture2D(tDetail, duv).g, hx = texture2D(tDetail, duv + vec2(0.0025, 0.0)).g, hz = texture2D(tDetail, duv + vec2(0.0, 0.0025)).g;
-          vec3 bw = normalize(vec3((h0 - hx) * ${bump.toFixed(1)}, 1.0, (h0 - hz) * ${bump.toFixed(1)}));
+          vec3 bw = normalize(vec3((h0 - hx) * ${bump.toFixed(1)} * uDetK.y, 1.0, (h0 - hz) * ${bump.toFixed(1)} * uDetK.y));
           normal = normalize((viewMatrix * vec4(bw, 0.0)).xyz); }`)
-      .replace('#include <output_fragment>', 'outgoingLight *= mix(0.46, 1.0, sunLit(vWP));\n#include <output_fragment>')
+      .replace('#include <output_fragment>', 'outgoingLight *= mix(0.46, 1.0, sunLit(vWP));\n{ vec2 pq = vWP.xz * vec2(0.0161, 0.0238); outgoingLight *= mix(1.0, 0.8 + 0.36 * exp(-dot(pq, pq)), uDetK.z); }\n#include <output_fragment>')
       .replace('#include <output_fragment>', refl ? `if (uWet > 0.0) {
           // waterlogged pitch: worn muddy goalmouths and centre, wide standing puddles with raindrop rings
           float ax = abs(vWP.x), mudN = rn(vWP.xz * 0.35 + 1.3);
@@ -1319,6 +1463,97 @@ function grassify(mat, strength, bump, refl) {
           outgoingLight = mix(outgoingLight, rc, clamp(k, 0.0, 0.9)) + vec3(ring * pud * uWet * 0.05); }
         #include <output_fragment>` : '#include <output_fragment>');
   };
+}
+// x: detail tiles per metre, y: bump gain. The baked grass-blade tile (see pitch.js) is finer than the drawn fallback.
+W3.detK = { value: new THREE.Vector3(0.25, 1, 0) };      // z: night (floodlight pooling)
+const PITCH_URL = 'pitch.js';
+function loadPitchAssets() {
+  new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = PITCH_URL; sc.async = true; sc.onload = () => res(); sc.onerror = rej; document.head.appendChild(sc); }).then(() => {
+    const B = window.__BALL_TEX, Gt = window.__GRASS_TEX, Gb = window.__GRASS_BIN, Gh = window.__GRASS_H; delete window.__BALL_TEX; delete window.__GRASS_TEX; delete window.__GRASS_BIN; delete window.__GRASS_H;
+    try { if (Gb) buildGrass3(Gb); } catch (e) { console.warn('grass', e); }
+    const img = (src, fn) => { if (!src) return; const im = new Image(); im.onload = () => { try { fn(im); } catch (e) { console.warn('pitch', e); } }; im.src = src; };
+    img(B, im => {                                                     // the scanned match ball, baked onto the sphere
+      const t = new THREE.Texture(im); t.encoding = THREE.sRGBEncoding; t.anisotropy = Math.min(8, R3.capabilities.getMaxAnisotropy()); t.needsUpdate = true;
+      const m = W3.ball.material; if (m.map) m.map.dispose(); m.map = t; m.roughness = 0.46; m.color.setScalar(1.12); m.needsUpdate = true;
+    });
+    img(Gh, im => buildShell3(im));                                    // 3D grass over the whole pitch
+    img(Gt, im => {                                                    // real grass blades for the turf detail and bump
+      const t = W3.detailTex; t.image = im; t.needsUpdate = true; W3.detK.value.x = 0.85; W3.detK.value.y = 0.6;
+    });
+  }).catch(() => { });
+}
+// 3D grass: one tile of real tufts (from the grass model, see pitch.js) instanced on a grid that follows the point the camera
+// looks at. Tufts shrink into the turf towards the edge of the grid and the whole layer fades out for the high broadcast
+// camera, where a blade is smaller than a pixel. Each tuft takes the colour of the turf under it, so the mowing stripes carry through.
+const GR3 = { c: { value: new THREE.Vector2() }, k: { value: new THREE.Vector3(6, 0, 0) } }, _gd = new THREE.Vector3();
+function buildGrass3(b64) {
+  const bin = atob(b64), raw = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) raw[i] = bin.charCodeAt(i);
+  const hd = new Uint32Array(raw.buffer.slice(0, 16)), n = hd[0], ni = hd[1], tile = hd[2] / 1e6, bh = hd[3] / 1e6;
+  const q = new Uint16Array(raw.buffer.slice(16, 16 + n * 10)), t8 = raw.subarray(16 + n * 10, 16 + n * 11), ix = new Uint16Array(raw.buffer.slice(16 + n * 11, 16 + n * 11 + ni * 2));
+  const P = new Float32Array(n * 3), Rt = new Float32Array(n * 2), Tt = new Float32Array(n), N = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { P[i * 3] = (q[i * 5] / 65535 - 0.5) * 2 * tile; P[i * 3 + 1] = q[i * 5 + 1] / 65535 * bh * 1.05; P[i * 3 + 2] = (q[i * 5 + 2] / 65535 - 0.5) * 2 * tile;
+    Rt[i * 2] = (q[i * 5 + 3] / 65535 - 0.5) * 2 * tile; Rt[i * 2 + 1] = (q[i * 5 + 4] / 65535 - 0.5) * 2 * tile; Tt[i] = t8[i] / 255; N[i * 3 + 1] = 1; }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(P, 3)); geo.setAttribute('normal', new THREE.BufferAttribute(N, 3));
+  geo.setAttribute('aRoot', new THREE.BufferAttribute(Rt, 2)); geo.setAttribute('aT', new THREE.BufferAttribute(Tt, 1)); geo.setIndex(new THREE.BufferAttribute(ix, 1));
+  const mat = new THREE.MeshLambertMaterial({ map: W3.pitchMat.map, side: THREE.DoubleSide });
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.uGrC = GR3.c; sh.uniforms.uGrK = GR3.k; sh.uniforms.uDetK = W3.detK; sunUniforms(sh.uniforms);
+    sh.vertexShader = 'attribute vec2 aRoot; attribute float aT; uniform vec2 uGrC; uniform vec3 uGrK; varying float vGT; varying vec3 vGR;\n' + sh.vertexShader
+      .replace('#include <uv_vertex>', `#include <uv_vertex>
+        vec3 gRoot = (modelMatrix * instanceMatrix * vec4(aRoot.x, 0.0, aRoot.y, 1.0)).xyz; vGR = gRoot;
+        vUv = vec2(gRoot.x / 128.0 + 0.5, (2.0 - gRoot.z) / 92.0 + 0.5);`)
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+        float gF = (1.0 - smoothstep(uGrK.x * 0.5, uGrK.x, distance(gRoot.xz, uGrC))) * uGrK.y * step(abs(gRoot.x), 61.0) * step(abs(gRoot.z - 2.0), 43.0);
+        float gH = fract(sin(dot(floor(gRoot.xz * 9.0), vec2(12.9898, 78.233))) * 43758.5453);
+        transformed.y *= gF * (0.72 + 0.5 * gH);
+        float gS = sin(uGrK.z * 1.7 + gRoot.x * 2.1 + gRoot.z * 1.3) * 0.007 * aT * aT; transformed.x += gS; transformed.z += gS * 0.6;
+        vGT = aT;`);
+    sh.fragmentShader = 'uniform vec3 uDetK; varying float vGT; varying vec3 vGR;\n' + SUN_GLSL + '\n' + sh.fragmentShader
+      .replace('#include <map_fragment>', '#include <map_fragment>\n  diffuseColor.rgb *= mix(0.5, 1.22, vGT) * vec3(1.0, 1.04, 0.92);')
+      .replace('#include <normal_fragment_begin>', '#include <normal_fragment_begin>\n  normal = normalize((viewMatrix * vec4(0.0, 1.0, 0.0, 0.0)).xyz);')        // both faces of a blade are lit like the turf
+      .replace('#include <output_fragment>', 'outgoingLight *= mix(0.46, 1.0, sunLit4(vGR));\n{ vec2 pq = vGR.xz * vec2(0.0161, 0.0238); outgoingLight *= mix(1.0, 0.8 + 0.36 * exp(-dot(pq, pq)), uDetK.z); }\n#include <output_fragment>');
+  };
+  const side = isTouch ? 7 : 13, m = new THREE.InstancedMesh(geo, mat, side * side), M = new THREE.Matrix4(); let k = 0;
+  for (let i = 0; i < side; i++) for (let j = 0; j < side; j++) m.setMatrixAt(k++, M.makeTranslation((i - (side - 1) / 2) * tile, 0, (j - (side - 1) / 2) * tile));
+  m.instanceMatrix.needsUpdate = true; m.frustumCulled = false; m.receiveShadow = true; m.visible = false; m.userData = { tile, R: (side - 1) / 2 * tile };
+  SCN.add(m); W3.grass3 = m; applyTimeOfDay(G.tod);
+}
+// 3D grass over the whole pitch: the turf is drawn again as a stack of thin layers, each keeping only the texels where the
+// baked blades of the grass model reach that height. Blades get real depth everywhere (they hide boot soles and the ball's
+// underside, and shift against each other as the camera moves) for the cost of a few alpha-tested planes. The pitch lines
+// are painted into the blades, and the layers are lit and shadowed like the turf below them.
+function buildShell3(im) {
+  const hm = new THREE.Texture(im); hm.wrapS = hm.wrapT = THREE.RepeatWrapping; hm.anisotropy = Math.min(8, R3.capabilities.getMaxAnisotropy()); hm.needsUpdate = true;
+  const ppm = 10, T = TEX.pitch, lc = mkCanvas(128 * ppm, 92 * ppm), g = lc.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, lc.width, lc.height); g.fillStyle = '#fff';
+  for (const pts of LINES) { g.beginPath(); for (let i = 0; i < pts.length; i += 2) { const x = (pts[i] - T.x0) * ppm, y = (T.zTop - pts[i + 1]) * ppm; if (i) g.lineTo(x, y); else g.moveTo(x, y); } g.closePath(); g.fill(); }
+  const lt = new THREE.CanvasTexture(lc); lt.anisotropy = hm.anisotropy;
+  const K = isTouch ? 4 : 7, HS = 0.058, U = { tBlade: { value: hm }, tLine: { value: lt }, uShell: { value: new THREE.Vector3(HS, 1 / 0.92, isTouch ? 55 : 85) } };
+  const mat = new THREE.MeshLambertMaterial({ map: W3.pitchMat.map });
+  mat.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, U); sh.uniforms.uDetK = W3.detK; sunUniforms(sh.uniforms);
+    sh.vertexShader = 'uniform vec3 uShell; varying vec3 vSP; varying float vLay;\n' + sh.vertexShader
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\n  vSP = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz; vLay = instanceMatrix[3].y / uShell.x;');
+    sh.fragmentShader = 'uniform sampler2D tBlade, tLine; uniform vec3 uShell, uDetK; varying vec3 vSP; varying float vLay;\n' + SUN_GLSL + '\n' + sh.fragmentShader
+      .replace('#include <map_fragment>', `
+        if (distance(cameraPosition, vSP) > uShell.z) discard;
+        vec2 bu = vSP.xz * uShell.y; float bh = max(texture2D(tBlade, bu).g, texture2D(tBlade, vec2(bu.y, -bu.x) * 1.37 + 0.31).g * 0.92);
+        if (bh < vLay * 0.9 + 0.06) discard;
+        #include <map_fragment>
+        diffuseColor.rgb = mix(diffuseColor.rgb * mix(0.56, 1.24, vLay) * vec3(1.0, 1.04, 0.92), vec3(0.82, 0.86, 0.8) * mix(0.7, 1.05, vLay), texture2D(tLine, vUv).r * 0.92);`)
+      .replace('#include <output_fragment>', 'outgoingLight *= mix(0.46, 1.0, sunLit4(vSP));\n{ vec2 pq = vSP.xz * vec2(0.0161, 0.0238); outgoingLight *= mix(1.0, 0.8 + 0.36 * exp(-dot(pq, pq)), uDetK.z); }\n#include <output_fragment>');
+  };
+  const geo = new THREE.PlaneGeometry(128, 92).rotateX(-Math.PI / 2), m = new THREE.InstancedMesh(geo, mat, K), M = new THREE.Matrix4();
+  for (let i = 0; i < K; i++) m.setMatrixAt(i, M.makeTranslation(0, (i + 1) / K * HS, 0));
+  m.instanceMatrix.needsUpdate = true; m.position.set(0, 0, 2); m.frustumCulled = false; m.receiveShadow = true; SCN.add(m); W3.shell = m; applyTimeOfDay(G.tod);
+}
+function updateGrass3(t) {
+  const g = W3.grass3; if (!g) return;
+  CAM3.getWorldDirection(_gd);
+  const hit = _gd.y < -0.01 ? -CAM3.position.y / _gd.y : 1e9, reach = Math.min(hit, 9), cx = CAM3.position.x + _gd.x * reach, cz = CAM3.position.z + _gd.z * reach;
+  const d = Math.hypot(CAM3.position.x - cx, CAM3.position.y, CAM3.position.z - cz), k = clamp(1 - (d - 24) / 14, 0, 1);
+  g.visible = k > 0.01 && G.wx !== 'rain_off'; if (!g.visible) return;
+  const T = g.userData.tile; g.position.set(Math.round(cx / T) * T, 0, Math.round(cz / T) * T);
+  GR3.c.value.set(cx, cz); GR3.k.value.set(g.userData.R, k, t);
 }
 function buildPitch3() {
   const T = TEX.pitch, map = tex3(T.c, true, 16);
@@ -1929,6 +2164,7 @@ function rebuildRigs() {
     p.rig = R; SCN.add(R.root); W3.rigs.push(R);
   }
   if (KEEPER.gltf) attachKeepers();
+  attachPlayers();
 }
 
 // Rain: streaks animated entirely on the GPU in a box that follows the camera, plus splash rings on the turf
@@ -1988,7 +2224,7 @@ function renderReflection(t) {
   CAM3.getWorldDirection(_rd); _rtg.copy(CAM3.position).add(_rd); _rtg.y = -_rtg.y;
   rc.up.set(0, 1, 0).applyQuaternion(CAM3.quaternion); rc.up.y = -rc.up.y; rc.lookAt(_rtg); rc.updateMatrixWorld();
   U.uReflMat.value.copy(_bias).multiply(rc.projectionMatrix).multiply(rc.matrixWorldInverse);
-  const hide = [W3.pitch, W3.run, W3.lines, W3.blobs, W3.ring, W3.aim, W3.rain, W3.splash, W3.turf, W3.crowd].filter(Boolean), vis = hide.map(o => o.visible);
+  const hide = [W3.pitch, W3.run, W3.lines, W3.blobs, W3.ring, W3.aim, W3.rain, W3.splash, W3.turf, W3.crowd, W3.grass3, W3.shell, W3.motes, W3.pyro].filter(Boolean), vis = hide.map(o => o.visible);
   hide.forEach(o => { o.visible = false; });
   const au = R3.shadowMap.autoUpdate; R3.shadowMap.autoUpdate = false;
   R3.setRenderTarget(W3.reflRT); R3.clear(); R3.render(SCN, rc); R3.setRenderTarget(null);
@@ -2000,18 +2236,22 @@ function applyTimeOfDay(tod) {
   const wet = G.wx === 'rain';
   W3.hemi.color.copy(lin(day ? '#aacaf0' : '#7f95cf')); W3.hemi.groundColor.copy(lin(day ? '#565a3e' : '#2a2e22')); W3.hemi.intensity = day ? 0.85 : 0.62;
   KEY.color.copy(lin(day ? '#fff2df' : '#fff1dc')); KEY.intensity = day ? 2.6 : 2.25; W3.keyOff = day ? [-38, 78, -30] : [-32, 72, -48];
-  W3.fill.intensity = day ? 0.3 : 0.55; W3.rim.intensity = day ? 0.12 : 0.45;
+  W3.fill.intensity = day ? 0.3 : 0.55; W3.rim.intensity = day ? 0.12 : 0.62;
   SCN.fog.color.copy(lin(day ? (wet ? '#8f9aa8' : '#c5d7ec') : (wet ? '#1a2130' : '#0b1226'))); SCN.fog.density = (day ? 0.0015 : 0.0022) * (wet ? 3.6 : 1);
   if (wet) { KEY.intensity *= day ? 0.55 : 0.85; W3.hemi.intensity *= day ? 0.8 : 0.9; W3.hemi.color.copy(lin(day ? '#9aa8ba' : '#6f7f9f')); }
   if (W3.pitchMat) { W3.pitchMat.roughness = wet ? 0.7 : 0.93; W3.pitchMat.color.setScalar(wet ? 0.76 : 1); }
+  if (W3.grass3) W3.grass3.material.color.setScalar(wet ? 0.76 : 1);
+  if (W3.shell) W3.shell.material.color.setScalar(wet ? 0.76 : 1);
   if (W3.rain) { W3.rain.visible = W3.splash.visible = wet; W3.rain.material.uniforms.col.value.copy(day ? new THREE.Color(0.8, 0.85, 0.92) : new THREE.Color(0.9, 0.92, 1.0)); W3.rain.material.uniforms.alpha.value = day ? 0.22 : 0.3; }
   const u = W3.sky.uniforms; u.top.value.copy(lin(day ? '#2f6cc2' : '#03061a')); u.mid.value.copy(lin(day ? '#6aa6e6' : '#1a1648')); u.hor.value.copy(lin(day ? '#d3e5f6' : '#7a2d63')); u.glow.value.copy(lin(day ? '#f6e3c4' : '#ff8a4a'));
   if (wet) { u.top.value.copy(lin(day ? '#4d5866' : '#05070d')); u.mid.value.copy(lin(day ? '#76808c' : '#11141f')); u.hor.value.copy(lin(day ? '#a3abb5' : '#262a36')); u.glow.value.copy(lin(day ? '#b9bec4' : '#3a3440')); }
   W3.stars.visible = !day && !wet; W3.beams.forEach(b => { b.visible = !day || wet; b.material.opacity = (b.userData.op0 = b.userData.op0 || b.material.opacity) * (wet ? (day ? 0.45 : 1.6) : 1); });
   if (day) W3.lampMat.color.setRGB(1.5, 1.5, 1.45); else W3.lampMat.color.setRGB(9, 8.6, 7.8);
   if (W3.crowd) W3.crowd.material.uniforms.lightK.value = day ? 1.0 : 0.55;
-  if (FINAL) { FINAL.uniforms.vignette.value = day ? 0.28 : 0.55; FINAL.uniforms.saturation.value = (day ? 0.96 : 1.1) * (wet ? 0.82 : 1); FINAL.uniforms.exposure.value = (day ? 0.92 : 1.0) * (wet ? 1.06 : 1); }
-  if (BLOOM) { BLOOM.strength = day ? 0.2 : 0.5; BLOOM.threshold = day ? 1.3 : 1.0; }
+  W3.detK.value.z = day ? 0 : 1;
+  if (W3.motes) { W3.motes.material.uniforms.k.value = day ? (wet ? 0 : 0.12) : (wet ? 0.35 : 1); W3.haze.forEach(h => { h.visible = !day; }); W3.hazeMat.opacity = wet ? 0.11 : 0.075; W3.pyro.material.uniforms.lit.value = day ? 1.0 : 0.8; }
+  if (FINAL) { FINAL.uniforms.grade.value = day ? 0.45 : 1; FINAL.uniforms.vignette.value = day ? 0.28 : 0.55; FINAL.uniforms.saturation.value = (day ? 0.96 : 1.1) * (wet ? 0.82 : 1); FINAL.uniforms.exposure.value = (day ? 0.92 : 1.0) * (wet ? 1.06 : 1); }
+  if (BLOOM) { BLOOM.strength = day ? 0.2 : 0.58; BLOOM.threshold = day ? 1.3 : 0.98; }
   if (W3.sunScene) bakeSunShadow(); else SUN.on.value = 0;
   if (W3.tifoMat) W3.tifoMat.emissiveIntensity = day ? 0.16 : 0.28;
   for (const m of W3.screenMats || []) m.color.setScalar(day ? (wet ? 1.6 : 1.85) : 2.3);
@@ -3431,7 +3671,7 @@ function paintFace(L) {
 /* ---------------- level of detail + gaze ---------------- */
 const _hv = new THREE.Vector3(), _hl = new THREE.Vector3(), _qe = new THREE.Quaternion(), _fz = new THREE.Vector3(0, 0, 1);
 function headDetail(R, cam, viewH) {
-  if (!R.head) return;
+  if (!R.head || R.hd) return;
   R.head.getWorldPosition(_hv);
   const dist = _hv.distanceTo(cam.position), pxH = 0.23 / (2 * dist * Math.tan(cam.fov * Math.PI / 360)) * viewH, near = viewH < 0 || pxH > 55;
   const want = near ? HB.headHi : HB.head; if (R.head.geometry !== want) R.head.geometry = want;
@@ -3480,12 +3720,12 @@ function keeperTextures(g, body, normal, hair) {
   });
 }
 // Rest-pose analysis: scale to the game's body, rest frames of the model's bones built the same way the game builds its own
-function keeperPrepare(g) {
+function keeperPrepare(g, M = KEEPER) {
   const sc = g.scene; sc.updateMatrixWorld(true);
-  const bones = {}; sc.traverse(o => { if (o.isBone) bones[kKey(o.name)] = o; });
+  const key = M.key || kKey, bones = {}; sc.traverse(o => { if (o.isBone) bones[key(o.name)] = o; });
   const wp = n => bones[n].getWorldPosition(new THREE.Vector3());
-  KEEPER.kS = 0.985 / wp('Hips').y;
-  const P = n => wp(n).multiplyScalar(KEEPER.kS);
+  M.kS = 0.985 / wp('Hips').y;
+  const P = n => wp(n).multiplyScalar(M.kS);
   const legL = ['LeftUpLeg', 'LeftLeg', 'LeftFoot', 'LeftToeBase'].map(P), legR = ['RightUpLeg', 'RightLeg', 'RightFoot', 'RightToeBase'].map(P);
   const armL = ['LeftArm', 'LeftForeArm', 'LeftHand'].map(P), armR = ['RightArm', 'RightForeArm', 'RightHand'].map(P);
   const F = BONES.slice(0, 16).map(() => new THREE.Quaternion());
@@ -3499,11 +3739,11 @@ function keeperPrepare(g) {
     const y1 = dU.clone().negate(), x1 = hinge.clone(); orth(x1, y1); basisQ(x1, y1, F[bi]);
     const y2 = dF.clone().negate(), x2 = hinge.clone(); orth(x2, y2); basisQ(x2, y2, F[bi + 1]); F[bi + 2].copy(F[bi + 1]);
   }
-  KEEPER.C = F.map((f, i) => HB.bindQ[i].clone().multiply(f.clone().invert()));          // game rest frame -> model rest frame
-  KEEPER.hipsBind = bones.Hips.position.clone();
-  KEEPER.preQ = bones.Hips.parent.getWorldQuaternion(new THREE.Quaternion());
-  KEEPER.preInv = bones.Hips.parent.matrixWorld.clone().invert();
-  KEEPER.hipsBindW = bones.Hips.getWorldPosition(new THREE.Vector3());
+  M.C = F.map((f, i) => HB.bindQ[i].clone().multiply(f.clone().invert()));          // game rest frame -> model rest frame
+  M.hipsBind = bones.Hips.position.clone();
+  M.preQ = bones.Hips.parent.getWorldQuaternion(new THREE.Quaternion());
+  M.preInv = bones.Hips.parent.matrixWorld.clone().invert();
+  M.hipsBindW = bones.Hips.getWorldPosition(new THREE.Vector3());
 }
 function keeperKit(mesh, hex) {
   const m = mesh.material.clone(), col = new THREE.Color(hex).convertSRGBToLinear();
@@ -3516,6 +3756,33 @@ function keeperKit(mesh, hex) {
 }
 const KPARTS = { 4137: 'shirt', 3699: 'shorts', 622: 'socks' };
 function keeperPart(o) { const n = (o.name || '') + ' ' + ((o.geometry && o.geometry.name) || ''); return /Shirt/i.test(n) ? 'shirt' : /Shorts/i.test(n) ? 'shorts' : /Socks/i.test(n) ? 'socks' : KPARTS[o.geometry.attributes.position.count] || null; }
+// the model's bones in hierarchy order, each with its rest rotations and the game bone that drives it
+function hdChain(scene, key = kKey) {
+  const chain = [], bones = {};
+  scene.traverse(o => { if (o.isBone) bones[key(o.name)] = o; });
+  const hips = bones.Hips;
+  const walk = (b, pi) => {
+    const k = key(b.name), src = KMAP[k] === undefined ? null : KMAP[k];
+    const e = { b, pi, src, lb: b.quaternion.clone(), Wb: null, W: new THREE.Quaternion() };
+    chain.push(e); const me = chain.length - 1;
+    for (const c of b.children) if (c.isBone) walk(c, me);
+  };
+  walk(hips, -1);
+  // rest world rotations (relative to the model root)
+  const rootInv = scene.getWorldQuaternion(new THREE.Quaternion()).invert();
+  for (const e of chain) e.Wb = e.b.getWorldQuaternion(new THREE.Quaternion()).premultiply(rootInv);
+  return { chain, hips };
+}
+// skin tone on the keeper's body: only the saturated (skin) texels are tinted, so gloves and eye whites stay as they are
+function keeperSkin(mesh, tone) {
+  const m = mesh.material.clone(), k = new THREE.Vector3(tone[0], tone[1], tone[2]);
+  m.onBeforeCompile = sh => {
+    sh.uniforms.kSkin = { value: k };
+    sh.fragmentShader = 'uniform vec3 kSkin;\n' + sh.fragmentShader.replace('#include <map_fragment>', `#include <map_fragment>
+      { vec3 kb = diffuseColor.rgb; float mx = max(kb.r, max(kb.g, kb.b)), mn = min(kb.r, min(kb.g, kb.b)); diffuseColor.rgb = mix(kb, kb * kSkin, smoothstep(0.16, 0.3, (mx - mn) / max(mx, 0.0001))); }`);
+  };
+  m.customProgramCacheKey = () => 'gk-skin'; mesh.material = m; return m;
+}
 function attachKeepers() {
   if (!KEEPER.gltf) return;
   for (const p of players) {
@@ -3530,42 +3797,261 @@ function attachKeepers() {
       if (part === 'shirt') mats.push(keeperKit(o, kit.shirt));
       else if (part === 'shorts') mats.push(keeperKit(o, kit.shorts));
       else if (part === 'socks') mats.push(keeperKit(o, kit.socks));
+      else if (o.geometry.attributes.position.count === 9901 && skinTone(p.look) > 0) mats.push(keeperSkin(o, SKIN_TONES[skinTone(p.look)]));
     });
     R.root.add(scene); scene.updateMatrixWorld(true);
-    // the model's bones in hierarchy order, each with its rest rotations and the game bone that drives it
-    const chain = [], bones = {}; let hips = null;
-    scene.traverse(o => { if (o.isBone) bones[kKey(o.name)] = o; });
-    hips = bones.Hips;
-    const walk = (b, pi) => {
-      const k = kKey(b.name), src = KMAP[k] === undefined ? null : KMAP[k];
-      const e = { b, pi, src, lb: b.quaternion.clone(), Wb: null, W: new THREE.Quaternion() };
-      chain.push(e); const me = chain.length - 1;
-      for (const c of b.children) if (c.isBone) walk(c, me);
-    };
-    walk(hips, -1);
-    // rest world rotations (relative to the model root)
-    const rootInv = scene.getWorldQuaternion(new THREE.Quaternion()).invert();
-    for (const e of chain) e.Wb = e.b.getWorldQuaternion(new THREE.Quaternion()).premultiply(rootInv);
+    const { chain, hips } = hdChain(scene);
     R.mesh.visible = false;
-    R.hd = { scene, chain, hips, mats, D: BONES.slice(0, 16).map(() => new THREE.Quaternion()), sp1: new THREE.Quaternion(), sp2: new THREE.Quaternion(), qp: new THREE.Quaternion(), v: new THREE.Vector3() };
+    R.hd = { M: KEEPER, scene, chain, hips, mats, D: BONES.slice(0, 16).map(() => new THREE.Quaternion()), sp1: new THREE.Quaternion(), sp2: new THREE.Quaternion(), qp: new THREE.Quaternion(), v: new THREE.Vector3() };
   }
 }
 const _kq = new THREE.Quaternion();
 function keeperPose(R) {
-  const K = R.hd, Q = R.Q, D = K.D;
-  for (let i = 0; i < 16; i++) D[i].copy(Q[i]).multiply(KEEPER.C[i]);
+  const K = R.hd, Q = R.Q, D = K.D, M = K.M;
+  for (let i = 0; i < 16; i++) D[i].copy(Q[i]).multiply(M.C[i]);
   K.sp1.copy(D[0]).slerp(D[1], 0.36); K.sp2.copy(D[0]).slerp(D[1], 0.7);
   for (const e of K.chain) {
-    const pW = e.pi < 0 ? KEEPER.preQ : K.chain[e.pi].W;
+    const pW = e.pi < 0 ? M.preQ : K.chain[e.pi].W;
     if (e.src === null) e.W.copy(pW).multiply(e.lb);
     else e.W.copy(e.src === 'sp1' ? K.sp1 : e.src === 'sp2' ? K.sp2 : D[e.src]).multiply(e.Wb);
     e.b.quaternion.copy(_kq.copy(pW).invert()).multiply(e.W);
   }
   // the hips follow the game's pelvis (rest pelvis at 0.985 m)
-  const pel = R.bones[0].position, v = K.v.set(pel.x, pel.y - 0.985, pel.z).multiplyScalar(1 / KEEPER.kS).add(KEEPER.hipsBindW);
-  K.hips.position.copy(v.applyMatrix4(KEEPER.preInv));
+  const pel = R.bones[0].position, v = K.v.set(pel.x, pel.y - 0.985, pel.z).multiplyScalar(1 / M.kS).add(M.hipsBindW);
+  K.hips.position.copy(v.applyMatrix4(M.preInv));
 }
-function disposeKeeper(R) { if (R.hd) { for (const m of R.hd.mats) m.dispose(); R.hd = null; } }
+function disposeKeeper(R) { if (R.hd) { for (const m of R.hd.mats) m.dispose(); for (const t of R.hd.tex || []) t.dispose(); R.hd = null; } }
+/* =====================================================================
+   HD PLAYERS
+   Every outfield player and match official wears the rigged, textured footballer model (CC BY 4.0, see CREDITS). It is
+   driven exactly like the HD goalkeepers: the pose the game computes is carried onto the model's skeleton. The model's
+   white kit is one mesh with a per-vertex part id, so a single shader dresses it in the club's shirt, sleeves, shorts
+   and socks (stripes and the Hechter band included), prints the player's name and number on the back and the club
+   crest on the chest, and gives each player one of three skin tones: white, light brown or dark brown.
+   ===================================================================== */
+const HDP = { gltf: null, loading: false, kS: 1, C: null, tex: null, crest: {}, kitMat: null, hairMat: null };
+const PLAYER_URL = 'player.js';
+const SKIN_TONES = [[1.08, 1.04, 1.02], [0.74, 0.585, 0.48], [0.36, 0.255, 0.2]];     // white, light brown, dark brown
+const skinTone = L => { const i = SKINS.indexOf(L.skin); return i < 2 ? 0 : i < 4 ? 1 : 2; };
+function loadPlayerModel() {
+  if (HDP.loading || HDP.gltf || !THREE.GLTFLoader || !THREE.SkeletonUtils) return;
+  HDP.loading = true;
+  new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = PLAYER_URL; sc.async = true; sc.onload = () => res(); sc.onerror = rej; document.head.appendChild(sc); }).then(() => {
+    const b64 = window.__PLAYER_B64, T = window.__PLAYER_TEX || {}; if (!b64) throw new Error('no player'); delete window.__PLAYER_B64; delete window.__PLAYER_TEX;
+    const bin = atob(b64), buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    const img = src => new Promise((res, rej) => { if (!src) { rej(new Error('no texture')); return; } const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+    Promise.all([img(T.body), img(T.normal), img(T.hair)]).then(([body, normal, hair]) => {
+      new THREE.GLTFLoader().parse(buf.buffer, '', g => { try { playerPrepare(g, body, normal, hair); HDP.gltf = g; attachPlayers(); } catch (e) { console.warn('player', e); } }, () => { HDP.loading = false; });
+    }).catch(() => { HDP.loading = false; });
+  }).catch(() => { HDP.loading = false; });
+}
+// One skinned mesh for skin + kit + boots (part id per vertex), one for hair and lashes: two draw calls per player
+function hdMerge(list, name, pidOf) {
+  let nv = 0, ni = 0; for (const o of list) { nv += o.geometry.attributes.position.count; ni += o.geometry.index.count; }
+  const P = new Float32Array(nv * 3), N = new Float32Array(nv * 3), U = new Float32Array(nv * 2), SI = new Uint16Array(nv * 4), SW = new Float32Array(nv * 4), PT = new Float32Array(nv), I = new (nv > 65535 ? Uint32Array : Uint16Array)(ni);
+  let vo = 0, io = 0;
+  for (const o of list) {
+    const a = o.geometry.attributes, n = a.position.count, ix = o.geometry.index, pid = pidOf(o);
+    for (let i = 0; i < n; i++) {
+      const v = vo + i;
+      P[v * 3] = a.position.getX(i); P[v * 3 + 1] = a.position.getY(i); P[v * 3 + 2] = a.position.getZ(i);
+      N[v * 3] = a.normal.getX(i); N[v * 3 + 1] = a.normal.getY(i); N[v * 3 + 2] = a.normal.getZ(i);
+      U[v * 2] = a.uv.getX(i); U[v * 2 + 1] = a.uv.getY(i);
+      SI[v * 4] = a.skinIndex.getX(i); SI[v * 4 + 1] = a.skinIndex.getY(i); SI[v * 4 + 2] = a.skinIndex.getZ(i); SI[v * 4 + 3] = a.skinIndex.getW(i);
+      SW[v * 4] = a.skinWeight.getX(i); SW[v * 4 + 1] = a.skinWeight.getY(i); SW[v * 4 + 2] = a.skinWeight.getZ(i); SW[v * 4 + 3] = a.skinWeight.getW(i);
+      PT[v] = pid;
+    }
+    for (let i = 0; i < ix.count; i++) I[io + i] = ix.getX(i) + vo;
+    vo += n; io += ix.count;
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(P, 3)); geo.setAttribute('normal', new THREE.BufferAttribute(N, 3)); geo.setAttribute('uv', new THREE.BufferAttribute(U, 2));
+  geo.setAttribute('skinIndex', new THREE.BufferAttribute(SI, 4)); geo.setAttribute('skinWeight', new THREE.BufferAttribute(SW, 4)); geo.setAttribute('part', new THREE.BufferAttribute(PT, 1));
+  geo.setIndex(new THREE.BufferAttribute(I, 1));
+  const first = list[0], m = new THREE.SkinnedMesh(geo, first.material); m.name = name;
+  m.position.copy(first.position); m.quaternion.copy(first.quaternion); m.scale.copy(first.scale); first.parent.add(m); m.updateMatrixWorld(true);
+  m.bind(first.skeleton, first.bindMatrix);
+  for (const o of list) { o.parent.remove(o); o.geometry.dispose(); }
+  return m;
+}
+function playerPrepare(g, body, normal, hair) {
+  const tex = (im, srgb) => { const t = new THREE.Texture(im); t.flipY = false; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 4; if (srgb) t.encoding = THREE.sRGBEncoding; t.needsUpdate = true; return t; };
+  HDP.tex = { body: tex(body, true), normal: tex(normal, false), hair: tex(hair, true) };
+  const sc = g.scene; sc.updateMatrixWorld(true);
+  const PART = { body: 0, shirt: 1, shorts: 2, socks: 3, shoes: 4 }, partOf = o => o.userData.part || (/P_([a-z]+)/.exec(o.name) || [])[1] || '';
+  const all = []; sc.traverse(o => { if (o.isSkinnedMesh) all.push(o); });
+  hdMerge(all.filter(o => PART[partOf(o)] !== undefined), 'HD_kit', o => PART[partOf(o)]); hdMerge(all.filter(o => PART[partOf(o)] === undefined), 'HD_hair', () => 0);
+  HDP.kitMat = new THREE.MeshStandardMaterial({ map: HDP.tex.body, normalMap: HDP.tex.normal, normalScale: new THREE.Vector2(1, 1), roughness: 0.74, metalness: 0, side: THREE.DoubleSide });
+  HDP.hairMat = new THREE.MeshStandardMaterial({ map: HDP.tex.hair, alphaTest: 0.4, roughness: 0.58, metalness: 0, side: THREE.DoubleSide, color: new THREE.Color(1.5, 1.45, 1.4) });
+  keeperPrepare(g, HDP);
+}
+const HD_FRAG = `{
+  vec3 kb = diffuseColor.rgb; float kl = dot(kb, vec3(0.299, 0.587, 0.114)), ks = clamp(kl * 1.4, 0.0, 1.3);
+  if (vPart < 0.5) {                                                    // skin (the eyes keep their own colours)
+    float eye = step(0.822, vUv.x) * step(0.432, vUv.y) * step(vUv.y, 0.527);
+    diffuseColor.rgb = mix(kb * kSkin, kb, eye);
+  } else if (vPart < 1.5) {                                             // shirt: body, pattern, sleeves, cuffs, prints
+    float ax = abs(vRest.x), body = 1.0 - smoothstep(19.5, 21.0, ax); vec3 c = kShirt;
+    if (kPattern > 0.5 && kPattern < 1.5) c = mix(kShirt, kStripe, step(0.5, fract(vRest.x / 9.0 + 0.25)));
+    if (kPattern > 1.5) c = ax < 5.2 ? kStripe : ax < 6.8 ? kStripe2 : kShirt;
+    c = mix(kSleeve, c, body); c = mix(c, kTrim, step(67.0, ax));
+    vec3 col = c * ks;
+    vec2 d = (vUv - vec2(0.4541, 0.6523)) / 0.1953; float in1 = step(0.0, d.x) * step(d.x, 1.0) * step(0.0, d.y) * step(d.y, 1.0);
+    vec4 t1 = texture2D(kDecal, clamp(d, 0.0, 1.0)) * in1; col = col * (1.0 - t1.a) + t1.rgb * clamp(ks, 0.55, 1.05);
+    vec2 e = (vUv - vec2(0.1904, 0.2422)) / 0.0449; float in2 = step(0.0, e.x) * step(e.x, 1.0) * step(0.0, e.y) * step(e.y, 1.0);
+    vec4 t2 = texture2D(kCrest, clamp(e, 0.0, 1.0)) * in2; col = col * (1.0 - t2.a) + t2.rgb * clamp(ks, 0.6, 1.0);
+    diffuseColor.rgb = col;
+  } else if (vPart < 2.5) diffuseColor.rgb = kShorts * ks;
+  else if (vPart < 3.5) diffuseColor.rgb = mix(kSocks, kSockTop, step(32.5, vRest.y)) * ks;
+  else diffuseColor.rgb = mix(kb, kBoot * clamp(kl * 2.6 + 0.07, 0.0, 1.2), 0.82);
+}`;
+function hdKitMaterial(U) {
+  const m = HDP.kitMat.clone();
+  m.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, U);
+    sh.vertexShader = 'attribute float part; varying float vPart; varying vec3 vRest;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n  vPart = part; vRest = position;');
+    sh.fragmentShader = 'uniform vec3 kShirt, kSleeve, kShorts, kSocks, kSockTop, kTrim, kStripe, kStripe2, kSkin, kBoot; uniform float kPattern; uniform sampler2D kDecal, kCrest; varying float vPart; varying vec3 vRest;\n'
+      + sh.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n' + HD_FRAG);
+  };
+  m.customProgramCacheKey = () => 'hd-kit'; return m;
+}
+// back print (name + number) and chest crest: premultiplied so the edges blend cleanly over any shirt colour
+function hdPrint(cnv) { const t = new THREE.CanvasTexture(cnv); t.flipY = false; t.premultiplyAlpha = true; t.encoding = THREE.sRGBEncoding; t.anisotropy = 4; return t; }
+function hdDecal(num, name, col) {
+  const c = mkCanvas(256, 256), g = c.getContext('2d'); g.fillStyle = col; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  if (num !== '' && num !== undefined) { g.font = '800 168px "Barlow Condensed", "Arial Narrow", sans-serif'; g.fillText(String(num), 128, 226, 236); }
+  if (name) { g.font = '700 36px "Barlow Condensed", "Arial Narrow", sans-serif'; g.fillText(String(name).toUpperCase(), 128, 70, 240); }
+  return hdPrint(c);
+}
+function hdCrest(team) {
+  const id = team.id || 'ref'; if (HDP.crest[id]) return HDP.crest[id];
+  const c = mkCanvas(128, 128), g = c.getContext('2d'), im = logoImg(id);
+  if (im) { const k = Math.min(120 / im.width, 120 / im.height), w = im.width * k, h = im.height * k; g.drawImage(im, 64 - w / 2, 64 - h / 2, w, h); }
+  const t = hdPrint(c); if (im) HDP.crest[id] = t; return t;
+}
+function attachHD(R, team, L, num, name) {
+  if (!HDP.gltf || !R || R.hd || L.gk) return;                         // keepers keep their own model (with gloves)
+  const scene = THREE.SkeletonUtils.clone(HDP.gltf.scene); scene.scale.setScalar(HDP.kS);
+  let kit = null, hair = null;
+  scene.traverse(o => { if (!o.isSkinnedMesh) return; if (o.name === 'HD_kit') kit = o; else hair = o; o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; });
+  hair.bind(kit.skeleton, kit.bindMatrix);                             // one skeleton update per player
+  const v3 = h => { const c = lin(h); return new THREE.Vector3(c.r, c.g, c.b); }, tone = SKIN_TONES[skinTone(L)];
+  const decal = hdDecal(num, name, team.num || '#ffffff');
+  const U = { kShirt: { value: v3(team.shirt) }, kSleeve: { value: v3(team.sleeve || team.shirt) }, kShorts: { value: v3(team.shorts) }, kSocks: { value: v3(team.socks) },
+    kSockTop: { value: v3(team.sockTop || team.trim || team.socks) }, kTrim: { value: v3(team.trim || team.shirt) }, kStripe: { value: v3(team.stripe || team.shirt) }, kStripe2: { value: v3(team.stripe2 || '#ffffff') },
+    kSkin: { value: new THREE.Vector3(tone[0], tone[1], tone[2]) }, kBoot: { value: v3(L.boot || '#141414') }, kPattern: { value: team.pattern === 'stripes' ? 1 : team.pattern === 'hechter' ? 2 : 0 },
+    kDecal: { value: decal }, kCrest: { value: hdCrest(team) } };
+  kit.material = hdKitMaterial(U); hair.material = HDP.hairMat;
+  hdFinish(R, HDP, scene, [kit.material], [decal]);
+}
+function hdFinish(R, M, scene, mats, tex) {
+  R.root.add(scene); scene.updateMatrixWorld(true);
+  const rig = hdChain(scene, M.key);
+  R.mesh.material.visible = false; R.head.visible = false; if (R.hair) R.hair.visible = false; if (R.cards) R.cards.visible = false;     // props on the game rig (whistle, flag) stay
+  R.hd = Object.assign(rig, { M, scene, mats, tex, D: BONES.slice(0, 16).map(() => new THREE.Quaternion()), sp1: new THREE.Quaternion(), sp2: new THREE.Quaternion(), qp: new THREE.Quaternion(), v: new THREE.Vector3() });
+}
+function attachPlayers() {
+  if (!HDP.gltf && !HDR.gltf) return;
+  // the second model dresses the officials and every midfielder; everyone else outfield wears the footballer (which also stands in if the second model fails to load)
+  for (const p of players) if (p.rig && !p.rig.hd && !p.look.gk) {
+    if (p.role === 'MID' && HDR.gltf) attachRef(p.rig, TEAMS_SEL[p.team], p.look, p.num, p.name);
+    else if (p.role !== 'MID' || HDR.failed) attachHD(p.rig, TEAMS_SEL[p.team], p.look, p.num, p.name);
+  }
+  for (const o of officials) if (o.rig && !o.rig.hd) { if (HDR.gltf) attachRef(o.rig, refKit(), o.look, '', ''); else if (HDR.failed) attachHD(o.rig, REF_TEAM, o.look, '', ''); }
+  if (typeof PV !== 'undefined' && PV.items) { PV.items.forEach((it, i) => { if (it && !it.R.hd) attachHD(it.R, TEAMS[i], it.p.look, TEAMS[i].squad[9][1], TEAMS[i].squad[9][0]); }); PV.drawn = TEAMS.map(() => false); }
+}
+
+/* =====================================================================
+   HD MATCH OFFICIALS AND MIDFIELDERS
+   The referee and both assistants wear the second rigged model (CC BY 4.0, see CREDITS), a Character Creator rig whose
+   bones are renamed onto the same map the players use. Its skin, shirt, shorts, boots and eyes share one atlas and one
+   mesh; the shader colours the kit, pulls socks up the shins and applies the same three skin tones. Officials get a
+   referee kit picked to stand out from both teams; the midfielders of both teams wear this model too, in their club's
+   kit with name, number and crest.
+   ===================================================================== */
+const CCN = { Hip: 'Hips', Waist: 'Spine', Spine01: 'Spine1', Spine02: 'Spine2', NeckTwist01: 'Neck', Head: 'Head',
+  L_Clavicle: 'LeftShoulder', L_Upperarm: 'LeftArm', L_Forearm: 'LeftForeArm', L_Hand: 'LeftHand', R_Clavicle: 'RightShoulder', R_Upperarm: 'RightArm', R_Forearm: 'RightForeArm', R_Hand: 'RightHand',
+  L_Thigh: 'LeftUpLeg', L_Calf: 'LeftLeg', L_Foot: 'LeftFoot', L_ToeBase: 'LeftToeBase', R_Thigh: 'RightUpLeg', R_Calf: 'RightLeg', R_Foot: 'RightFoot', R_ToeBase: 'RightToeBase' };
+const ccKey = n => { const k = n.replace(/_\d+$/, '').replace(/^CC_Base_/, ''); return CCN[k] || 'cc_' + k; };
+const HDR = { gltf: null, loading: false, failed: false, kS: 1, C: null, tex: null, kitMat: null, hairMat: null, key: ccKey };
+const REF_URL = 'referee.js';
+function loadRefModel() {
+  if (HDR.loading || HDR.gltf || !THREE.GLTFLoader || !THREE.SkeletonUtils) return;
+  HDR.loading = true;
+  const fail = () => { HDR.loading = false; HDR.failed = true; attachPlayers(); };
+  new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = REF_URL; sc.async = true; sc.onload = () => res(); sc.onerror = rej; document.head.appendChild(sc); }).then(() => {
+    const b64 = window.__REF_B64, T = window.__REF_TEX || {}; if (!b64) throw new Error('no referee'); delete window.__REF_B64; delete window.__REF_TEX;
+    const bin = atob(b64), buf = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    const img = src => new Promise((res, rej) => { if (!src) { rej(new Error('no texture')); return; } const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+    Promise.all([img(T.body), img(T.hair)]).then(([body, hair]) => {
+      new THREE.GLTFLoader().parse(buf.buffer, '', g => { try { refPrepare(g, body, hair); HDR.gltf = g; HDR.loading = false; attachPlayers(); } catch (e) { console.warn('referee', e); fail(); } }, fail);
+    }).catch(fail);
+  }).catch(fail);
+}
+function refPrepare(g, body, hair) {
+  const tex = (im, srgb) => { const t = new THREE.Texture(im); t.flipY = false; t.anisotropy = 4; if (srgb) t.encoding = THREE.sRGBEncoding; t.needsUpdate = true; return t; };
+  HDR.tex = { body: tex(body, true), hair: tex(hair, true) };
+  const sc = g.scene; sc.updateMatrixWorld(true);
+  const PART = { head: 0, torso: 0, arm: 0, shirt: 1, shorts: 2, leg: 3, boots: 4, eye: 5 }, partOf = o => o.userData.part || (/R_([a-z]+)/.exec(o.name) || [])[1] || '';
+  const all = []; sc.traverse(o => { if (o.isSkinnedMesh) all.push(o); });
+  hdMerge(all.filter(o => partOf(o) !== 'hair'), 'HD_kit', o => PART[partOf(o)] || 0); hdMerge(all.filter(o => partOf(o) === 'hair'), 'HD_hair', () => 0);
+  HDR.kitMat = new THREE.MeshStandardMaterial({ map: HDR.tex.body, roughness: 0.78, metalness: 0, side: THREE.DoubleSide });
+  HDR.hairMat = new THREE.MeshStandardMaterial({ map: HDR.tex.hair, alphaTest: 0.32, roughness: 0.6, metalness: 0, side: THREE.DoubleSide });
+  keeperPrepare(g, HDR);
+}
+const REF_FRAG = `{
+  vec3 kb = diffuseColor.rgb; float kl = dot(kb, vec3(0.299, 0.587, 0.114)), ks = clamp(kl * 1.4, 0.0, 1.3);
+  if (vPart < 0.5) diffuseColor.rgb = kb * kSkin;
+  else if (vPart < 1.5) {                                               // short-sleeved shirt: body, pattern, sleeves, hems, prints
+    float ax = abs(vRest.x), body = 1.0 - smoothstep(19.5, 21.0, ax); vec3 c = kShirt;
+    if (kPattern > 0.5 && kPattern < 1.5) c = mix(kShirt, kStripe, step(0.5, fract(vRest.x / 9.0 + 0.25)));
+    if (kPattern > 1.5) c = ax < 5.2 ? kStripe : ax < 6.8 ? kStripe2 : kShirt;
+    c = mix(kSleeve, c, body); c = mix(c, kTrim, step(35.2, ax));
+    vec3 col = c * ks;
+    // the prints are projected in the rest pose: name and number across the back, crest on the left chest
+    vec2 d = vec2((12.5 - vRest.x) / 25.0, (146.0 - vRest.y) / 25.0); float in1 = step(0.0, d.x) * step(d.x, 1.0) * step(0.0, d.y) * step(d.y, 1.0) * step(vRestN.z, -0.2);
+    vec4 t1 = texture2D(kDecal, clamp(d, 0.0, 1.0)) * in1; col = col * (1.0 - t1.a) + t1.rgb * clamp(ks, 0.55, 1.05);
+    vec2 e = vec2((vRest.x - 5.0) / 6.5, (142.5 - vRest.y) / 6.5); float in2 = step(0.0, e.x) * step(e.x, 1.0) * step(0.0, e.y) * step(e.y, 1.0) * step(0.2, vRestN.z);
+    vec4 t2 = texture2D(kCrest, clamp(e, 0.0, 1.0)) * in2; col = col * (1.0 - t2.a) + t2.rgb * clamp(ks, 0.6, 1.0);
+    diffuseColor.rgb = col;
+  } else if (vPart < 2.5) diffuseColor.rgb = kShorts * ks;
+  else if (vPart < 3.5) {                                               // legs: skin above, socks pulled up the shin
+    vec3 sock = mix(kSocks, kSockTop, step(36.0, vRest.y)) * clamp(kl * 1.9, 0.0, 1.15);
+    diffuseColor.rgb = mix(sock, kb * kSkin, smoothstep(40.0, 40.5, vRest.y));
+  } else if (vPart < 4.5) diffuseColor.rgb = kBoot * clamp(kl * 2.6 + 0.05, 0.0, 1.2);
+}`;
+function refMaterial(U) {
+  const m = HDR.kitMat.clone();
+  m.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, U);
+    sh.vertexShader = 'attribute float part; varying float vPart; varying vec3 vRest, vRestN;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\n  vPart = part; vRest = position; vRestN = normal;');
+    sh.fragmentShader = 'uniform vec3 kShirt, kSleeve, kShorts, kSocks, kSockTop, kTrim, kStripe, kStripe2, kSkin, kBoot; uniform float kPattern; uniform sampler2D kDecal, kCrest; varying float vPart; varying vec3 vRest, vRestN;\n'
+      + sh.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\n' + REF_FRAG);
+  };
+  m.customProgramCacheKey = () => 'hd-ref'; return m;
+}
+// the referee shirt is the candidate furthest from both teams' shirts
+function refKit() {
+  const a = shirtRGB(TEAMS_SEL[0]), b = shirtRGB(TEAMS_SEL[1]); let best = '#e4f23a', bd = -1;
+  for (const c of ['#e4f23a', '#ff4f9a', '#22c7d6', '#ff7a1a', '#18181c']) { const r = hexRgb(c), d = Math.min(kitDist(r, a), kitDist(r, b)); if (d > bd) { bd = d; best = c; } }
+  return { id: 'ref', shirt: best, sleeve: best, shorts: '#141416', socks: '#141416', sockTop: best, trim: '#141416', num: '#141416' };
+}
+// officials (referee kit) and midfielders (their club's kit, name, number and crest) both wear this model
+function attachRef(R, team, L, num, name) {
+  if (!HDR.gltf || !R || R.hd) return;
+  const scene = THREE.SkeletonUtils.clone(HDR.gltf.scene); scene.scale.setScalar(HDR.kS);
+  let kit = null, hair = null;
+  scene.traverse(o => { if (!o.isSkinnedMesh) return; if (o.name === 'HD_kit') kit = o; else hair = o; o.castShadow = true; o.receiveShadow = true; o.frustumCulled = false; });
+  hair.bind(kit.skeleton, kit.bindMatrix);
+  const v3 = h => { const c = lin(h); return new THREE.Vector3(c.r, c.g, c.b); }, tone = SKIN_TONES[skinTone(L)], ref = team.id === 'ref';
+  const decal = hdDecal(num, name, team.num || '#ffffff');
+  const U = { kShirt: { value: v3(team.shirt) }, kSleeve: { value: v3(team.sleeve || team.shirt) }, kShorts: { value: v3(team.shorts) }, kSocks: { value: v3(team.socks) },
+    kSockTop: { value: v3(team.sockTop || team.trim || team.socks) }, kTrim: { value: v3(team.trim || team.shirt) }, kStripe: { value: v3(team.stripe || team.shirt) }, kStripe2: { value: v3(team.stripe2 || '#ffffff') },
+    kSkin: { value: new THREE.Vector3(tone[0], tone[1], tone[2]) }, kBoot: { value: v3(ref ? '#16161a' : (L.boot || '#141414')) }, kPattern: { value: team.pattern === 'stripes' ? 1 : team.pattern === 'hechter' ? 2 : 0 },
+    kDecal: { value: decal }, kCrest: { value: hdCrest(team) } };
+  kit.material = refMaterial(U); hair.material = HDR.hairMat;
+  hdFinish(R, HDR, scene, [kit.material], [decal]);
+}
 
 /* ---------------- Ball ---------------- */
 const ICO = (() => { const t = (1 + Math.sqrt(5)) / 2, v = [[-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0], [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t], [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1]]; return v.map(a => { const l = Math.hypot(...a); return a.map(c => c / l); }); })();
@@ -3728,7 +4214,7 @@ function drawScreenFx() {
    Team 0 = the human's team, always attacking +x (the right-hand goal).
    Team 1 = AI on "easy": slower, rarely tackles, weak finishing.
    ===================================================================== */
-const G = { tod: 'day', state: 'menu', t: 0, clock: 0, dur: 300, half: 1, score: [0, 0], hype: 0, goalTeam: -1, timeScale: 1, kickTeam: 0,
+const G = { tod: 'night', state: 'menu', t: 0, clock: 0, dur: 300, half: 1, score: [0, 0], hype: 0, goalTeam: -1, timeScale: 1, kickTeam: 0,
   stats: { shots: [0, 0], onT: [0, 0], poss: [0, 0], passes: [0, 0], offsides: [0, 0] }, scorers: [], stT: 0, pending: null, setT: 0, lastSwitch: 0, scorer: null };
 let TEAMS_SEL = [TEAMS[0], TEAMS[1]];
 const players = [];
@@ -4640,6 +5126,7 @@ function onGoal(team) {
   const T = TEAMS_SEL[team];
   banner(team === 0 ? 'GOAL!' : 'GOAL', `${sc.name} · ${minute}'`, team !== 0);
   G.fwCols = [T.c1, T.c2, '#ffd23d', '#ffffff'];
+  pyroEnds([[-1, T], [1, T]], 16, 4);
   if (team === 0) spawnConfetti(G.fwCols, 220);
   G.timeScale = 0.3; updateScore(true); rig.shake = 0.35;
   sc.act = A_CELEB; sc.actT = 0; sc.actDur = 99;
@@ -4997,35 +5484,36 @@ function drawRadar() {
    MENUS
    ===================================================================== */
 G.myIdx = -1; G.oppIdx = -1;
+// Club hub: one club on screen at a time. Arrows, arrow keys, the dots or a swipe step through the clubs.
+const CLUB = { che: ['England', 1905], mun: ['England', 1878], bvb: ['Germany', 1909], rma: ['Spain', 1902], bay: ['Germany', 1900], psg: ['France', 1970], bar: ['Spain', 1899], liv: ['England', 1892], tot: ['England', 1882], mci: ['England', 1880], ars: ['England', 1886] };
 function buildCards() {
-  const wrap = $('cards'); wrap.innerHTML = '';
-  TEAMS.forEach((t, i) => {
-    const b = document.createElement('button'); b.className = 'card'; b.id = 'team-' + t.id; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', 'false');
-    b.style.setProperty('--c1', t.c1);
-    // selected: a glossy round check badge in the club's own colour (a dark tick on light colours)
-    const [cr, cg, cb] = hexRgb(t.c1), light = (0.299 * cr + 0.587 * cg + 0.114 * cb) / 255 > 0.62, tick = light ? (t.c2 || '#0b1426') : '#ffffff';
-    const pickSVG = `<svg viewBox="0 0 64 64" aria-hidden="true"><defs><radialGradient id="pk${i}" cx="38%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".42" stop-color="${t.c1}" stop-opacity="0"/></radialGradient>`
-      + `<linearGradient id="pl${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${shade(t.c1, 1.18)}"/><stop offset="1" stop-color="${shade(t.c1, 0.62)}"/></linearGradient></defs>`
-      + `<circle cx="32" cy="33.5" r="29" fill="rgba(0,0,0,.35)"/><circle cx="32" cy="32" r="29" fill="url(#pl${i})"/><circle cx="32" cy="32" r="29" fill="url(#pk${i})"/>`
-      + `<ellipse cx="29" cy="17" rx="18" ry="9.5" fill="#fff" opacity=".28"/><circle cx="32" cy="32" r="28.2" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.2"/>`
-      + `<path d="M19 33.5 L28 42 L46 22.5" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 1.6)"/>`
-      + `<path d="M19 33.5 L28 42 L46 22.5" fill="none" stroke="${tick}" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    b.innerHTML = `<div class="card-in"><span class="pick" title="Selected">${pickSVG}<span class="sr">Selected</span></span><div class="card-body"><div class="card-top"><div class="badge">${badgeSVG(t)}</div><div><div class="tname">${t.name}</div><div class="tnick">${t.nick}</div></div></div><canvas class="kit" width="480" height="300"></canvas><div class="stats">${Object.entries(t.stats).map(([k, v]) => `<div class="stat"><span>${k}</span><div class="bar"><i style="width:${v}%"></i></div><b>${v}</b></div>`).join('')}</div></div></div>`;
-    b.addEventListener('click', () => selectTeam(i));
-    b.addEventListener('pointerenter', () => { PV.hover = i; }); b.addEventListener('pointerleave', () => { if (PV.hover === i) PV.hover = -1; });
-    wrap.appendChild(b);
-  });
+  const dots = $('hub-dots'); dots.innerHTML = TEAMS.map(() => '<i></i>').join('');
+  const club = $('hub-club'); let sx = null;
+  club.addEventListener('pointerdown', e => { sx = e.clientX; });
+  club.addEventListener('pointerup', e => { if (sx !== null && Math.abs(e.clientX - sx) > 44) cardsScroll(e.clientX < sx ? 1 : -1); sx = null; });
+  club.addEventListener('pointercancel', () => { sx = null; });
+  selectTeam(G.myIdx >= 0 ? G.myIdx : 0, true);
 }
-function cardsNav() {
-  const c = $('cards'), max = c.scrollWidth - c.clientWidth - 2;
-  $('cards-prev').disabled = c.scrollLeft <= 2; $('cards-next').disabled = c.scrollLeft >= max;
+function fillHub(i) {
+  const t = TEAMS[i], hub = $('cards'), info = CLUB[t.id] || ['', ''], st = t.stats, ovr = Math.round((st.Attack + st.Pace + st.Defence) / 3), stars = clamp(Math.round((ovr - 76) / 2), 3, 5);
+  const level = v => v >= 88 ? 'World class' : v >= 85 ? 'Very high' : v >= 82 ? 'High' : 'Solid', sq = t.squad || [];
+  hub.style.setProperty('--c1', t.c1);
+  $('hub-league').textContent = info[0]; $('hub-name').textContent = t.name; $('hub-logo').innerHTML = badgeSVG(t); $('hub-nick').textContent = t.nick;
+  $('hub-stars').innerHTML = '★'.repeat(stars) + '<i>' + '★'.repeat(5 - stars) + '</i>';
+  $('hub-dots').querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === i));
+  $('hub-founded').textContent = info[1]; $('hub-ovr').textContent = ovr; $('hub-country').textContent = info[0];
+  $('hub-star').textContent = sq[9] ? sq[9][0] : ''; $('hub-cap').textContent = sq[t.captain] ? sq[t.captain][0] + ' · ' + sq[t.captain][1] : '';
+  $('hub-xi').textContent = [8, 9, 10].map(k => sq[k] ? sq[k][0] : '').filter(Boolean).join(' · ');
+  $('hub-sw').innerHTML = [t.shirt, t.shorts, t.socks].map(c => `<i style="background:${c}"></i>`).join('');
+  $('hub-stats').innerHTML = Object.entries(st).map(([k, v]) => `<div class="tile hub-stat"><div class="tl">${k}</div><b>${v}</b><div class="tv">${level(v)}</div><div class="bar"><i style="width:${v}%"></i></div></div>`).join('');
+  hub.classList.remove('swap'); void hub.offsetWidth; hub.classList.add('swap');
 }
-function cardsScroll(dir) { const c = $('cards'), w = c.querySelector('.card'); c.scrollBy({ left: dir * ((w ? w.offsetWidth : 240) + 16) * 2, behavior: 'smooth' }); }
-function selectTeam(i) {
-  audioInit(); menuMusic(true); sfxUI(620 + i * 90); G.myIdx = i;
-  document.querySelectorAll('.card').forEach((c, k) => { c.classList.toggle('sel', k === i); c.classList.toggle('dim', k !== i); c.setAttribute('aria-checked', k === i ? 'true' : 'false'); });
+function cardsNav() { }
+function cardsScroll(dir) { const n = TEAMS.length; selectTeam(((G.myIdx < 0 ? 0 : G.myIdx) + dir + n) % n); }
+function selectTeam(i, silent) {
+  if (!silent) { audioInit(); menuMusic(true); sfxUI(620 + (i % 6) * 70); }
+  G.myIdx = i; fillHub(i);
   $('btn-next').disabled = false; $('btn-next-label').textContent = 'Continue with ' + TEAMS[i].name;
-  const card = document.querySelectorAll('.card')[i]; if (card && card.scrollIntoView) card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
 }
 function fillVs() {
   const a = TEAMS[G.myIdx], b = TEAMS[G.oppIdx];
@@ -5060,6 +5548,7 @@ function startMatch() {
     Object.assign(rig, { tx: -24, tz: 8, h: 30, D: 58, vw: 92, shift: 0.56 });
     G.state = 'intro'; G.stT = 0; IN.moved = false;
     banner('KICK OFF', 'Nusantara Stadium', true);
+    pyroEnds([[-1, TEAMS_SEL[0]], [1, TEAMS_SEL[1]]], 14, 5);
     crowdLevel(0.6); sfxCheer(false); updateScore(); updateLower(); resize();
     if (isTouch && innerHeight > innerWidth * 1.15) { $('rotate').hidden = false; clearTimeout(startMatch.rt); startMatch.rt = setTimeout(() => { $('rotate').hidden = true; }, 5000); }
   });
@@ -5135,7 +5624,6 @@ function wireUI() {
   $('btn-swap').addEventListener('click', () => swapOpp(1)); $('vs-opp').addEventListener('click', () => swapOpp(1));
   addEventListener('keydown', e => { if ($('scr-vs').hidden) return; if (e.code === 'ArrowRight') swapOpp(1); else if (e.code === 'ArrowLeft') swapOpp(-1); });
   $('cards-prev').addEventListener('click', () => cardsScroll(-1)); $('cards-next').addEventListener('click', () => cardsScroll(1));
-  $('cards').addEventListener('scroll', cardsNav, { passive: true }); addEventListener('resize', cardsNav); setTimeout(cardsNav, 50);
   addEventListener('keydown', e => { if ($('scr-select').hidden || !$('scr-vs').hidden) return; if (e.code === 'ArrowRight' || e.code === 'ArrowLeft') { const n = TEAMS.length, i = G.myIdx < 0 ? 0 : (G.myIdx + (e.code === 'ArrowRight' ? 1 : -1) + n) % n; selectTeam(i); } });
   document.querySelectorAll('.chip.dur').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('.chip.dur').forEach(o => o.setAttribute('aria-checked', o === c ? 'true' : 'false')); G.dur = +c.dataset.dur; sfxUI(560); }));
   document.querySelectorAll('.chip.diff').forEach(c => c.addEventListener('click', () => { document.querySelectorAll('.chip.diff').forEach(o => o.setAttribute('aria-checked', o === c ? 'true' : 'false')); setDifficulty(c.dataset.diff); $('vs-role2').textContent = 'Opponent · ' + c.textContent.trim(); sfxUI(660); }));
@@ -5178,24 +5666,19 @@ function pvItem(i) {
   if (PV.items[i]) return PV.items[i];
   const team = TEAMS[i], L = lookFor(team, false, 9, mulberry32(41 + i * 13)); L.idle = i % 3 === 1 ? 1 : 0;
   const R = makeRig(team, L, team.squad[9][1], team.squad[9][0]); R.root.visible = false; PV.scn.add(R.root);
+  attachHD(R, team, L, team.squad[9][1], team.squad[9][0]);
   return (PV.items[i] = { R, p: { look: L, rx: 0, rz: 0, rf: -Math.PI / 2, rph: 0, rsp: 0, ract: A_NONE, ractT: 0, raux: 0, rjump: 0 } });
 }
 function renderKits(t) {
   if ($('scr-select').hidden) return;
   if (!PV.r && !PV.fail && G.fontsOk) initPreview();
   if (!PV.r) return;
-  const box = $('cards').getBoundingClientRect(); let made = 0;
-  document.querySelectorAll('.card canvas').forEach((c, i) => {
-    const r = c.getBoundingClientRect(); if (r.width < 2 || r.right < box.left - 30 || r.left > box.right + 30) return;
-    const anim = i === G.myIdx || i === PV.hover;
-    if (!anim && PV.drawn[i]) return;
-    if (!PV.items[i]) { if (made++) return; pvItem(i); }
-    const it = PV.items[i];
-    PV.items.forEach(o => { if (o) o.R.root.visible = o === it; });
-    it.p.rf = anim ? -Math.PI / 2 + Math.sin(t * 0.5 + i * 2.1) * 1.9 : -Math.PI / 2 + 0.38; it.p.rph = anim ? t * 2.2 + i : 0.5;
-    poseRig(it.R, it.p); it.R.root.updateMatrixWorld(true); headDetail(it.R, PV.cam, -1); PV.r.render(PV.scn, PV.cam);
-    const g = c.getContext('2d'); g.clearRect(0, 0, c.width, c.height); g.drawImage(PV.r.domElement, 0, 0, c.width, c.height); PV.drawn[i] = true;
-  });
+  const c = $('hub-kit'), i = G.myIdx < 0 ? 0 : G.myIdx; if (!c || c.getBoundingClientRect().width < 2) return;
+  const it = pvItem(i);
+  PV.items.forEach(o => { if (o) o.R.root.visible = o === it; });
+  it.p.rf = -Math.PI / 2 + Math.sin(t * 0.5 + i * 2.1) * 1.9; it.p.rph = t * 2.2 + i;
+  poseRig(it.R, it.p); if (it.R.hd) keeperPose(it.R); it.R.root.updateMatrixWorld(true); headDetail(it.R, PV.cam, -1); PV.r.render(PV.scn, PV.cam);
+  const g = c.getContext('2d'); g.clearRect(0, 0, c.width, c.height); g.drawImage(PV.r.domElement, 0, 0, c.width, c.height);
 }
 
 // Set-piece aim: a stream of glowing dots flowing out along the kick path (arcing for lofted balls)
@@ -5276,9 +5759,9 @@ function render(dt) {
   camApply(rig);
   const t = G.t, live = !['menu', 'result', 'replay'].includes(G.state) && !(G.state === 'paused' && G.prev === 'replay');
   for (const p of players) if (p.rig) { poseRig(p.rig, p); if (p.rig.hd) keeperPose(p.rig); }
-  for (const o of officials) if (o.rig) poseRig(o.rig, o);
+  for (const o of officials) if (o.rig) { poseRig(o.rig, o); if (o.rig.hd) keeperPose(o.rig); }
   for (const R of W3.rigs) headDetail(R, CAM3, H);
-  updateAimArrow(t); updateRain(t); if (W3.tifoT) W3.tifoT.value = t; if (W3.bigCanvas && Math.floor(t * 2) !== W3.bigTick) { W3.bigTick = Math.floor(t * 2); drawBigScreen(false); }
+  updateAimArrow(t); updateRain(t); updateAtmosphere(t); updateGrass3(t); if (W3.tifoT) W3.tifoT.value = t; if (W3.bigCanvas && Math.floor(t * 2) !== W3.bigTick) { W3.bigTick = Math.floor(t * 2); drawBigScreen(false); }
   updateFx3(t, live && G.state !== 'goal');
   updateNets(t);
   updateBoards(t, (G.state === 'goal' || G.state === 'replay' || (G.state === 'paused' && G.goalTeam >= 0)) ? G.goalTeam : -1);
@@ -5323,7 +5806,7 @@ function boot() {
   buildPitchTexture();
   TEAMS_SEL = [TEAMS[0], TEAMS[1]];
   buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]);
-  setDifficulty('hard'); initGL(); resize(); applyGfx(GFX.ultra); loadStadiumModel(); loadKeeperModel(); applyTimeOfDay(G.tod || 'day');
+  setDifficulty('hard'); initGL(); resize(); applyGfx(GFX.ultra); loadStadiumModel(); loadKeeperModel(); loadPlayerModel(); loadRefModel(); loadPitchAssets(); applyTimeOfDay(G.tod || 'day');
   buildTeams(); rebuildRigs(); resetKickoff(0);
   for (const p of players) { const d = dirOf(p.team); p.x = -d * rand(4, 44); p.z = rand(-28, 28); p.tx = p.x; p.tz = p.z; }
   buildCards(); wireUI(); setupIntro(); setTouchMode(isTouch);
@@ -5333,7 +5816,7 @@ function boot() {
   requestAnimationFrame(t => { lastT = t; frame(t); });
   const fl = document.fonts && document.fonts.load ? Promise.race([Promise.all([document.fonts.load('italic 800 30px "Barlow Condensed"'), document.fonts.load('700 30px "Barlow Condensed"'), document.fonts.load('800 30px "Barlow Condensed"'), LOGO_READY]), new Promise(r => setTimeout(r, 2500))]) : LOGO_READY;
   fl.then(() => { G.fontsOk = true; if (G.state === 'menu') { buildStandFaces(TEAMS_SEL[0], TEAMS_SEL[1]); buildLED(TEAMS_SEL[0], TEAMS_SEL[1]); refreshWorldTeams(); rebuildRigs(); } }).catch(() => { });
-  window.__golazo = { KEEPER, CAREER, toggleCam, gkHands, EASY, gkOf, netTick: () => { syncRender(); updateNets(0, STEP); }, get sel() { return TEAMS_SEL; }, DBG, MENU, wx: applyWeather, knockDown, foul, G, ball, players, officials, ars, snapOffside, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
+  window.__golazo = { KEEPER, HDP, HDR, startMatch, CAREER, toggleCam, gkHands, EASY, gkOf, netTick: () => { syncRender(); updateNets(0, STEP); }, get sel() { return TEAMS_SEL; }, DBG, MENU, wx: applyWeather, knockDown, foul, G, ball, players, officials, ars, snapOffside, rig, IN, get user() { return user; }, giveBall, setUser, step: n => { for (let i = 0; i < n; i++) simStep(STEP); }, three: () => ({ R3, SCN, KEY, COMP, BLOOM, W3, CAM3 }), setQuality: q => { quality = q; if (q < 0.72) Q3.bloom = false; resize(); }, tod: applyTimeOfDay };
 }
 boot();
 })();

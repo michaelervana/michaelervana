@@ -36,6 +36,57 @@ These changes were made for the game:
 - In the game the kit is tinted in each team's goalkeeper colours, and the skeleton is driven by the game's own animation.
 - The model's diving-save animation is baked into joint poses (in `index.html`) and drives the keepers' dives.
 
+## Player model
+
+`player.js` contains a repacked version of:
+
+**"Animated Football Player Trips Loop"** by LasquetiSpice
+(https://sketchfab.com/LasquetiSpice), from
+https://sketchfab.com/3d-models/animated-football-player-trips-loop-d68b6101da814089a4dfcf012016283a
+
+Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+
+These changes were made for the game:
+
+- The animation was removed and the skeleton reset to its bind pose; the game's own animation drives it.
+- The mesh was simplified (about 48,000 to 23,000 triangles) and unused UV sets and tangents removed.
+- The textures were re-encoded; the shirt number, crest and brand marks were painted out.
+- In the game every defender and forward wears this model. A shader colours the kit per club (stripes and bands included), prints the player's name, number and club crest, and applies one of three skin tones.
+
+## Match officials and midfielders model
+
+`referee.js` contains a repacked version of:
+
+**"Man Player"** by RiverofCreative
+(https://sketchfab.com/RiverofCreative), from
+https://sketchfab.com/3d-models/man-player-4c7133dbb06e4136891d59231372d818
+
+Licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+
+These changes were made for the game:
+
+- The static poses were removed and the skeleton flattened (helper nodes removed) in its rest pose.
+- The tongue, teeth, nails, corneas and eyelashes were removed and the rest simplified (about 45,000 to 24,000 triangles).
+- The colour textures were combined into one atlas; shirt, shorts and boots were turned neutral grey so they can be coloured in game.
+- In the game the referee, both assistants and the midfielders of both teams wear this model. A shader colours the kit, draws socks on the shins, prints name, number and crest, and applies one of three skin tones.
+
+## Match ball and pitch grass
+
+`pitch.js` contains material derived from:
+
+**"Soccer ball"** by Agisoft (https://sketchfab.com/agisoft), from
+https://sketchfab.com/3d-models/soccer-ball-7aa17e963bc84f63ad665e5f8d8d17de
+
+**"Green Grass"** by ROY (https://sketchfab.com/roy.gearloft.in), from
+https://sketchfab.com/3d-models/green-grass-1b900e5cb8a84e0fa96b3a6df11c03d1
+
+Both licensed under CC BY 4.0 (http://creativecommons.org/licenses/by/4.0/).
+
+These changes were made for the game:
+
+- The ball scan was baked onto a sphere map (white-balanced) and is wrapped on the game's ball.
+- The grass model is used three ways: its blade heights, baked from above into a seamless tile, drive the layered 3D grass over the whole pitch; the same bake gives the turf its fine detail; and 380 of its tufts, each simplified, form a tile of real blades planted around the camera for close views.
+
 ## Goalkeeper set position
 
 The keepers' set position is baked from the animation of:
