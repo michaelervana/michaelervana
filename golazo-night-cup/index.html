@@ -1399,7 +1399,11 @@ function smokeJets() {
   for (const zs of [-1, 1]) for (const x of [-31, -13, 13, 31]) pyro(x, zs * (PW + 3.2), '#f2f6ff', 17, 3.4, 6.5, 10.5);
 }
 function updateAtmosphere(t) {
-  if (!W3.motes) return; const px = H / (2 * Math.tan(CAM3.fov * Math.PI / 360));
+  if (!W3.motes) return;
+  // the smoke cannons keep puffing on and off through the opening minutes (up to the 4th minute of the first half)
+  if (G.half === 1 && ['intro', 'kickoff', 'play', 'stoppage', 'setpiece'].includes(G.state) && +matchMinute() <= 4) {
+    if (G.t > (ATM.jetT || 0)) { if (ATM.jetT) { smokeJets(); if (ATM.jetN++ % 2) pyroEnds([[-1, TEAMS_SEL[0]], [1, TEAMS_SEL[1]]], 8, 2.5); } ATM.jetT = G.t + 4.2; }
+  } else { ATM.jetT = 0; ATM.jetN = 0; } const px = H / (2 * Math.tan(CAM3.fov * Math.PI / 360));
   W3.motes.material.uniforms.time.value = t; W3.motes.material.uniforms.px.value = px; W3.pyro.material.uniforms.time.value = G.t; W3.pyro.material.uniforms.px.value = px;
 }
 
