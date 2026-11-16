@@ -1,4 +1,4 @@
-# Golazo Night Cup – credits
+# Champions League 27 – credits
 
 ## Stadium model
 
