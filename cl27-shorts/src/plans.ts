@@ -57,7 +57,7 @@ export const PLANS: Plan[] = [
       { media: ["r:mob_engraving", "r:football_engraving@5"], big: "DESA VS DESA", sub: "RATUSAN ORANG · HAMPIR TANPA ATURAN" },
       { media: ["r:engravings@8"], sub: "BIAR RAKYAT LATIHAN MEMANAH" },
       { media: ["g:broadcast"], big: "CLASSIC." },
-      { media: ["r:mob_photo", "g:kick_smoke@2"], sub: "MASIH DIMAINKAN SAMPAI SEKARANG" },
+      { media: ["r:mob_photo", "g:kick_smoke@1"], sub: "MASIH DIMAINKAN SAMPAI SEKARANG" },
     ],
   },
   {
