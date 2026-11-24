@@ -73,7 +73,7 @@ const Clip: React.FC<{ k: string; len: number; seed: number }> = ({ k, len, seed
   const game = k.startsWith("g:");
   const zoom = interpolate(frame, [0, len], seed % 2 ? [1.04, 1.13] : [1.13, 1.04], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const pan = interpolate(frame, [0, len], seed % 3 === 0 ? [-18, 18] : [14, -14], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const enter = spring({ frame, fps: FPS, config: { damping: 200 }, durationInFrames: 12 });
+  const enter = spring({ frame, fps: FPS, config: { damping: 200 }, durationInFrames: 8 });
   if (game) {
     return (
       <AbsoluteFill style={{ overflow: "hidden" }}>
@@ -91,7 +91,7 @@ const Clip: React.FC<{ k: string; len: number; seed: number }> = ({ k, len, seed
       <Interactive.Div name="Card" style={{
         position: "absolute", left: CARD.x, top: CARD.y, width: CARD.w, height: CARD.h, overflow: "hidden", borderRadius: 26,
         boxShadow: "0 30px 80px rgba(0,0,0,.6), 0 0 0 3px rgba(255,255,255,.16)",
-        opacity: enter, scale: String(interpolate(enter, [0, 1], [0.94, 1])),
+        opacity: interpolate(enter, [0, 1], [0.55, 1]), scale: String(interpolate(enter, [0, 1], [0.96, 1])),
       }}>
         <Video src={mediaSrc(k)} muted loop={loop} trimBefore={trimBefore} objectFit="cover"
           style={{ width: "100%", height: "100%", scale: String(zoom), translate: `${pan}px 0px` }} />
