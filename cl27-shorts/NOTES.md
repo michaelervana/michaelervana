@@ -8,6 +8,11 @@ The user will upload material for the **next video: a breakdown of how the anima
 **Blender and Remotion** ("breakdown animasinya, cara buatnya"). Wait for the upload before starting, then plan
 the breakdown around what they send.
 
+**Use the user's own guides for it:** `next/Skill_Motion_Kartun.md` (the "motion-kartun" skill: idea → script →
+voiceover → finished MP4, cartoon cards in a toon-shaded 3D world, music and SFX at 50 % of the voice) and
+`next/Prompt_Claude_Motion_Kartun.pdf`. The skill expects a `kit/` folder (engine, tools, vendored three.js and
+toon.ts); it was not uploaded, so ask for it or rebuild the parts needed.
+
 ## How the user wants videos
 
 - TikTok format: 1080 x 1920, **under 59 s**.
