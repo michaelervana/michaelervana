@@ -1,0 +1,227 @@
+{
+ "arsenal": {
+  "dur": 40.99,
+  "lines": [
+   {
+    "t0": 0.0,
+    "t1": 3.997,
+    "text": "Salah satu klub terbesar di Inggris ternyata lahir dari pabrik senjata."
+   },
+   {
+    "t0": 4.869,
+    "t1": 11.274,
+    "text": "Tahun delapan belas delapan puluh enam, di Woolwich, London, para pekerja pabrik senjata Royal Arsenal bikin tim bola."
+   },
+   {
+    "t0": 11.994,
+    "t1": 15.77,
+    "text": "Namanya Dial Square, diambil dari nama bengkel tempat mereka kerja."
+   },
+   {
+    "t0": 16.306,
+    "t1": 20.782,
+    "text": "Jersey merahnya? Konon pinjaman dari klub lain. Literally modal nekat."
+   },
+   {
+    "t0": 21.696,
+    "t1": 25.705,
+    "text": "Namanya terus ganti, jadi Royal Arsenal, lalu Woolwich Arsenal."
+   },
+   {
+    "t0": 26.532,
+    "t1": 31.052,
+    "text": "Tahun sembilan belas tiga belas, klubnya pindah ke utara London, biar penontonnya makin banyak."
+   },
+   {
+    "t0": 31.624,
+    "t1": 34.919,
+    "text": "Tapi julukannya tetap kebawa sampai sekarang: The Gunners."
+   },
+   {
+    "t0": 35.528,
+    "t1": 40.713,
+    "text": "Jadi tiap fans teriak Gunners, mereka lagi ngerayain... sebuah pabrik meriam."
+   }
+  ]
+ },
+ "manutd": {
+  "dur": 40.5,
+  "lines": [
+   {
+    "t0": 0.0,
+    "t1": 2.435,
+    "text": "Klub sebesar Manchester United dulu namanya... Newton Heath."
+   },
+   {
+    "t0": 3.109,
+    "t1": 9.901,
+    "text": "Tahun delapan belas tujuh puluh delapan, para pekerja kereta api di Manchester bikin tim bola buat ngisi waktu."
+   },
+   {
+    "t0": 10.463,
+    "t1": 13.94,
+    "text": "Plot twist, jersey-nya bukan merah, tapi hijau dan kuning."
+   },
+   {
+    "t0": 14.835,
+    "t1": 18.355,
+    "text": "Lama-lama klubnya bangkrut. Utang numpuk, hampir bubar."
+   },
+   {
+    "t0": 19.426,
+    "t1": 22.953,
+    "text": "Legenda bilang, sang kapten bawa anjing St. Bernard ke acara penggalangan dana."
+   },
+   {
+    "t0": 23.691,
+    "t1": 27.468,
+    "text": "Anjingnya kabur, dan ditemukan seorang pengusaha bir yang kaya raya."
+   },
+   {
+    "t0": 28.049,
+    "t1": 34.605,
+    "text": "Pengusaha itu akhirnya ikut menyelamatkan klub, dan tahun sembilan belas nol dua namanya jadi Manchester United."
+   },
+   {
+    "t0": 35.297,
+    "t1": 40.275,
+    "text": "Jadi salah satu klub terkaya di dunia, konon diselamatkan... sama anjing yang hilang."
+   }
+  ]
+ },
+ "mancity": {
+  "dur": 38.25,
+  "lines": [
+   {
+    "t0": 0.0,
+    "t1": 3.567,
+    "text": "Manchester City ternyata lahir dari... gereja."
+   },
+   {
+    "t0": 4.556,
+    "t1": 9.131,
+    "text": "Tahun delapan belas delapan puluh, di Gorton, Manchester, hidup para buruh lagi keras banget."
+   },
+   {
+    "t0": 9.86,
+    "t1": 13.741,
+    "text": "Miskin, banyak yang mabuk, dan berantem di jalan hampir tiap malam."
+   },
+   {
+    "t0": 14.027,
+    "t1": 18.752,
+    "text": "Gereja St. Mark's punya ide simpel: kasih anak muda kegiatan yang positif."
+   },
+   {
+    "t0": 19.316,
+    "t1": 22.054,
+    "text": "Awalnya tim kriket, lalu lahirlah tim sepak bola."
+   },
+   {
+    "t0": 22.641,
+    "t1": 27.456,
+    "text": "Namanya sempat jadi Ardwick, sebelum tahun delapan belas sembilan puluh empat resmi jadi Manchester City."
+   },
+   {
+    "t0": 28.278,
+    "t1": 32.745,
+    "text": "Lebih dari seratus tahun kemudian, klub ini jadi raksasa dan meraih treble."
+   },
+   {
+    "t0": 33.423,
+    "t1": 37.839,
+    "text": "Jadi klub yang sekarang bikin lawan ribut... awalnya dibikin biar orang berhenti ribut."
+   }
+  ]
+ },
+ "liverpool": {
+  "dur": 35.75,
+  "lines": [
+   {
+    "t0": 0.0,
+    "t1": 3.061,
+    "text": "Liverpool ada karena Everton... pindah rumah."
+   },
+   {
+    "t0": 4.102,
+    "t1": 7.284,
+    "text": "Tahun delapan belas sembilan puluh dua, Everton masih main di Anfield."
+   },
+   {
+    "t0": 7.746,
+    "t1": 11.976,
+    "text": "Tapi mereka ribut sama pemilik lahannya, John Houlding, soal uang sewa."
+   },
+   {
+    "t0": 12.816,
+    "t1": 16.527,
+    "text": "Akhirnya Everton angkat kaki dan pindah ke stadion baru di seberang taman."
+   },
+   {
+    "t0": 17.526,
+    "t1": 21.191,
+    "text": "Houlding ditinggal dengan stadion kosong. Nggak ada tim, nggak ada penonton."
+   },
+   {
+    "t0": 21.816,
+    "t1": 26.132,
+    "text": "Solusinya? Dia bikin klub baru sendiri. Namanya Liverpool."
+   },
+   {
+    "t0": 26.878,
+    "t1": 30.657,
+    "text": "Sejak itu, dua klub ini jadi tetangga sekaligus rival bebuyutan."
+   },
+   {
+    "t0": 31.586,
+    "t1": 35.481,
+    "text": "Jadi Anfield yang legendaris itu... aslinya kandang Everton."
+   }
+  ]
+ },
+ "chelsea": {
+  "dur": 32.78,
+  "lines": [
+   {
+    "t0": 0.0,
+    "t1": 2.525,
+    "text": "Chelsea lahir gara-gara sebuah tawaran ditolak."
+   },
+   {
+    "t0": 3.158,
+    "t1": 8.252,
+    "text": "Tahun sembilan belas nol lima, seorang pengusaha punya stadion bernama Stamford Bridge di London."
+   },
+   {
+    "t0": 8.603,
+    "t1": 12.842,
+    "text": "Dia nawarin stadion itu ke klub Fulham. Fulham bilang: nggak deh, kemahalan."
+   },
+   {
+    "t0": 13.533,
+    "t1": 16.725,
+    "text": "Katanya, dia hampir aja ngejual lahannya buat gudang batu bara."
+   },
+   {
+    "t0": 17.332,
+    "t1": 21.326,
+    "text": "Tapi akhirnya dia mikir, kalau nggak ada yang mau, ya bikin klub sendiri."
+   },
+   {
+    "t0": 22.0,
+    "t1": 24.024,
+    "text": "Lahirlah Chelsea Football Club."
+   },
+   {
+    "t0": 24.451,
+    "t1": 28.254,
+    "text": "Uniknya, stadionnya sebenarnya ada di wilayah Fulham, bukan Chelsea."
+   },
+   {
+    "t0": 28.754,
+    "t1": 32.461,
+    "text": "Jadi Chelsea main di Fulham... gara-gara Fulham nolak main di sana."
+   }
+  ]
+ }
+}
