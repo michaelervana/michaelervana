@@ -13,6 +13,11 @@ voiceover → finished MP4, cartoon cards in a toon-shaded 3D world, music and S
 `next/Prompt_Claude_Motion_Kartun.pdf`. The skill expects a `kit/` folder (engine, tools, vendored three.js and
 toon.ts); it was not uploaded, so ask for it or rebuild the parts needed.
 
+The PDF is a prompt template: `/motion-kartun` + "Buatkan video penjelasan dengan bahasa Indonesia" + the skill's style
+line (flat 2D bean-head characters, colourful 3D world, black ink outlines, painted textures, depth of field, gliding
+cameras, 1080x1920 30 fps, as long as the voiceover, voice unchanged, music and SFX at 50 % of the voice), then two
+blanks for the user to fill: **Tema Video** and **Script**. So the next video is an Indonesian explainer cartoon.
+
 ## How the user wants videos
 
 - TikTok format: 1080 x 1920, **under 59 s**.
