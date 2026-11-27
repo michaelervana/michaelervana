@@ -133,9 +133,9 @@ def s4b(W, lt, u, t, cam):  # "tiki, taka!": a pass each way, the words pop out
     p, seg = pass_path([(A[0] + 0.5, 0), (Bp[0] - 0.5, 0), (A[0] + 0.5, 0)], times, lt, 0.12); ball_at(W, 0, p); ball_at(W, 1, None)
     if seg: W.trail.set((seg[0][0], seg[0][1], 0.25), p, 0.05)
     else: W.trail.show(False)
-    for word, tw, x in (('TIKI!', 30.0 - T0, -0.95), ('TAKA!', 30.48 - T0, 0.95)):
+    for word, tw, x in (('TIKI!', 30.0 - T0, -0.62), ('TAKA!', 30.48 - T0, 0.62)):
         P = W.props[word]; k = lt - tw; s = back(k / 0.22) if k > 0 else 0.0
-        P.root.location = (x, -0.8, 2.45 + (0.35 if x > 0 else 0) + max(0, k) * 0.3); P.root.rotation_euler = (0, rad(-8 if x < 0 else 8), 0); P.root.scale = (max(0.001, s) * 0.62,) * 3
+        P.root.location = (x, -0.8, 2.45 + (0.35 if x > 0 else 0) + max(0, k) * 0.3); P.root.rotation_euler = (0, rad(-8 if x < 0 else 8), 0); P.root.scale = (max(0.001, s) * 0.44,) * 3
     W.crowd_colors(BARCA, jump=0.3 if lt > 2.0 else 0.12)
 
 
