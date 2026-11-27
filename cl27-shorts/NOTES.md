@@ -62,3 +62,19 @@ blanks for the user to fill: **Tema Video** and **Script**. So the next video is
   bloom and lens flares in the post shader, volume shading on the bean cards, 3D leather ball kick-ups, 3D crown/trophies.
 - Real archive photos: Commons API is rate-limited from the cloud and thumbnail downloads were refused, so photo
   pop-ups (`photos` keys in `stories.js`) are skipped unless files are placed in `web/img/<key>.jpg`.
+
+## Full-Blender shorts (`blender/`): Parkir Bus / Catenaccio and Tiki-Taka
+
+- User preference (Nov 2026): from now on the videos are made **fully in Blender**, with the **Night Cup stadium**,
+  a **cute female voice** (Gemini TTS "Leda"), light-Jaksel Indonesian, and the "huss huss huss" gag about every 10 s
+  placed right after a sentence ends, plus once more after the punchline.
+- Blender 4.0 (apt) runs headless with Eevee on llvmpipe: `xvfb-run -a blender -b -y --python film.py -- <story> <a-b> <out> 66 3`.
+  About 3.2 s/frame at 66% scale and 3 samples. `post.py` upscales to 1080x1920 and adds bloom/star/anamorphic/ghost flares
+  and the HUSS overlay. Blender renders at -0.5 EV so only light sources clip (and bloom); post restores the exposure.
+- `decode.py` turns `golazo-night-cup/stadium.js` (GSTD blob) and `pitch.js` (goal GLB, grass, ball, grass tufts) into
+  Blender assets. Turf = wet base with screen-space puddle reflections (no Shader-to-RGB there, it disables SSR), 8 grass shells
+  from the game's height map, and the game's real tuft tile instanced around the action.
+- The game's LED boards, UCL ribbons, giant screens and flags are exported from the running game (`gx/exp.js`): the page is served
+  with a small hook that exposes the closure's scene, three.js comes from npm three@0.147.0, fonts from @fontsource, and
+  `WebGLRenderer.render` is stubbed so the headless page loads in a few minutes.
+- Stadium model licence: CC BY-NC-SA 4.0 (credit Ninh Pham, non-commercial). The boards show real sponsor and club marks.

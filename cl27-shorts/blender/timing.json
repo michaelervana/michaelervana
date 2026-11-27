@@ -1,0 +1,102 @@
+{
+ "parkirbus": {
+  "dur": 51.57,
+  "lines": [
+   {
+    "t0": 0.0,
+    "t1": 4.6,
+    "text": "Kenapa tim yang bertahan total disebut parkir bus? Sejarahnya panjang banget."
+   },
+   {
+    "t0": 4.65,
+    "t1": 12.04,
+    "text": "Tahun tiga puluhan, pelatih Austria Karl Rappan bikin sistem bertahan di Swiss. Namanya verrou, artinya gembok."
+   },
+   {
+    "t0": 12.09,
+    "t1": 17.825,
+    "text": "Italia jatuh cinta, terus bikin versi sendiri: catenaccio, artinya grendel pintu."
+   },
+   {
+    "t0": 18.12,
+    "t1": 23.514,
+    "text": "Kuncinya satu pemain ekstra di belakang bek, namanya libero, tugasnya nyapu bola yang lolos."
+   },
+   {
+    "t0": 23.75,
+    "t1": 29.66,
+    "text": "Lalu di tahun enam puluhan, Inter Milan pakai catenaccio, dan juara Eropa dua kali beruntun."
+   },
+   {
+    "t0": 29.71,
+    "t1": 36.561,
+    "text": "Tahun dua ribu empat, Mourinho kesel Chelsea ditahan imbang Tottenham. Katanya, lawannya parkir bus di depan gawang!"
+   },
+   {
+    "t0": 36.65,
+    "t1": 40.66,
+    "text": "Sejak itu, bertahan total punya nama baru: parkir bus."
+   },
+   {
+    "t0": 40.71,
+    "t1": 47.85,
+    "text": "Plot twist-nya, enam tahun kemudian, Mourinho bawa Inter ke Camp Nou, dan bikin salah satu parkir bus paling legendaris."
+   },
+   {
+    "t0": 47.92,
+    "t1": 51.57,
+    "text": "Jadi orang yang paling protes soal bus... ternyata sopir busnya sendiri."
+   }
+  ]
+ },
+ "tikitaka": {
+  "dur": 53.86,
+  "lines": [
+   {
+    "t0": 0.0,
+    "t1": 5.092,
+    "text": "Tiki-taka, gaya oper-operan pendek yang bikin lawan pusing. Asalnya dari mana, sih?"
+   },
+   {
+    "t0": 5.8,
+    "t1": 11.416,
+    "text": "Akarnya dari total football Belanda tahun tujuh puluhan, semua pemain bisa main di mana aja."
+   },
+   {
+    "t0": 11.88,
+    "t1": 16.587,
+    "text": "Bintangnya, Johan Cruyff, lalu melatih Barcelona dan bawa ide itu ke Spanyol."
+   },
+   {
+    "t0": 16.9,
+    "t1": 22.874,
+    "text": "Di akademi La Masia, anak-anak diajarin: jaga bola, oper, gerak, oper lagi."
+   },
+   {
+    "t0": 23.19,
+    "t1": 30.73,
+    "text": "Namanya dipopulerkan komentator Andrés Montes di Piala Dunia dua ribu enam. Kayak bunyi bola dioper: tiki, taka!"
+   },
+   {
+    "t0": 31.42,
+    "t1": 37.503,
+    "text": "Puncaknya, Barcelona raih enam trofi setahun, dan Spanyol juara tiga turnamen besar beruntun."
+   },
+   {
+    "t0": 37.66,
+    "t1": 42.08,
+    "text": "Pelatih Barça waktu itu, Pep Guardiola, dianggap bapaknya tiki-taka."
+   },
+   {
+    "t0": 42.13,
+    "t1": 49.517,
+    "text": "Plot twist-nya, Pep sendiri bilang dia benci tiki-taka! Katanya, oper tanpa tujuan itu nggak guna."
+   },
+   {
+    "t0": 49.66,
+    "t1": 53.86,
+    "text": "Jadi bapaknya tiki-taka... nggak suka nama anaknya sendiri."
+   }
+  ]
+ }
+}
